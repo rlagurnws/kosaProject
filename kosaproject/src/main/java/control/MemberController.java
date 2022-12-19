@@ -69,6 +69,9 @@ public class MemberController {
 				session.setAttribute("id", id);
 				session.setAttribute("power", m.getMemPower());
 				session.setAttribute("nick", m.getMemNick());
+				System.out.println("------------------------로그인 컨트롤 ----------------");
+				System.out.println(session.getAttribute("power"));
+				System.out.println("------------------------로그인 컨트롤 ----------------");
 				map.put("status", 1);
 				map.put("msg", "로그인 성공");
 			}else {

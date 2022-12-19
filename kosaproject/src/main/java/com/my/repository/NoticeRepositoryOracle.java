@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import com.my.exception.AddException;
 import com.my.exception.FindException;
+import com.my.exception.ModifyException;
+import com.my.exception.RemoveException;
 import com.my.vo.Notice;
 
 @Repository("noticeRepository")
@@ -95,24 +97,20 @@ public class NoticeRepositoryOracle implements NoticeRepository {
 	@Override
 	public int findNext(int no) throws FindException {
 		SqlSession session = null;
-		List<Notice> list = new ArrayList<>();
+		List<Integer> list = new ArrayList<>();
 		int i = 0;
 		try {
 			session = sqlSessionFactory.openSession();
 			list = session.selectList("com.my.mybatis.NoticeMapper.findAll");
-			for(Notice n : list) {
-				if(n.getNotiNo() == no) {
+			for(int n : list) {
+				if(n == no) {
 					break;
 				}else {
 					i++;
 				}
 			}
-			i+=2;
-			return list.get(i).getNotiNo();
-		}catch(NullPointerException e) {
-			return 0;
-		}
-		catch (Exception e) {
+			return list.get(i+1);
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new FindException(e.getMessage());
 		}finally {
@@ -125,19 +123,19 @@ public class NoticeRepositoryOracle implements NoticeRepository {
 	@Override
 	public int findPre(int no) throws FindException {
 		SqlSession session = null;
-		List<Notice> list = new ArrayList<>();
+		List<Integer> list = new ArrayList<>();
 		int i = 0;
 		try {
 			session = sqlSessionFactory.openSession();
 			list = session.selectList("com.my.mybatis.NoticeMapper.findAll");
-			for(Notice n : list) {
-				if(n.getNotiNo() == no) {
+			for(int n : list) {
+				if(n== no) {
 					break;
 				}else {
 					i++;
 				}
 			}
-			return list.get(i).getNotiNo();
+			return list.get(i-1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new FindException(e.getMessage());
@@ -147,5 +145,37 @@ public class NoticeRepositoryOracle implements NoticeRepository {
 			}
 		}
 	}
+
+	@Override
+	public void delete(int no) throws RemoveException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			session.delete("com.my.mybatis.NoticeMapper.delete",no);
+		}catch (Exception e) {
+			throw new RemoveException(e.getMessage());
+		}finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+
+	@Override
+	public void update(Notice noti) throws ModifyException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			session.update("com.my.mybatis.NoticeMapper.update",noti);
+		} catch(Exception e) {
+			throw new ModifyException(e.getMessage());
+		}finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+	
+	
 
 }

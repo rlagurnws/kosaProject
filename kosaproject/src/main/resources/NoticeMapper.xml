@@ -20,7 +20,7 @@
 		select count(*) from notice
 	</select>
 	
-	<select id="slectByNo" resultType="Notice" parameterType="int">
+	<select id="selectByNo" resultType="Notice" parameterType="int">
 		SELECT *
 		FROM NOTICE
 		WHERE NOTI_NO = #{notiNo}
@@ -31,4 +31,12 @@
 		FROM NOTICE 
 		ORDER BY NOTI_NO DESC
 	</select>
+	
+	<update id="update" parameterType="Notice">
+		UPDATE NOTICE SET NOTI_TITLE = #{notiTitle}, NOTI_DES = #{notiDes} WHERE NOTI_NO = #{notiNo}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE NOTICE WHERE NOTI_NO = #{notiNo}
+	</delete>
 </mapper>

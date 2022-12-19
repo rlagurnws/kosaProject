@@ -47,10 +47,5 @@ public class Notice {
 	public Notice() {
 		super();
 	}
-	@Override
-	public String toString() {
-		return "Notice [notiNo=" + notiNo + ", notiDes=" + notiDes + ", notiDate=" + notiDate + ", notiId=" + notiId
-				+ ", notiTitle=" + notiTitle + "]";
-	}
 	
 }

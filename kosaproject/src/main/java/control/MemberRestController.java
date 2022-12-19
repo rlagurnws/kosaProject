@@ -6,10 +6,13 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.my.exception.AddException;
 import com.my.exception.FindException;
@@ -18,15 +21,15 @@ import com.my.exception.RemoveException;
 import com.my.service.MemberService;
 import com.my.vo.Member;
 
-@Controller
-public class MemberController {
-
+//@Controller
+@RestController
+@RequestMapping("member/*")
+public class MemberRestController {
 	@Autowired
 	MemberService service;
 	
-	@PostMapping("iddupchk")
-	@ResponseBody
-	public Map<String, Object> iddupchk(String id) {
+	@PostMapping(value="iddupchk")
+	public ResponseEntity<?> iddupchk(HttpSession session,String id) {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			service.idDupChk(id);
@@ -37,12 +40,11 @@ public class MemberController {
 			map.put("status", 1);
 			map.put("msg", "아이디 사용가능");
 		}
-		return map;
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 	
-	@PostMapping("signup")
-	@ResponseBody
-	public Map<String, Object> signup(Member m){
+	@PostMapping(value="signup")
+	public ResponseEntity<?> signup(@PathVariable Member m){
 		Map<String, Object> map = new HashMap<>();
 		try {
 			service.signUp(m);
@@ -53,12 +55,13 @@ public class MemberController {
 			map.put("status", 1);
 			map.put("msg", e.getMessage());
 		}
-		return map;
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 	
-	@GetMapping("login")
-	@ResponseBody
-	public Map<String,Object> login(HttpSession session, String id, String pwd){
+	@GetMapping(value="login")
+	public ResponseEntity<?> login(HttpSession session, 
+			@PathVariable String id,
+			@PathVariable String pwd){
 		Map<String, Object> map = new HashMap<>();
 		try {
 			Member m = service.searchById(id);
@@ -82,18 +85,16 @@ public class MemberController {
 			map.put("status", 0);
 			map.put("msg", "탈퇴한 계정입니다.");
 		}
-		return map;
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 	
-	@GetMapping("logout")
-	@ResponseBody
+	@GetMapping(value="logout")	
 	public void logout(HttpSession session){
 		session.invalidate();
 	}
 	
-	@GetMapping("mypage")
-	@ResponseBody
-	public Map<String, Object> mypage(HttpSession session){
+	@GetMapping(value="mypage")
+	public ResponseEntity<?> mypage(HttpSession session){
 		String id = (String)session.getAttribute("id");
 		Map<String, Object> map = new HashMap<>();
 		try {
@@ -104,12 +105,11 @@ public class MemberController {
 			e.printStackTrace();
 			map.put("status", 0);
 		}
-		return map;
+		return new ResponseEntity<>(map,HttpStatus.OK);
 	}
 	
-	@PostMapping("memmodi")
-	@ResponseBody
-	public Map<String, Object> memmodi(Member m){
+	@PostMapping(value="modify")
+	public ResponseEntity<?> memmodi(@PathVariable Member m){
 		Map<String, Object> map = new HashMap<>();
 		try {
 			service.memMody(m);
@@ -120,12 +120,11 @@ public class MemberController {
 			map.put("status", 0);
 			map.put("msg", "변경 실패!");
 		}
-		return map;
+		return new ResponseEntity<>(map,HttpStatus.OK);
 	}
 	
-	@GetMapping("delmem")
-	@ResponseBody
-	public Map<String, Object> delmem(HttpSession session){
+	@GetMapping(value="delete")
+	public ResponseEntity<?> delmem(HttpSession session){
 		String id = (String)session.getAttribute("id");
 		Map<String, Object> map = new HashMap<>();
 		
@@ -137,17 +136,16 @@ public class MemberController {
 			e.printStackTrace();
 			map.put("status", 0);
 		}
-		return map;
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
-	
-	@GetMapping("session")
-	@ResponseBody
-	public Map<String, Object> session(HttpSession session){
+		
+	@GetMapping(value="session")
+	public ResponseEntity<?> session(HttpSession session){
 		Map<String, Object> map = new HashMap<>();
 		String id = (String)session.getAttribute("id");
 		if(id == null) {
 			map.put("status", 0);
-			return map;
+			return new ResponseEntity<>(map, HttpStatus.OK);
 		}else {
 			int power = (Integer)session.getAttribute("power");
 			String nick = (String)session.getAttribute("nick");
@@ -155,7 +153,7 @@ public class MemberController {
 			map.put("id", id);
 			map.put("power", power);
 			map.put("nick", nick);
-			return map;
+			return new ResponseEntity<>(map, HttpStatus.OK);
 		}
 	}
 	

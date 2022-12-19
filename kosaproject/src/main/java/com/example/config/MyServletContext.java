@@ -21,15 +21,15 @@ public class MyServletContext implements WebMvcConfigurer {
 		CommonsMultipartResolver r = new CommonsMultipartResolver();
 		r.setMaxUploadSize(1024*1024*10);
 		r.setMaxUploadSizePerFile(1024*1024*10);
-		r.setDefaultEncoding("utf-8");
+		r.setDefaultEncoding("UTF-8");
 		return r;
 	}
 	
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 //		WebMvcConfigurer.super.addCorsMappings(registry);
-		registry.addMapping("/**").allowCredentials(true).allowedOrigins("http://192.168.2.22:9999").allowedMethods("GET","POST","PUT","DELETE"); //메서드 체이닝
-		registry.addMapping("/**").allowCredentials(true).allowedOrigins("http://192.168.2.22:5500").allowedMethods("GET","POST","PUT","DELETE");
+		registry.addMapping("/**").allowCredentials(true).allowedOrigins("http://192.168.2.21:9999").allowedMethods("GET","POST","PUT","DELETE"); //메서드 체이닝
+		registry.addMapping("/**").allowCredentials(true).allowedOrigins("http://192.168.2.21:5500").allowedMethods("GET","POST","PUT","DELETE");
 	}
 
 //	@Bean

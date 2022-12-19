@@ -10,7 +10,7 @@ import com.my.exception.RemoveException;
 import com.my.repository.MemberRepository;
 import com.my.vo.Member;
 
-@Service("memberService")
+@Service
 public class MemberService {
 	@Autowired
 	private MemberRepository repository;

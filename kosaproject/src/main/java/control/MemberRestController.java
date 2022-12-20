@@ -55,7 +55,7 @@ public class MemberRestController {
 			service.signUp(m);
 			map.put("status", 1);
 			map.put("msg", "회원가입 성공!");
-			String saveDirectory = "D:\\\\MyBACK\\\\kosafront\\\\src\\\\main\\\\webapp\\\\project_image\\\\profile";
+			String saveDirectory = "C:\\\\files";
 			File fDir = new File(saveDirectory);
 			if(!fDir.exists()) {
 				fDir.mkdir();
@@ -119,7 +119,7 @@ public class MemberRestController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			Member m = service.searchById(memId);
-			String saveDirectory = "D:\\MyBACK\\kosafront\\src\\main\\webapp\\project_image\\profile";
+			String saveDirectory = "C:\\\\files";
 			String fileName = null;
 			File dir = new File(saveDirectory);
 			String[] allFileNames = dir.list();
@@ -158,7 +158,7 @@ public class MemberRestController {
 				flag = true;
 			}
 			if(flag) {
-				String saveDirectory = "D:\\\\MyBACK\\\\kosafront\\\\src\\\\main\\\\webapp\\\\project_image\\\\profile";
+				String saveDirectory = "C:\\\\files";
 				File dir = new File(saveDirectory);
 				if(!dir.exists()) {
 					dir.mkdir();

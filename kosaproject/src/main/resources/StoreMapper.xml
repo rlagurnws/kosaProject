@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!--이름 -->
+  <mapper namespace="com.my.mybatis.StoreMapper">
+	<insert id="insert" parameterType="Store">
+		INSERT INTO ST(st_num, st_des, st_hits, st_date, st_name,st_score, st_loca,
+						 st_phone, cate, oner_id, st_res_no, st_review_cnt, st_status)
+					VALUES(ST_SEQ.nextVal,#{stDes},0,SYSDATE,#{stName},0,#{stLoca},
+					#{stPhone},#{cateNum},#{ownerId},#{stResNo},0,0)
+		<selectKey keyProperty="stNum" resultType="int" order="AFTER">
+		SELECT ST_SEQ.currval FROM dual
+		</selectKey>
+	</insert>
+	
+	<insert id="insertfood" parameterType="Menu">
+		INSERT INTO menu(st_num, menu_name, menu_price)
+					VALUES(#{stNum},#{menuName},#{menuPrice})
+	</insert>
+	
+	<select id="selectAll" resultType="Store" parameterType="map">
+		SELECT *
+		FROM (SELECT rownum rn, a.*
+		FROM (SELECT * FROM notice ORDER BY noti_no DESC)a )
+		WHERE rn BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+</mapper>

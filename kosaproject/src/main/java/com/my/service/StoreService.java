@@ -7,60 +7,30 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.repository.StoreRepository;
 import com.my.vo.Store;
 
+@Service("storeService")
 public class StoreService {
+	@Autowired
 	private StoreRepository repository;
 	
-	public StoreService(String propertiesFileName) {
-		Properties env = new Properties();
-		try {
-			env.load(new FileInputStream(propertiesFileName));
-			String className = env.getProperty("store");
-			//클래스로드
-			Class clazz = Class.forName(className);
-			//객체 생성
-			Object obj = clazz.getDeclaredConstructor().newInstance();
-			repository = (StoreRepository)obj;
-			
-		} catch (FileNotFoundException e) {
-			
-			e.printStackTrace();
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	public StoreService() {}
+	
+	public StoreService(StoreRepository repository) {
+		this.repository = repository;
 	}
 	
 	//추가
-	public void addStore(Store store) throws AddException{
-		repository.insert(store);
+	public int addStore(Store store) throws AddException{
+		int stNum = repository.insert(store);
 		System.out.println("add성공");
+		return stNum;
 	}
 	public List<Store> findAll() throws FindException{
 		return repository.selectAll();

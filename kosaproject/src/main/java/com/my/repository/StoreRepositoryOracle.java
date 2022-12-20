@@ -1,64 +1,67 @@
-//package com.my.repository;
-//
-//import java.sql.Connection;
-//import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import com.my.exception.AddException;
-//import com.my.exception.FindException;
-//import com.my.sql.MyConnection;
-//import com.my.vo.Food;
-//import com.my.vo.Notice;
-//import com.my.vo.Store;
-//
-//public class StoreRepositoryOracle implements StoreRepository{
-//
-//	@Override
-//	public void insert(Store store) throws AddException {
-//		//db연결관련
-//		Connection conn = null;
-//		PreparedStatement pstmt = null;
-//		
-//		try {
-//			conn = MyConnection.getConnection();
-//			String StoreSQL = "INSERT "
-//					+ "INTO ST(st_num, st_des, st_hits, st_date, st_name,"
-//					+ "st_score, st_loca, st_phone, cate, oner_id, st_res_no, st_post_cnt, st_st)"
-//					+ " VALUES(ST_SEQ.nextVal,?,0,SYSDATE,?,"
-//					+ "0,?,?,?,?,'1',0,0)";
-//			pstmt = conn.prepareStatement(StoreSQL);
-//			pstmt.setString(1, store.getSt_des());
-//			pstmt.setString(2, store.getSt_name());
-//			pstmt.setString(3, store.getSt_loca());
-//			pstmt.setString(4, store.getSt_phone());
-//			pstmt.setInt(5, store.getCate_num());
-//			pstmt.setString(6, store.getOner_id());
-//			pstmt.executeUpdate();
-//			
-//			
-//			String foodSQL = "INSERT INTO FOOD(st_num, food_name, food_price)"
-//					+ " VALUES(st_seq.currval,?,?)";
-//				
-//			pstmt = conn.prepareStatement(foodSQL);
-//			List<Food> foodList = store.getSt_menuList();
-//			
-//			
-//			for(Food f: foodList) {
-//				pstmt.setString(1, f.getFood_name());
-//				pstmt.setInt(2, f.getFood_price());
-//				pstmt.executeUpdate();
-//			}
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}finally {
-//			MyConnection.close(pstmt, conn);
-//		}
-//		
-//	}
-//
+package com.my.repository;
+
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.my.exception.AddException;
+import com.my.exception.FindException;
+
+import com.my.vo.Menu;
+
+import com.my.vo.Store;
+
+@Repository("storeRepository")
+public class StoreRepositoryOracle implements StoreRepository{
+
+	@Autowired
+	SqlSessionFactory sqlSessionFactory;
+	
+	@Override
+	public int insert(Store store) throws AddException {
+		SqlSession session = null;
+		int stNum;
+		try {
+			session = sqlSessionFactory.openSession();
+			session.insert("com.my.mybatis.StoreMapper.insert",store);
+			System.out.println(store.getStNum());
+			session.close();
+			
+			List<Menu> foodList = store.getStMenuList();			
+			for(Menu menu: foodList) {
+				session = sqlSessionFactory.openSession();
+				menu.setStNum(store.getStNum());
+				session.insert("com.my.mybatis.StoreMapper.insertfood",menu);
+			}
+			return store.getStNum();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new AddException(e.getMessage());
+		}finally {
+			if(session != null) {
+				session.close();
+			}
+		}
+		
+	}
+
+	@Override
+	public List<Store> selectAll() throws FindException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Store> selectByCate(int cate) throws FindException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 //	@Override
 //	public List<Store> selectAll() throws FindException {
 //		List<Store> list = new ArrayList<>();
@@ -120,4 +123,4 @@
 //			MyConnection.close(rs, pstmt, conn);
 //		}
 //	}
-//}
+}

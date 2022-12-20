@@ -12,9 +12,10 @@ public interface StoreRepository {
 	/**
 	 * 가게등록
 	 * @param store  
+	 * @return 
 	 * @throws AddException
 	 */
-	void insert(Store store) throws AddException;
+	int insert(Store store) throws AddException;
 	
 	/**
 	 * 가게 전체 개수

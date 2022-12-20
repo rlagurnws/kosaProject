@@ -8,10 +8,9 @@
   <insert id="insert" parameterType="Member">
   	INSERT INTO MEMBER(mem_id, mem_name, mem_pwd, mem_birth,
 						mem_phone, mem_sex, mem_nick, mem_power,
-							mem_address, mem_state)
+							mem_state)
 	VALUES (#{memId}, #{memName}, #{memPwd}, #{memBirth},
-				#{memPhone}, #{memSex}, #{memNick}, #{memPower},
-				#{memAddress}, 1)
+				#{memPhone}, #{memSex}, #{memNick}, #{memPower}, 1)
   </insert>
   
   <select id="selectById" resultType="Member" parameterType="string">
@@ -28,8 +27,7 @@
 	mem_phone = #{memPhone} ,
 	mem_sex = #{memSex} ,
 	mem_nick = #{memNick},
-	mem_power = '1',
-	mem_address = #{memAddress},
+	mem_power = #{memPower},
 	mem_state = '1'
 	WHERE mem_ID = #{memId}
   </update>

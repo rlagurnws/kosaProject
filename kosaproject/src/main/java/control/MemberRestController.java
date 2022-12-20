@@ -1,15 +1,18 @@
 package control;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -45,22 +48,40 @@ public class MemberRestController {
 		return map;
 	}
 	
-	@PostMapping(value="signup")
-	public Map<String, Object> signup(@RequestBody Member m){
+	@PostMapping(value="new")
+	public Map<String, Object> signup(Member m, @RequestPart MultipartFile img){
 		Map<String, Object> map = new HashMap<>();
 		try {
 			service.signUp(m);
 			map.put("status", 1);
 			map.put("msg", "회원가입 성공!");
+			String saveDirectory = "D:\\\\MyBACK\\\\kosafront\\\\src\\\\main\\\\webapp\\\\project_image\\\\profile";
+			File fDir = new File(saveDirectory);
+			if(!fDir.exists()) {
+				fDir.mkdir();
+			}
+			long imgSize = img.getSize();
+			String imgOriginName = img.getOriginalFilename();
+			String saveFileName = m.getMemId()+"_"+imgOriginName;
+			if(imgSize ==0 || "".equals(imgOriginName)) {
+				System.out.println("이미지파일이 첨부되지 않았습니다.");
+			}else {
+				File saveImg = new File(saveDirectory, saveFileName);
+				FileCopyUtils.copy(img.getBytes(), saveImg);
+			}
 		} catch (AddException e) {
 			e.printStackTrace();
-			map.put("status", 1);
+			map.put("status", 0);
+			map.put("msg", e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+			map.put("status", 0);
 			map.put("msg", e.getMessage());
 		}
 		return map;
 	}
 	
-	@PostMapping(value="login")
+	@PostMapping(value="{memId}")
 	public Map<String,Object> login(HttpSession session,@RequestBody Member m ){
 		Map<String, Object> map = new HashMap<>();
 		try {
@@ -93,14 +114,27 @@ public class MemberRestController {
 		session.invalidate();
 	}
 	
-	@GetMapping(value="mypage")
-	public Map<String, Object> mypage(HttpSession session){
-		String id = (String)session.getAttribute("id");
+	@PostMapping("mypage/{memId}")
+	public Map<String, Object> mypage(HttpSession session, @PathVariable String memId){
 		Map<String, Object> map = new HashMap<>();
 		try {
-			Member m = service.searchById(id);
+			Member m = service.searchById(memId);
+			String saveDirectory = "D:\\MyBACK\\kosafront\\src\\main\\webapp\\project_image\\profile";
+			String fileName = null;
+			File dir = new File(saveDirectory);
+			String[] allFileNames = dir.list();
+			for(String fn: allFileNames) {
+				if(fn.startsWith(memId+"_")){
+					fileName = fn;
+					break;
+				}
+			}
+			System.out.println(fileName);
 			map.put("status",1);
 			map.put("member", m);
+			if(fileName != null) {
+				map.put("profile", fileName);				
+			}
 		} catch (FindException e) {
 			e.printStackTrace();
 			map.put("status", 0);
@@ -109,34 +143,57 @@ public class MemberRestController {
 	}
 	
 	@PostMapping(value="modify")
-	public Map<String, Object> memmodi(
-			@RequestPart					List<MultipartFile> f,
-			@RequestPart(required = false)	MultipartFile fimg,
-			Member m){
-		Member m2 = new Member();
-		m2.setMemId(m.getMemId());
-		m2.setMemId(m.getMemName());
-		
+	public Map<String, Object> modify(HttpSession session, Member m, @RequestPart MultipartFile img){
 		Map<String, Object> map = new HashMap<>();
 		try {
 			service.memMody(m);
 			map.put("status", 1);
-			map.put("msg", "변경 !");
+			map.put("msg", "수정 성공!");
+			
+			boolean flag = false;
+			String imgOriginName = img.getOriginalFilename();
+			long imgSize = img.getSize();
+			
+			if(imgSize > 0 && !"".equals(imgOriginName)) {
+				flag = true;
+			}
+			if(flag) {
+				String saveDirectory = "D:\\\\MyBACK\\\\kosafront\\\\src\\\\main\\\\webapp\\\\project_image\\\\profile";
+				File dir = new File(saveDirectory);
+				if(!dir.exists()) {
+					dir.mkdir();
+				}
+				
+				String saveFileName = m.getMemId()+"_"+imgOriginName;
+				
+				File[] files = dir.listFiles();
+				for(File f1: files) {
+					String[] fName = f1.getName().split("_");
+					if(fName[0].equals(m.getMemId())) {
+						f1.delete();
+					}
+				}
+				
+				File saveImg = new File(saveDirectory, saveFileName);
+				FileCopyUtils.copy(img.getBytes(), saveImg);
+			}
 		} catch (ModifyException e) {
 			e.printStackTrace();
 			map.put("status", 0);
-			map.put("msg", "변경 실패!");
+			map.put("msg", e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+			map.put("msg", e.getMessage());
 		}
 		return map;
 	}
 	
-	@GetMapping(value="delete")
-	public Map<String, Object> delmem(HttpSession session){
-		String id = (String)session.getAttribute("id");
+	@PutMapping(value="{memId}")
+	public Map<String, Object> delmem(HttpSession session, @PathVariable String memId){
 		Map<String, Object> map = new HashMap<>();
-		
 		try {
-			service.deleteMem(id);
+			service.deleteMem(memId);
 			session.invalidate();
 			map.put("status", 1);
 		} catch (RemoveException e) {

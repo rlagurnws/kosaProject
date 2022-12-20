@@ -1,6 +1,7 @@
 package control;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.my.exception.AddException;
 import com.my.exception.FindException;
@@ -106,7 +109,14 @@ public class MemberRestController {
 	}
 	
 	@PostMapping(value="modify")
-	public Map<String, Object> memmodi(@RequestBody Member m){
+	public Map<String, Object> memmodi(
+			@RequestPart					List<MultipartFile> f,
+			@RequestPart(required = false)	MultipartFile fimg,
+			Member m){
+		Member m2 = new Member();
+		m2.setMemId(m.getMemId());
+		m2.setMemId(m.getMemName());
+		
 		Map<String, Object> map = new HashMap<>();
 		try {
 			service.memMody(m);

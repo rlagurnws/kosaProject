@@ -6,11 +6,10 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +28,7 @@ public class MemberRestController {
 	MemberService service;
 	
 	@PostMapping(value="iddupchk")
-	public ResponseEntity<?> iddupchk(HttpSession session,String id) {
+	public Map<String, Object> iddupchk(String id) {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			service.idDupChk(id);
@@ -40,11 +39,11 @@ public class MemberRestController {
 			map.put("status", 1);
 			map.put("msg", "아이디 사용가능");
 		}
-		return new ResponseEntity<>(map, HttpStatus.OK);
+		return map;
 	}
 	
 	@PostMapping(value="signup")
-	public ResponseEntity<?> signup(@PathVariable Member m){
+	public Map<String, Object> signup(@RequestBody Member m){
 		Map<String, Object> map = new HashMap<>();
 		try {
 			service.signUp(m);
@@ -55,23 +54,21 @@ public class MemberRestController {
 			map.put("status", 1);
 			map.put("msg", e.getMessage());
 		}
-		return new ResponseEntity<>(map, HttpStatus.OK);
+		return map;
 	}
 	
-	@GetMapping(value="login")
-	public ResponseEntity<?> login(HttpSession session, 
-			@PathVariable String id,
-			@PathVariable String pwd){
+	@PostMapping(value="login")
+	public Map<String,Object> login(HttpSession session,@RequestBody Member m ){
 		Map<String, Object> map = new HashMap<>();
 		try {
-			Member m = service.searchById(id);
-			if(m.getMemPwd().equals(pwd)) {
-				if(m.getMemState() == 0) {
+			Member m2 = service.searchById(m.getMemId());
+			if(m2.getMemPwd().equals(m.getMemPwd())) {
+				if(m2.getMemState() == 0) {
 					throw new RemoveException();
 				}
-				session.setAttribute("id", id);
-				session.setAttribute("power", m.getMemPower());
-				session.setAttribute("nick", m.getMemNick());
+				session.setAttribute("id", m2.getMemId());
+				session.setAttribute("power", m2.getMemPower());
+				session.setAttribute("nick", m2.getMemNick());
 				map.put("status", 1);
 				map.put("msg", "로그인 성공");
 			}else {
@@ -85,7 +82,7 @@ public class MemberRestController {
 			map.put("status", 0);
 			map.put("msg", "탈퇴한 계정입니다.");
 		}
-		return new ResponseEntity<>(map, HttpStatus.OK);
+		return map;
 	}
 	
 	@GetMapping(value="logout")	
@@ -94,7 +91,7 @@ public class MemberRestController {
 	}
 	
 	@GetMapping(value="mypage")
-	public ResponseEntity<?> mypage(HttpSession session){
+	public Map<String, Object> mypage(HttpSession session){
 		String id = (String)session.getAttribute("id");
 		Map<String, Object> map = new HashMap<>();
 		try {
@@ -105,11 +102,11 @@ public class MemberRestController {
 			e.printStackTrace();
 			map.put("status", 0);
 		}
-		return new ResponseEntity<>(map,HttpStatus.OK);
+		return map;
 	}
 	
 	@PostMapping(value="modify")
-	public ResponseEntity<?> memmodi(@PathVariable Member m){
+	public Map<String, Object> memmodi(@RequestBody Member m){
 		Map<String, Object> map = new HashMap<>();
 		try {
 			service.memMody(m);
@@ -120,11 +117,11 @@ public class MemberRestController {
 			map.put("status", 0);
 			map.put("msg", "변경 실패!");
 		}
-		return new ResponseEntity<>(map,HttpStatus.OK);
+		return map;
 	}
 	
 	@GetMapping(value="delete")
-	public ResponseEntity<?> delmem(HttpSession session){
+	public Map<String, Object> delmem(HttpSession session){
 		String id = (String)session.getAttribute("id");
 		Map<String, Object> map = new HashMap<>();
 		
@@ -136,16 +133,16 @@ public class MemberRestController {
 			e.printStackTrace();
 			map.put("status", 0);
 		}
-		return new ResponseEntity<>(map, HttpStatus.OK);
+		return map;
 	}
 		
 	@GetMapping(value="session")
-	public ResponseEntity<?> session(HttpSession session){
+	public Map<String, Object> session(HttpSession session){
 		Map<String, Object> map = new HashMap<>();
 		String id = (String)session.getAttribute("id");
 		if(id == null) {
 			map.put("status", 0);
-			return new ResponseEntity<>(map, HttpStatus.OK);
+			return map;
 		}else {
 			int power = (Integer)session.getAttribute("power");
 			String nick = (String)session.getAttribute("nick");
@@ -153,7 +150,7 @@ public class MemberRestController {
 			map.put("id", id);
 			map.put("power", power);
 			map.put("nick", nick);
-			return new ResponseEntity<>(map, HttpStatus.OK);
+			return map;
 		}
 	}
 	

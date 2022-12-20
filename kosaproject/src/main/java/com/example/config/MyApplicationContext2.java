@@ -17,7 +17,6 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @ComponentScan(basePackages = {"com.my.repository","com.my.service"})
-@MapperScan(basePackages = {"mybatis"})
 @EnableTransactionManagement
 public class MyApplicationContext2 {
 	@Bean	

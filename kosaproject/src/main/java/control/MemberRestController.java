@@ -1,5 +1,6 @@
 package control;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,8 +31,8 @@ import com.my.vo.Member;
 public class MemberRestController {
 	@Autowired
 	MemberService service;
-	
-	@PostMapping(value="iddupchk")
+
+	@PostMapping(value = "iddupchk")
 	public Map<String, Object> iddupchk(String id) {
 		Map<String, Object> map = new HashMap<>();
 		try {
@@ -44,9 +46,9 @@ public class MemberRestController {
 		}
 		return map;
 	}
-	
-	@PostMapping(value="signup")
-	public Map<String, Object> signup(@RequestBody Member m){
+
+	@PostMapping(value = "signup")
+	public Map<String, Object> signup(@RequestBody Member m) {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			service.signUp(m);
@@ -59,14 +61,14 @@ public class MemberRestController {
 		}
 		return map;
 	}
-	
-	@PostMapping(value="login")
-	public Map<String,Object> login(HttpSession session,@RequestBody Member m ){
+
+	@PostMapping(value = "login")
+	public Map<String, Object> login(HttpSession session, @RequestBody Member m) {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			Member m2 = service.searchById(m.getMemId());
-			if(m2.getMemPwd().equals(m.getMemPwd())) {
-				if(m2.getMemState() == 0) {
+			if (m2.getMemPwd().equals(m.getMemPwd())) {
+				if (m2.getMemState() == 0) {
 					throw new RemoveException();
 				}
 				session.setAttribute("id", m2.getMemId());
@@ -74,7 +76,7 @@ public class MemberRestController {
 				session.setAttribute("nick", m2.getMemNick());
 				map.put("status", 1);
 				map.put("msg", "로그인 성공");
-			}else {
+			} else {
 				throw new FindException();
 			}
 		} catch (FindException e) {
@@ -87,19 +89,19 @@ public class MemberRestController {
 		}
 		return map;
 	}
-	
-	@GetMapping(value="logout")	
-	public void logout(HttpSession session){
+
+	@GetMapping(value = "logout")
+	public void logout(HttpSession session) {
 		session.invalidate();
 	}
-	
-	@GetMapping(value="mypage")
-	public Map<String, Object> mypage(HttpSession session){
-		String id = (String)session.getAttribute("id");
+
+	@GetMapping(value = "mypage")
+	public Map<String, Object> mypage(HttpSession session) {
+		String id = (String) session.getAttribute("id");
 		Map<String, Object> map = new HashMap<>();
 		try {
 			Member m = service.searchById(id);
-			map.put("status",1);
+			map.put("status", 1);
 			map.put("member", m);
 		} catch (FindException e) {
 			e.printStackTrace();
@@ -107,34 +109,50 @@ public class MemberRestController {
 		}
 		return map;
 	}
-	
-	@PostMapping(value="modify")
-	public Map<String, Object> memmodi(
-			@RequestPart					List<MultipartFile> f,
-			@RequestPart(required = false)	MultipartFile fimg,
-			Member m){
-		Member m2 = new Member();
-		m2.setMemId(m.getMemId());
-		m2.setMemId(m.getMemName());
-		
+
+	@PostMapping(value = "modify")
+	public Map<String, Object> memmodi(Member m, @RequestPart(required = false) MultipartFile fImg) {
 		Map<String, Object> map = new HashMap<>();
+		boolean imgFileFlag = false;
+
 		try {
 			service.memMody(m);
+			if (fImg != null) { // 이미지파일은 최대 한개만 첨부된다. 첨부안되면 요청데이터로 fImg가 전달되지 않는다
+				String orignImgName = fImg.getOriginalFilename();
+				long imgFileLength = fImg.getSize();
+				if (imgFileLength > 0 && !"".equals(orignImgName)) {
+					// flag = true;
+					imgFileFlag = true;
+				}
+
+				if (imgFileFlag) {
+					String saveDirectory = "c:\\files";
+					File dir = new File(saveDirectory);
+					File[] files = dir.listFiles();
+					for (File f1 : files) {
+						if (f1.getName().startsWith(m.getMemId() + "_"+orignImgName)) {
+							f1.delete();
+						}
+					}
+					com.my.util.Attach.upload(m.getMemId(), fImg);
+				}
+			}
 			map.put("status", 1);
 			map.put("msg", "변경 !");
-		} catch (ModifyException e) {
+		} catch (ModifyException | AddException e) {
 			e.printStackTrace();
 			map.put("status", 0);
 			map.put("msg", "변경 실패!");
 		}
+
 		return map;
 	}
-	
-	@GetMapping(value="delete")
-	public Map<String, Object> delmem(HttpSession session){
-		String id = (String)session.getAttribute("id");
+
+	@GetMapping(value = "delete")
+	public Map<String, Object> delmem(HttpSession session) {
+		String id = (String) session.getAttribute("id");
 		Map<String, Object> map = new HashMap<>();
-		
+
 		try {
 			service.deleteMem(id);
 			session.invalidate();
@@ -145,17 +163,17 @@ public class MemberRestController {
 		}
 		return map;
 	}
-		
-	@GetMapping(value="session")
-	public Map<String, Object> session(HttpSession session){
+
+	@GetMapping(value = "session")
+	public Map<String, Object> session(HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
-		String id = (String)session.getAttribute("id");
-		if(id == null) {
+		String id = (String) session.getAttribute("id");
+		if (id == null) {
 			map.put("status", 0);
 			return map;
-		}else {
-			int power = (Integer)session.getAttribute("power");
-			String nick = (String)session.getAttribute("nick");
+		} else {
+			int power = (Integer) session.getAttribute("power");
+			String nick = (String) session.getAttribute("nick");
 			map.put("status", 1);
 			map.put("id", id);
 			map.put("power", power);
@@ -163,5 +181,5 @@ public class MemberRestController {
 			return map;
 		}
 	}
-	
+
 }

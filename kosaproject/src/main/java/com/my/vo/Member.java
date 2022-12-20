@@ -10,8 +10,17 @@ public class Member {
 	private String memSex;
 	private String memNick;
 	private int memPower;
-	private String memAddress;
 	private int memState;
+	private Member memInfo;
+	
+	
+	
+	public Member getMemInfo() {
+		return memInfo;
+	}
+	public void setMemInfo(Member memInfo) {
+		this.memInfo = memInfo;
+	}
 	public String getMemId() {
 		return memId;
 	}
@@ -60,17 +69,11 @@ public class Member {
 	public void setMemPower(int memPower) {
 		this.memPower = memPower;
 	}
-	public String getMemAddress() {
-		return memAddress;
-	}
-	public void setMemAddress(String memAddress) {
-		this.memAddress = memAddress;
-	}
 	public int getMemState() {
 		return memState;
 	}
 	public Member(String memId, String memName, String memPwd, String memBirth, String memPhone, String memSex,
-			String memNick, int memPower, String memAddress, int memState) {
+			String memNick, int memPower, int memState) {
 		super();
 		this.memId = memId;
 		this.memName = memName;
@@ -80,7 +83,6 @@ public class Member {
 		this.memSex = memSex;
 		this.memNick = memNick;
 		this.memPower = memPower;
-		this.memAddress = memAddress;
 		this.memState = memState;
 	}
 	public Member() {

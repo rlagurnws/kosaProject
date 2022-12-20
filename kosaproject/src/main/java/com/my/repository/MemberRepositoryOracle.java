@@ -103,9 +103,8 @@ public class MemberRepositoryOracle implements MemberRepository{
 //				M.setMEM_sex(rs.getString(6));
 //				M.setMEM_nick(rs.getString(7));
 //				M.setMEM_power(rs.getInt(8));
-//				M.setMEM_address(rs.getString(9));
-//				M.setMEM_state(rs.getInt(10));
-//				M.setMEM_pic(rs.getString(11));
+//				M.setMEM_state(rs.getInt(9));
+//				M.setMEM_pic(rs.getString(10));
 //				return M;
 //			}else {
 //				return null;

@@ -1,15 +1,20 @@
 package control;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.my.exception.AddException;
 import com.my.exception.FindException;
@@ -18,14 +23,14 @@ import com.my.exception.RemoveException;
 import com.my.service.MemberService;
 import com.my.vo.Member;
 
-@Controller
-public class MemberController {
-
+//@Controller
+@RestController
+@RequestMapping("member/*")
+public class MemberRestController {
 	@Autowired
 	MemberService service;
 	
-	@PostMapping("iddupchk")
-	@ResponseBody
+	@PostMapping(value="iddupchk")
 	public Map<String, Object> iddupchk(String id) {
 		Map<String, Object> map = new HashMap<>();
 		try {
@@ -40,9 +45,8 @@ public class MemberController {
 		return map;
 	}
 	
-	@PostMapping("signup")
-	@ResponseBody
-	public Map<String, Object> signup(Member m){
+	@PostMapping(value="signup")
+	public Map<String, Object> signup(@RequestBody Member m){
 		Map<String, Object> map = new HashMap<>();
 		try {
 			service.signUp(m);
@@ -56,22 +60,18 @@ public class MemberController {
 		return map;
 	}
 	
-	@GetMapping("login")
-	@ResponseBody
-	public Map<String,Object> login(HttpSession session, String id, String pwd){
+	@PostMapping(value="login")
+	public Map<String,Object> login(HttpSession session,@RequestBody Member m ){
 		Map<String, Object> map = new HashMap<>();
 		try {
-			Member m = service.searchById(id);
-			if(m.getMemPwd().equals(pwd)) {
-				if(m.getMemState() == 0) {
+			Member m2 = service.searchById(m.getMemId());
+			if(m2.getMemPwd().equals(m.getMemPwd())) {
+				if(m2.getMemState() == 0) {
 					throw new RemoveException();
 				}
-				session.setAttribute("id", id);
-				session.setAttribute("power", m.getMemPower());
-				session.setAttribute("nick", m.getMemNick());
-				System.out.println("------------------------로그인 컨트롤 ----------------");
-				System.out.println(session.getAttribute("power"));
-				System.out.println("------------------------로그인 컨트롤 ----------------");
+				session.setAttribute("id", m2.getMemId());
+				session.setAttribute("power", m2.getMemPower());
+				session.setAttribute("nick", m2.getMemNick());
 				map.put("status", 1);
 				map.put("msg", "로그인 성공");
 			}else {
@@ -88,14 +88,12 @@ public class MemberController {
 		return map;
 	}
 	
-	@GetMapping("logout")
-	@ResponseBody
+	@GetMapping(value="logout")	
 	public void logout(HttpSession session){
 		session.invalidate();
 	}
 	
-	@GetMapping("mypage")
-	@ResponseBody
+	@GetMapping(value="mypage")
 	public Map<String, Object> mypage(HttpSession session){
 		String id = (String)session.getAttribute("id");
 		Map<String, Object> map = new HashMap<>();
@@ -110,9 +108,15 @@ public class MemberController {
 		return map;
 	}
 	
-	@PostMapping("memmodi")
-	@ResponseBody
-	public Map<String, Object> memmodi(Member m){
+	@PostMapping(value="modify")
+	public Map<String, Object> memmodi(
+			@RequestPart					List<MultipartFile> f,
+			@RequestPart(required = false)	MultipartFile fimg,
+			Member m){
+		Member m2 = new Member();
+		m2.setMemId(m.getMemId());
+		m2.setMemId(m.getMemName());
+		
 		Map<String, Object> map = new HashMap<>();
 		try {
 			service.memMody(m);
@@ -126,8 +130,7 @@ public class MemberController {
 		return map;
 	}
 	
-	@GetMapping("delmem")
-	@ResponseBody
+	@GetMapping(value="delete")
 	public Map<String, Object> delmem(HttpSession session){
 		String id = (String)session.getAttribute("id");
 		Map<String, Object> map = new HashMap<>();
@@ -142,9 +145,8 @@ public class MemberController {
 		}
 		return map;
 	}
-	
-	@GetMapping("session")
-	@ResponseBody
+		
+	@GetMapping(value="session")
 	public Map<String, Object> session(HttpSession session){
 		Map<String, Object> map = new HashMap<>();
 		String id = (String)session.getAttribute("id");

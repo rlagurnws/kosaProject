@@ -19,7 +19,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan(basePackages = {"com.my.repository","com.my.service"})
 @EnableTransactionManagement
 public class MyApplicationContext2 {
-	@Bean
+	@Bean	
 	public HikariConfig hikariConfig() {
 		HikariConfig config = new HikariConfig();
 		config.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
@@ -42,13 +42,13 @@ public class MyApplicationContext2 {
 		sqlSessionFactory.setDataSource(dataSource());
 		org.springframework.core.io.Resource resource = new ClassPathResource("mybatis-config.xml");
 		sqlSessionFactory.setConfigLocation(resource);
-		sqlSessionFactory.setConfigLocation(resource);
 		return (SqlSessionFactory)sqlSessionFactory.getObject();
 	}
 	
 	@Bean
 	public DataSourceTransactionManager txManager() {
-		DataSourceTransactionManager tx = new DataSourceTransactionManager(dataSource());
+		DataSourceTransactionManager tx =
+				new DataSourceTransactionManager(dataSource());
 		return tx;
 	}
 

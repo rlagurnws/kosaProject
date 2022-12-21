@@ -29,7 +29,6 @@ import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.service.StoreService;
 import com.my.util.Attach;
-import com.my.vo.Notice;
 import com.my.vo.Store;
 
 @RestController
@@ -82,14 +81,19 @@ public class StoreController{
 //	}
 	
 	@GetMapping("list/{currentPage}")
-	public Map<String,Object> list(@PathVariable int currentPage) throws FindException{
+	public Map<String,Object> list(@PathVariable int currentPage){
 		Map<String,Object> map = new HashMap<>();
 		PageBean<Store> pb = null;
-		pb = service.getPageBean(currentPage);
-		map.put("status", 1);
-		map.put("pb", pb);
+		try {
+			pb = service.getPageBean(currentPage);
+			map.put("status", 1);
+			map.put("pb", pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
 		return map;
 	}
-	
-	
 }
+	
+	

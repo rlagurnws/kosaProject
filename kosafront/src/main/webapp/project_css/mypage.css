@@ -1,5 +1,5 @@
 html {
-    height: 800px;
+    height: 1080px;
 }
 a.store{
     display: none;
@@ -91,9 +91,7 @@ aside>.content {
     margin-left: 10%;
     height: 100%;
 }
-aside>.content>.signup {
-    border: 1px solid;
-    width: 100%;
-    margin: 0%;
-    height: 100%;
+aside>.content>img{
+    width: 200px;
+    height: 200px;
 }

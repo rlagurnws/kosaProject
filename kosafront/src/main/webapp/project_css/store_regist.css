@@ -72,7 +72,7 @@ aside {
     height: 70%;
 }
 
-aside>.content {
+aside>form>div.content {
     border: 1px solid;
     width: 80%;
     margin-left: 10%;

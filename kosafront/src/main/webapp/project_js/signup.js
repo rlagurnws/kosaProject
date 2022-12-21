@@ -12,7 +12,7 @@ $(function(){
         xhrFields: {
             withCredentials: true
         },
-        url: backURL+'session',
+        url: backURL+'member/session',
         success: function(jsonObj){
             if(jsonObj.power==2){
                 $('a.store').show()
@@ -31,28 +31,14 @@ $(function(){
             }
         }
     })
-    let $logout = $('a.logout')
-    $logout.click(()=>{
-        $.ajax({
-            xhrFields: {
-                withCredentials: true
-            },
-            url: backURL+'logout',
-            success: function(){
-                location.href=frontURL+'project_html/main.html'
-            }
-        })
-    })
-
-
     
-    let $id = $('input[name=id]')
+    let $id = $('input[name=memId]')
     $('input[name=submit]').hide()
 
     //--아이디중복확인버튼 클릭이벤트 START--
     let $btIdDupChk = $('button.iddupchk')
     $btIdDupChk.click(()=>{
-        let url = backURL+'iddupchk'
+        let url = backURL+'member/iddupchk'
         let method = 'post'
         let data = 'id='+$id.val()
         $.ajax({
@@ -78,37 +64,20 @@ $(function(){
     })
     //--아이디중복확인버튼 클릭이벤트 END--
 
-    //--아이디입력란 포커스이벤트 START--
-    //$id.focus(()=>{
-    //    $('input[name=submit]').hide()
-    //})
-    //--아이디입력란 포커스이벤트 END--
-
-    //-----지역 선택 이벤트 시작-----
-    let $selectloca = $('select.locaType')
-    let $region = $('select.region')
-    let $copy = $('select.region>.copy')
-    $selectloca.change(()=>{
-        $copy.show()
-        let region = $selectloca.val()
-        let el = $('.region>.copy').not($copy)
-        el.remove()
-        switch(region){
-            case 'gg':
-                $region.append($copy.clone().html('수원시'))
-                $region.append($copy.clone().html('의왕시'))
-                $region.append($copy.clone().html('안양시'))
-                $copy.hide()
-                break
-            case 'jr':
-                $region.append($copy.clone().html('고흥군'))
-                $region.append($copy.clone().html('광주시'))
-                $region.append($copy.clone().html('등등등'))
-                $copy.hide()
+    //----- 이미지 변경 시작 -----
+    let $img = $('img.img')
+    function setThumbnail(event) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+          $img.attr('src',event.target.result)
         }
-    })
-    //-----지역 선택 이벤트 끝 -----
+        reader.readAsDataURL(event.target.files[0]);
+      }
 
+    $('input[name=img]').change((event)=>{
+        setThumbnail(event)
+    })
+    //----- 이미지 변경 끝 -----
 
     //--가입버튼 클릭이벤트 START--
     $('input[name=submit]').click(()=>{
@@ -123,23 +92,40 @@ $(function(){
             return false
         }
 
+        let $form = $('form')
+        let formData = new FormData($form[0])
 
+        let memPower = $('input[name=memPower]').val()
+        let memId = $('input[name=memId]').val()
+        let memPwd= $('input[name=memPwd]').val()
+        let memName= $('input[name=memName]').val()
+        let memPhone= $('input[name=memPhone]').val()
+        let memSex= $('input[name=memSex]').val()
+        let memNick= $('input[name=memNick]').val()
+        let memBirth= $('input[name=memBirth]').val()
 
-        let url = backURL+'signup'
-        let method = 'post'
-        let data = $('form').serialize()
-        console.log('serialize결과', data)
+        formData.append('memPower',memPower)
+        formData.append('memId', memId)
+        formData.append('memPwd', memPwd)
+        formData.append('memName', memName)
+        formData.append('memPhone', memPhone)
+        formData.append('memSex', memSex)
+        formData.append('memNick', memNick)
+        formData.append('memBirth', memBirth)
+
         $.ajax({
             xhrFields: {
                 withCredentials: true
             },
-            url : url,
-            method : method,
-            data : data,
+            processData : false,
+            contentType : false,
+            method : 'post',
+            url : backURL+'member/new',
+            data : formData,
             success : function(jsonObj){
                 if(jsonObj.status == 1){
                     alert(jsonObj.msg)
-                    location= frontURL+"project_html/main.html"
+                    location= frontURL+"main.html"
                 }else if(jsonObj.status == 0){
                     alert(jsonObj.msg)
                 }

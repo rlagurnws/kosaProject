@@ -14,7 +14,7 @@ $(function(){
         xhrFields: {
             withCredentials: true
         },
-        url: backURL+'session',
+        url: backURL+'member/session',
         success: function(jsonObj){
             if(jsonObj.power==2){
                 $('a.store').show()
@@ -39,7 +39,7 @@ $(function(){
             xhrFields: {
                 withCredentials: true
             },
-            url: backURL+'logout',
+            url: backURL+'member/logout',
             success: function(){
                 location.href= 'main.html'
             }
@@ -48,12 +48,17 @@ $(function(){
     $('button.login').click(()=>{
         let id = $('input[name=id]').val()
         let pwd = $('input[name=pwd]').val()
+        let member = {}
+        member.memId = id
+        member.memPwd = pwd
         $.ajax({
             xhrFields: {
                 withCredentials: true
             },
-            url: backURL+'login',
-            data: 'id='+id+'&pwd='+pwd,
+            url: backURL+'member/'+id,
+            method : 'post',
+            data: JSON.stringify(member),
+            headers: {'Content-Type': 'application/json'},
             success: function(jsonObj){
                 if(jsonObj.status == 1){
                     alert("로그인 성공")

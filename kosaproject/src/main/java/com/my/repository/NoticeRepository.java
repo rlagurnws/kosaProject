@@ -1,11 +1,14 @@
 package com.my.repository;
 
+import java.sql.BatchUpdateException;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import com.my.exception.AddException;
 import com.my.exception.FindException;
+import com.my.exception.ModifyException;
+import com.my.exception.RemoveException;
 import com.my.vo.Notice;
 
 //@Repository
@@ -36,4 +39,8 @@ public interface NoticeRepository {
 	int findNext(int no) throws FindException;
 	
 	int findPre(int no) throws FindException;
+	
+	void delete(int no) throws RemoveException;
+	
+	void update(Notice noti) throws ModifyException;
 }

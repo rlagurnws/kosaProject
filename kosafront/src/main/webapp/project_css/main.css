@@ -1,12 +1,31 @@
-body {
-    font-family: "Lato", sans-serif;
-    /*background-color: bisque;*/
-
+html{
+    height: 1080px;
 }
-form{
-    text-align: center;
+a.store{
+    display: none;
 }
-.sidenav {
+body{
+    height: 100%;
+    margin: 0;
+}
+div.center{
+    margin-left: 0;
+    height: 100%;
+}
+header{
+    height: 10%;
+    border-bottom: 2px solid gray;
+}
+header>span.menu{
+    font-size: 50px;
+    cursor:pointer;
+    margin: 0 3% 0 3%;
+}
+header>span.title{
+    font-size: 50px;
+    margin-left: 35%;
+}
+.mySidenav{
     height: 100%;
     width: 0;
     position: fixed;
@@ -18,104 +37,75 @@ form{
     transition: 0.5s;
     padding-top: 60px;
 }
-.sidenav span {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
-}
-
-.sidenav span:hover {
+.mySidenav a:hover {
     color: #f1f1f1;
 }
-
-.sidenav a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
-}
-
-.sidenav a:hover {
-    color: #f1f1f1;
-}
-
-.sidenav .closebtn {
+.mySidenav .closebtn {
     position: absolute;
     top: 0;
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
 }
-a.store{
-    display: none;
+.mySidenav>a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+.mySidenav span {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
 }
 
-#main {
-    transition: margin-left .5s;
-    padding: 16px;
+.mySidenav span:hover {
+    color: #f1f1f1;
 }
-
-.frame {
-    /* 공간파악 css
-        background-color: rgb(0, 255, 200);
-        height: 500px; 
-        */
-    margin: 0 5%;
-    background-color: white;
-    
+nav{
+    height: 10%;
+    margin-left: 10%;
+    margin-top: 5%;
+    margin-right: 10%;
 }
-
-@media screen and (max-height: 450px) {
-    .sidenav {
-        padding-top: 15px;
-    }
-
-    .sidenav a {
-        font-size: 18px;
-    }
+nav>form{
+    margin-left: 33%;
+    margin-right: 20%;
 }
-
-
-* {
-    box-sizing: border-box;
+nav>form>input{
+    font-size: 25px;
 }
-
-.example {
-    margin: 0 5%;
+nav>form>select{
+    font-size: 25px;
 }
-
-form.example input[type=text] {
-    padding: 10px;
-    font-size: 17px;
-    border: 1px solid grey;
-    float: left;
-    width: 80%;
-    background: #f1f1f1;
+aside{
+    height: 60%;
+    margin-left: 5%;
 }
-
-form.example button {
-    float: left;
+aside div{
     width: 20%;
-    padding: 10px;
-    background: #2196F3;
-    color: white;
-    font-size: 17px;
-    border: 1px solid grey;
-    border-left: none;
-    cursor: pointer;
+    height: 60%;
+    border: 1px solid;
+    display: inline-block;
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
-form.example button:hover {
-    background: #0b7dda;
-}
 
-form.example::after {
-    content: "";
-    clear: both;
-    display: table;
+aside>.content>.noti_content{
+    margin: 5% 5% 5% 5%;
+}
+foot{
+    height: 20%;
+    background-color: #818181;
+}
+foot.div{
+    width: 100%;
+    height: 100%;
+    background-color: #818181;
 }

@@ -1,6 +1,8 @@
 package control;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -8,7 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,10 +24,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.my.dto.PageBean;
 import com.my.exception.AddException;
+import com.my.exception.FindException;
 import com.my.service.StoreService;
 import com.my.util.Attach;
 import com.my.vo.Member;
+import com.my.vo.Notice;
 import com.my.vo.Store;
 
 @RestController
@@ -65,6 +75,17 @@ public class StoreController{
 		}
 
 	}
+	@GetMapping("storelist/{currentPage}")
+	@ResponseBody
+	public ResponseEntity<?> storereadlist(@PathVariable int currentPage) throws FindException{
+		PageBean<Store> pb = service.getPageBean(currentPage);
+		
+		return new ResponseEntity<>(pb, HttpStatus.OK);		
+		
+	}
+	
+	
+	
 	//	public Map<String,Object> addstore(Store store){
 	//		Map<String,Object> map = new HashMap<>();
 	//		try {

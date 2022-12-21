@@ -4,13 +4,13 @@ import java.util.List;
 
 import com.my.exception.AddException;
 import com.my.exception.FindException;
-
 import com.my.vo.Store;
 
 public interface StoreRepository {
 	
 	/**
-	 * 가게등록
+	 * 가게등록 
+	 * @author 이남규
 	 * @param store  
 	 * @return 
 	 * @throws AddException
@@ -23,7 +23,14 @@ public interface StoreRepository {
 	 * @throws FindException
 	 */
 	
-	List<Store> selectAll() throws FindException;
+	
 	
 	public List<Store> selectByCate(int cate) throws FindException;
+	
+	
+	int selectStoreCount() throws FindException;
+	
+	List<Store> selectAll(int currentPage, int cntPerPage) throws FindException;
+	
+
 }

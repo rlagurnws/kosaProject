@@ -1,7 +1,9 @@
 package com.my.repository;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -12,7 +14,7 @@ import com.my.exception.AddException;
 import com.my.exception.FindException;
 
 import com.my.vo.Menu;
-
+import com.my.vo.Notice;
 import com.my.vo.Store;
 
 @Repository("storeRepository")
@@ -50,17 +52,73 @@ public class StoreRepositoryOracle implements StoreRepository{
 		
 	}
 
-	@Override
-	public List<Store> selectAll() throws FindException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
+	
 	@Override
 	public List<Store> selectByCate(int cate) throws FindException {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
+	
+	
+
+
+	
+
+
+
+	@Override
+	public int selectStoreCount() throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			return session.selectOne("com.my.mybatis.StoreMapper.selectStoreCount");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+
+
+
+	@Override
+	public List<Store> selectAll(int currentPage, int cntPerPage) throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			int startRow = ((currentPage-1)*cntPerPage)+1;
+			int endRow = currentPage*cntPerPage;
+			Map<String, Object> map = new HashMap<>();
+			map.put("startRow",startRow);
+			map.put("endRow", endRow);
+			return session.selectList("com.my.mybatis.StoreMapper.selectAll",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+
+
+
+	
+
+
+
+	
+
+	
+
+	
 
 //	@Override
 //	public List<Store> selectAll() throws FindException {

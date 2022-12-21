@@ -19,11 +19,29 @@
 					VALUES(#{stNum},#{menuName},#{menuPrice})
 	</insert>
 	
+	
+	
+	<select id="selectStoreCount" resultType="int" >
+		select count(*) from st
+	</select>
+	
+	<!--<select id="selectAll" resultType="Store" parameterType="map">
+		SELECT *
+		FROM (SELECT rownum rn, a.*
+		FROM (SELECT * FROM st
+		
+		     where st_loca like '%부산%'
+		       ORDER BY st_num DESC)a )
+		WHERE rn BETWEEN #{startRow} AND #{endRow}
+	</select>-->
 	<select id="selectAll" resultType="Store" parameterType="map">
 		SELECT *
 		FROM (SELECT rownum rn, a.*
-		FROM (SELECT * FROM notice ORDER BY noti_no DESC)a )
+		FROM (SELECT * FROM st		
+		     where 
+		     	st_loca like '%부산%'
+		     	or st_loca like '%서울%'
+		       		ORDER BY st_num DESC)a )
 		WHERE rn BETWEEN #{startRow} AND #{endRow}
 	</select>
-	
 </mapper>

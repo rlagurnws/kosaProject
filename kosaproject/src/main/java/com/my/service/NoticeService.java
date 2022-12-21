@@ -1,10 +1,6 @@
 package com.my.service;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.my.dto.PageBean;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
+import com.my.exception.ModifyException;
+import com.my.exception.RemoveException;
 import com.my.repository.NoticeRepository;
 import com.my.vo.Notice;
 
@@ -48,5 +46,11 @@ public class NoticeService {
 	}
 	public int selectNext(int no) throws FindException{
 		return repository.findNext(no);
+	}
+	public void deleteNotice(int no) throws RemoveException{
+		repository.delete(no);
+	}
+	public void updateNotice(Notice noti) throws ModifyException{
+		repository.update(noti);
 	}
 }

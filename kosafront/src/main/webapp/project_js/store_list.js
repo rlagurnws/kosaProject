@@ -26,10 +26,14 @@ $(function () {
             method : get,
             url : backURL +'',
             data : 'currentPage='+currentPage,
-            success: function (data) {
+            success: function (jsonObj) {
                 let $storeList = $('div.store_lists')
                 $storeList.show()
                 let $divsl = $('div.store_list')
+                let notis = jsonObj.pb.list
+                $(notis).each(function(index,n){
+                    
+                })
             },
             error: function (xhr) {
                 alert('오류:' + xhr.status)

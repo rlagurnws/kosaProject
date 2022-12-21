@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- xml파일이라 앞에 패키지 이름 일단 신경쓰지말자 -->
+<mapper namespace="com.my.mybatis.ReviewMapper">
+
+	<insert id="insert" parameterType="Review">
+		INSERT INTO Review(review_no, review_des, review_date, review_id, review_title)
+		VALUES (review_seq.nextVal,#{reviewDes},SYSDATE,#{reviewId},#{reviewTitle})
+	</insert>
+  
+	<select id="selectAll" resultType="Review" parameterType="map">
+		SELECT *
+		FROM (SELECT rownum rn, a.*
+		FROM (SELECT * FROM Review ORDER BY review_no DESC)a )
+		WHERE rn BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<select id="selectCount" resultType="int" >
+		select count(*) from Review
+	</select>
+	
+	
+	<select id="selectByNo" resultType="Review" parameterType="int">
+		SELECT *
+		FROM Review
+		WHERE review_no = #{review_no}
+	</select>
+
+	
+	<select id="findAll" resultType="int" parameterType="int">
+		SELECT review_NO 
+		FROM Review 
+		ORDER BY review_NO DESC
+	</select>
+	
+	
+</mapper>

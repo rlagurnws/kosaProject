@@ -10,28 +10,28 @@ public class Review {
 	private int stNum;
 	private String memId;
 	private int reviewState;
-	public int getReviewNo() {
+	public int getreviewNo() {
 		return reviewNo;
 	}
-	public void setReviewNo(int reviewNo) {
+	public void setreviewNo(int reviewNo) {
 		this.reviewNo = reviewNo;
 	}
-	public String getReviewDes() {
+	public String getreviewDes() {
 		return reviewDes;
 	}
-	public void setReviewDes(String reviewDes) {
+	public void setreviewDes(String reviewDes) {
 		this.reviewDes = reviewDes;
 	}
-	public double getReviewStar() {
+	public double getreviewStar() {
 		return reviewStar;
 	}
-	public void setReviewStar(double reviewStar) {
+	public void setreviewStar(double reviewStar) {
 		this.reviewStar = reviewStar;
 	}
-	public Date getReviewDate() {
+	public Date getreviewDate() {
 		return reviewDate;
 	}
-	public void setReviewDate(Date reviewDate) {
+	public void setreviewDate(Date reviewDate) {
 		this.reviewDate = reviewDate;
 	}
 	public int getstNum() {
@@ -43,16 +43,16 @@ public class Review {
 	public void setstNum(int stNum) {
 		this.stNum = stNum;
 	}
-	public String getMemId() {
+	public String getmemId() {
 		return memId;
 	}
-	public void setMemId(String memId) {
+	public void setmemId(String memId) {
 		this.memId = memId;
 	}
-	public int getReviewState() {
+	public int getreviewState() {
 		return reviewState;
 	}
-	public void setReviewState(int reviewState) {
+	public void setreviewState(int reviewState) {
 		this.reviewState = reviewState;
 	}
 	public Review(int reviewNo, String reviewDes, double reviewStar, Date reviewDate, int stNum, String memId,

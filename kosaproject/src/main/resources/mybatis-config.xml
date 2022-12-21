@@ -9,9 +9,11 @@
 <typeAliases>
 	<typeAlias type="com.my.vo.Member" alias="Member"/>
 	<typeAlias type="com.my.vo.Notice" alias="Notice"/>
+	<typeAlias type="com.my.vo.Review" alias="Review"/>
 </typeAliases>
   <mappers>
     <mapper resource="MemberMapper.xml"/>
     <mapper resource="NoticeMapper.xml"/>
+    <mapper resource="ReviewMapper.xml"/>
   </mappers>
 </configuration>

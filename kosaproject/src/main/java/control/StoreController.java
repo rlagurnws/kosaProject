@@ -82,17 +82,12 @@ public class StoreController{
 //	}
 	
 	@GetMapping("list/{currentPage}")
-	public Map<String,Object> list(@PathVariable int currentPage){
+	public Map<String,Object> list(@PathVariable int currentPage) throws FindException{
 		Map<String,Object> map = new HashMap<>();
 		PageBean<Store> pb = null;
-		try {
-			pb = service.getPageBean(currentPage);
-			map.put("status", 1);
-			map.put("pb", pb);
-		} catch (FindException e) {
-			e.printStackTrace();
-			map.put("status", 0);
-		}
+		pb = service.getPageBean(currentPage);
+		map.put("status", 1);
+		map.put("pb", pb);
 		return map;
 	}
 	

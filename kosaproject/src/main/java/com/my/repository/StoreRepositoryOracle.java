@@ -91,7 +91,7 @@ public class StoreRepositoryOracle implements StoreRepository{
 			Map<String, Object> map = new HashMap<>();
 			map.put("startRow",startRow);
 			map.put("endRow", endRow);
-			list =  session.selectList("com.my.mybatis.StoreMapper.selectAll",map);
+			list =  session.selectList("com.my.mybatis.StoreMapper.selectByCate",map);
 			
 			return list;
 		} catch (Exception e) {

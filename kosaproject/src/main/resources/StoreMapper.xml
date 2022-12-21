@@ -21,7 +21,7 @@
 	<select id="selectCount" resultType="int" >
 		select count(*) 
 		from st
-		WHERE cate_Num=#{cateNum}
+		WHERE cate_Num=1
 	</select>
 		
 	<select id="selectAll" resultType="Store" parameterType="map">
@@ -32,7 +32,7 @@
 	<select id="selectByCate" resultType="Store" parameterType="int">
 		SELECT st_name, st_hits, cate_Num, st_loca
 		FROM st
-		WHERE cate_Num=#{cateNum}
+		WHERE cate_Num=1
 	</select>
 	
 	

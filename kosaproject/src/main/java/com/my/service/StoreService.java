@@ -1,69 +1,54 @@
 package com.my.service;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.my.dto.PageBean;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
+import com.my.exception.ModifyException;
 import com.my.repository.StoreRepository;
+import com.my.vo.Menu;
 import com.my.vo.Store;
 
+@Service("storeService")
 public class StoreService {
+	@Autowired
 	private StoreRepository repository;
 	
-	public StoreService(String propertiesFileName) {
-		Properties env = new Properties();
-		try {
-			env.load(new FileInputStream(propertiesFileName));
-			String className = env.getProperty("store");
-			//클래스로드
-			Class clazz = Class.forName(className);
-			//객체 생성
-			Object obj = clazz.getDeclaredConstructor().newInstance();
-			repository = (StoreRepository)obj;
-			
-		} catch (FileNotFoundException e) {
-			
-			e.printStackTrace();
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	public StoreService() {}
+	
+	public StoreService(StoreRepository repository) {
+		this.repository = repository;
 	}
 	
 	//추가
-	public void addStore(Store store) throws AddException{
-		repository.insert(store);
+	public int addStore(Store store) throws AddException{
+		int stNum = repository.insert(store);
 		System.out.println("add성공");
+		return stNum;
 	}
-	public List<Store> findAll() throws FindException{
-		return repository.selectAll();
+	
+	
+	public List<Store> submittedStore(int currentPage, int cntPerPage) throws FindException{
+		return repository.submitted(currentPage, cntPerPage);
+	}
+	public PageBean<Store> getPageBean(int currentPage) throws FindException{
+		List<Store> list = submittedStore(currentPage,PageBean.CNT_PER_PAGE);
+		int totalCnt = repository.selectCount();
+		PageBean<Store> pb = new PageBean<>(currentPage, list, totalCnt);
+		return pb;
+	}
+	public Store selectByNo(int storeNo) throws FindException{
+		return repository.selectByNo(storeNo);
+	}
+	public List<Menu> findMenu(int stNum) throws FindException{
+		return repository.findMenu(stNum);
+	}
+	public void confirm(int stNum) throws ModifyException{
+		repository.confirmStore(stNum);
 	}
 	public List<Store> searchByCate(int cate) throws FindException{
 		return repository.selectByCate(cate);

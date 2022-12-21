@@ -1,7 +1,10 @@
 package com.my.repository;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -10,12 +13,13 @@ import org.springframework.stereotype.Repository;
 
 import com.my.exception.AddException;
 import com.my.exception.FindException;
-
 import com.my.vo.Menu;
 
 import com.my.vo.Store;
 
-@Repository("storeRepository")
+
+
+@Repository
 public class StoreRepositoryOracle implements StoreRepository{
 
 	@Autowired
@@ -50,77 +54,56 @@ public class StoreRepositoryOracle implements StoreRepository{
 		
 	}
 
-	@Override
-	public List<Store> selectAll() throws FindException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
-	public List<Store> selectByCate(int cate) throws FindException {
-		// TODO Auto-generated method stub
-		return null;
+	public int selectCount() throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			return session.selectOne("com.my.mybatis.StoreMapper.selectCount");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
 	}
 
-//	@Override
-//	public List<Store> selectAll() throws FindException {
-//		List<Store> list = new ArrayList<>();
-//		Connection conn = null;
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
-//		try {
-//			conn = MyConnection.getConnection();
-//			String selectAllPageSQL = "SELECT *\r\n"
-//					+ "FROM (SELECT rownum rn, a.* \r\n"
-//					+ "        FROM (\r\n"
-//					+ "                SELECT * FROM ST ORDER BY st_num\r\n"
-//					+ "             )a ) ";
-//			pstmt = conn.prepareStatement(selectAllPageSQL);
-//			rs = pstmt.executeQuery();
-//			while(rs.next()) {
-//				int store_No = rs.getInt("ST_NUM");
-//				String store_name = rs.getString("ST_NAME");
-//				Store s = new Store();
-//				s.setSt_num(store_No);
-//				s.setSt_name(store_name);
-//				list.add(s);
-//			}
-//			return list;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw new FindException(e.getMessage());
-//		}finally {
-//			MyConnection.close(rs, pstmt, conn);
-//		}
-//	}
-//	
-//	public List<Store> selectByCate(int cate) throws FindException{
-//		List<Store> list = new ArrayList<>();
-//		Connection conn = null;
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
-//		try {
-//			conn = MyConnection.getConnection();
-//			String selectAllPageSQL = "SELECT ST_name, ST_num "
-//									+ "FROM ST "
-//									+ "WHERE CATE = ?";
-//			pstmt = conn.prepareStatement(selectAllPageSQL);
-//			pstmt.setInt(1, cate);
-//			rs = pstmt.executeQuery();
-//			while(rs.next()) {
-//				int store_No = rs.getInt("ST_NUM");
-//				String store_name = rs.getString("ST_NAME");
-//				Store s = new Store();
-//				s.setSt_num(store_No);
-//				s.setSt_name(store_name);
-//				list.add(s);
-//			}
-//			return list;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw new FindException(e.getMessage());
-//		}finally {
-//			MyConnection.close(rs, pstmt, conn);
-//		}
-//	}
+	
+	
+
+
+	@Override
+	public List<Store> selectByCate() throws FindException {
+		return null;
+	}
+	
+	public List<Store> selectByCate(int currentPage, int cntPerPage) throws FindException{
+		SqlSession session = null;
+		List<Store> list = new ArrayList<>();
+		try {
+			session = sqlSessionFactory.openSession();
+			int startRow = ((currentPage-1)*cntPerPage)+1;
+			int endRow = currentPage*cntPerPage;
+			Map<String, Object> map = new HashMap<>();
+			map.put("startRow",startRow);
+			map.put("endRow", endRow);
+			list =  session.selectList("com.my.mybatis.StoreMapper.selectAll",map);
+			
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+
+	
+
 }

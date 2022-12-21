@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.my.exception.AddException;
 import com.my.exception.FindException;
-
+import com.my.vo.Notice;
 import com.my.vo.Store;
 
 public interface StoreRepository {
@@ -23,7 +23,19 @@ public interface StoreRepository {
 	 * @throws FindException
 	 */
 	
-	List<Store> selectAll() throws FindException;
+	int selectCount() throws FindException;
+		
+
+		
+
+
 	
-	public List<Store> selectByCate(int cate) throws FindException;
+
+	List<Store> selectByCate(int currentPage, int cntPerPage) throws FindException;
+
+	List<Store> selectByCate() throws FindException;
+
+
+
+
 }

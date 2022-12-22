@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.my.dto.PageBean;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
@@ -219,6 +220,21 @@ public class MemberRestController {
 			map.put("nick", nick);
 			return map;
 		}
+	}
+	
+	@GetMapping("list/{currentPage}")
+	public Map<String, Object> list(@PathVariable int currentPage){
+		Map<String, Object> map = new HashMap<>();
+		PageBean<Member> pb = null;
+		try {
+			pb = service.getPageBean(currentPage);
+			map.put("status", 1);
+			map.put("pb", pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
 	}
 	
 }

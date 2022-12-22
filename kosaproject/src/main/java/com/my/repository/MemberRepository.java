@@ -1,5 +1,7 @@
 package com.my.repository;
 
+import java.util.List;
+
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
@@ -18,4 +20,11 @@ public interface MemberRepository {
 //	Member memberInfo(String id)throws FindException;
 	
 	void delete(String id) throws RemoveException;
+
+	int selectCount() throws FindException;
+	
+	List<Member> selectAll() throws FindException;
+	
+	List<Member> selectAll(int currentPage, int cntPerPage) throws FindException;
+	
 }

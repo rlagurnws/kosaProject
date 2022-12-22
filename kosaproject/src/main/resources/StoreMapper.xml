@@ -2,6 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
   <mapper namespace="com.my.mybatis.StoreMapper">
 	<insert id="insert" parameterType="Store">
 		INSERT INTO ST(st_num, st_des, st_hits, st_date, st_name,st_score, st_loca,
@@ -17,23 +18,55 @@
 		INSERT INTO menu(st_num, menu_name, menu_price)
 					VALUES(#{stNum},#{menuName},#{menuPrice})
 	</insert>
-		
-	<select id="selectCount" resultType="int" >
-		select count(*) 
-		from st
-		WHERE cate_Num=1
+			
+	<select id="selectCount" resultType="int">
+		SELECT COUNT(*)
+		FROM ST
+		WHERE ST_STATUS = 1
 	</select>
-		
+	
 	<select id="selectAll" resultType="Store" parameterType="map">
 		SELECT st_name, st_hits, cate_Num, st_loca
 		FROM st		
 	</select>
-		
-	<select id="selectByCate" resultType="Store" parameterType="int">
-		SELECT st_name, st_hits, cate_Num, st_loca
-		FROM st
-		WHERE cate_Num=1
+	
+	<select id="submitted" resultType="Store" parameterType="map">
+		SELECT *
+		FROM (SELECT rownum rn, a.*
+			  FROM ST a
+			  WHERE ST_STATUS = 0)
+		WHERE rn BETWEEN #{startRow} AND #{endRow}
 	</select>
 	
+	<select id="selectByNo" resultType="Store" parameterType="int">
+		SELECT *
+		FROM ST
+		WHERE ST_NUM = #{storeNum}
+	</select>
+	
+	<select id="selectMenu" resultType="Menu" parameterType="int">
+		SELECT *
+		FROM MENU
+		WHERE ST_NUM = #{stNum}
+	</select>
+	
+	<update id="confirmStore" parameterType="int">
+		UPDATE ST SET ST_STATUS = 1
+		WHERE ST_NUM = #{stNum} 
+	</update>
+	
+	<select id="selectById" resultType="Store" parameterType="string">
+  		SELECT * 
+		FROM ST 
+		WHERE owner_id = #{ownerId} 
+	</select>
+	
+		
+	<select id="selectByCate" resultType="Store" parameterType="int">
+		SELECT st_name, st_hits, cate_Num, st_loca   
+		FROM st   
+		WHERE CATE_NUM=#{cateNum} AND st_status=1 
+	</select>
+	 
 	
 </mapper>

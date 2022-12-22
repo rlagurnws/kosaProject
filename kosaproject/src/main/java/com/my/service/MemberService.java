@@ -48,6 +48,7 @@ public class MemberService {
 	public void deleteMem(String id) throws RemoveException{
 		repository.delete(id);
 	}
+
 	public PageBean<Member> getPageBean(int currentPage) throws FindException {
 		List<Member> list = findAll(currentPage,PageBean.CNT_PER_PAGE);
 		int totalCnt = repository.selectCount();
@@ -57,5 +58,12 @@ public class MemberService {
 	
 	public List<Member> findAll(int currentPage, int cntPerPage) throws FindException{
 		return repository.selectAll(currentPage, cntPerPage);
+	}
+	public Member findByName(Member m) throws FindException{
+		return repository.findId(m);
+	}
+	public Member findById(Member m) throws FindException{
+		return repository.findPwd(m);
+
 	}
 }

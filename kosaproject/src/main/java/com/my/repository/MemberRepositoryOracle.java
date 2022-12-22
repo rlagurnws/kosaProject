@@ -82,46 +82,6 @@ public class MemberRepositoryOracle implements MemberRepository{
 		}
 	}
 
-	@Override
-//	public Member memberInfo(String id) throws FindException {
-//		Member M= new Member();
-//		Connection conn = null;
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
-//		try {
-//			conn = MyConnection.getConnection();
-//			String selectIDSQL = "SELECT * "
-//					+ 			 "FROM MEMBER "
-//					+ 			 "WHERE MEM_ID = ?";
-//			pstmt = conn.prepareStatement(selectIDSQL);
-//			pstmt.setString(1, id);
-//			rs = pstmt.executeQuery();
-//			rs.next();
-//			System.out.println(id);
-//			if(id.equals(rs.getString(1))) {
-//				M.setMEM_id(id);
-//				M.setMEM_name(rs.getString(2));
-//				M.setMEM_pwd(rs.getString(3));
-//				M.setMEM_birth(rs.getString(4));
-//				M.setMEM_phone(rs.getString(5));
-//				M.setMEM_sex(rs.getString(6));
-//				M.setMEM_nick(rs.getString(7));
-//				M.setMEM_power(rs.getInt(8));
-//				M.setMEM_address(rs.getString(9));
-//				M.setMEM_state(rs.getInt(10));
-//				M.setMEM_pic(rs.getString(11));
-//				return M;
-//			}else {
-//				return null;
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw new FindException(e.getMessage());
-//		}finally {
-//			MyConnection.close(rs, pstmt, conn);
-//		}
-//	}
-//	
 	public void delete(String id) throws RemoveException{
 		SqlSession session = null;
 		try {
@@ -137,6 +97,7 @@ public class MemberRepositoryOracle implements MemberRepository{
 		}
 	}
 
+
 	@Override
 	public int selectCount() throws FindException {
 		SqlSession session = null;
@@ -147,11 +108,28 @@ public class MemberRepositoryOracle implements MemberRepository{
 			e.printStackTrace();
 			throw new FindException(e.getMessage());
 		}finally {
-			if(session !=null) {
+			if(session != null) {
+
 				session.close();
 			}
 		}
 	}
+	public Member findId(Member m) throws FindException{
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			Member findM = session.selectOne("com.my.mybatis.MemberMapper.findId",m);
+			return findM;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		} finally {
+			if(session != null) {
+				session.close();
+			}
+		}
+	}
+
 
 	@Override
 	public List<Member> selectAll() throws FindException {
@@ -173,7 +151,25 @@ public class MemberRepositoryOracle implements MemberRepository{
 			e.printStackTrace();
 			throw new FindException(e.getMessage());
 		}finally {
-			if(session !=null) {
+			if(session != null) {
+
+				session.close();
+			}
+		}
+	}
+
+	public Member findPwd(Member m) throws FindException{
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			Member findM = session.selectOne("com.my.mybatis.MemberMapper.findPwd",m);
+			return findM;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		} finally {
+			if(session != null) {
+
 				session.close();
 			}
 		}

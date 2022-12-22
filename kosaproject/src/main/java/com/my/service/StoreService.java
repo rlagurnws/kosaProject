@@ -1,19 +1,17 @@
 package com.my.service;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.my.dto.PageBean;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
+import com.my.exception.ModifyException;
 import com.my.repository.StoreRepository;
+import com.my.vo.Menu;
 import com.my.vo.Store;
 
 @Service("storeService")
@@ -34,7 +32,6 @@ public class StoreService {
 	 * @throws FindException
 	 */
 	
-	//추가
 
 	public int addStore(Store store) throws AddException{
 		int stNum = repository.insert(store);
@@ -43,19 +40,47 @@ public class StoreService {
 	}
 
 	
+	
+	public List<Store> submittedStore(int currentPage, int cntPerPage) throws FindException{
+		return repository.submitted(currentPage, cntPerPage);
+	}
 	public PageBean<Store> getPageBean(int currentPage) throws FindException{
-		List<Store> list = selectByCate(currentPage, PageBean.CNT_PER_PAGE);
+		List<Store> list = submittedStore(currentPage,PageBean.CNT_PER_PAGE);
 		int totalCnt = repository.selectCount();
 		PageBean<Store> pb = new PageBean<>(currentPage, list, totalCnt);
 		return pb;
 	}
 	
-
-	private List<Store> selectByCate(int currentPage, int cntPerPage) throws FindException {
-		return repository.selectByCate(currentPage, cntPerPage);
+	
+	public Store selectByNo(int stNum) throws FindException{
+		return repository.selectByNo(stNum);
 	}
+	public List<Menu> findMenu(int stNum) throws FindException{
+		return repository.findMenu(stNum);
+	}
+	public void confirm(int stNum) throws ModifyException{
+		repository.confirmStore(stNum);
 
+	}
+	
+	public List<Store> selectById(String memId) throws FindException{
+		return repository.selectById(memId);
+	}
 	
 	
+//	public PageBean<Store> getPageBeanByCate(int currentPage, int cateNum) throws FindException{
+//		List<Store> list = selectByCate(currentPage, PageBean.CNT_PER_PAGE);
+//		int totalCnt = repository.selectCount();
+//		PageBean<Store> pb = new PageBean<>(currentPage, list, totalCnt);
+//		return pb;
+//	}
 	
+
+//	private List<Store> selectByCate(int cateNum, int currentPage, int cntPerPage) throws FindException {
+//		return repository.selectByCate(cateNum, currentPage, cntPerPage);
+//	}
+
+	public List<Store> selectByCate(int cateNum) throws FindException {
+		return repository.selectByCate(cateNum);
+	}
 }

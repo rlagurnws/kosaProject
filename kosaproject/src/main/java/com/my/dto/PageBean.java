@@ -34,7 +34,7 @@ public class PageBean<T> {
 	}
 
 
-	public List<T> getList() {
+	public List<T> getList() { 
 		return list;
 	}
 

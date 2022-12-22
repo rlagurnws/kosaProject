@@ -11,14 +11,15 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,65 +28,50 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.dto.PageBean;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
+
+import com.my.exception.ModifyException;
 import com.my.service.StoreService;
 import com.my.util.Attach;
+import com.my.vo.Menu;
 import com.my.vo.Store;
 
 @RestController
-@Controller
+
 @RequestMapping("store/*")
-public class StoreController{
+public class StoreController {
 
 	@Autowired
 	private StoreService service;
 
-	@PostMapping(value="AddStore", produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public ResponseEntity<?> write(HttpSession session, 
-			@RequestPart           List<MultipartFile> files, 
-			@RequestParam("Store") String strStore) throws AddException{
-		//Store store) throws AddException{
-		System.out.println("in control files.size = " + files.size());
-		System.out.println(strStore);
-
+	@PostMapping(value = "new", produces = "application/json;charset=UTF-8")
+	public ResponseEntity<?> write(HttpSession session, @RequestPart List<MultipartFile> files,
+			@RequestParam("Store") String strStore) throws AddException {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			Store store = mapper.readValue(strStore, new TypeReference<Store>() {});
+			Store store = mapper.readValue(strStore, new TypeReference<Store>() {
+			});
 			System.out.println(store);
-			//		System.out.println(store.getStDes());
-			String loginedId = (String)session.getAttribute("loginedId");
-			//store.setOwnerId(loginedId);
-			store.setOwnerId("id1");
-			
+			String id = (String) session.getAttribute("id");
+			store.setOwnerId(id);
+			int i = 0;
+			int storeNo = service.addStore(store);
 
-			int storeNo =  service.addStore(store);
-			//int storeNo=1;
-
-
-
-			for(MultipartFile f: files) {
-				Attach.upload(storeNo,f);
+			for (MultipartFile f : files) {
+				Attach.upload(storeNo, f, store.getStMenuList().get(i).getMenuName());
+				i++;
 			}
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);		
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
-
-//	@GetMapping(value="list/{currentPage}")
-//	public ResponseEntity<?> list(@PathVariable int currentPage) throws FindException{
-//		PageBean<Store> pb = service.getPageBean(currentPage);
-//		return new ResponseEntity<>(pb, HttpStatus.OK);
-//	}
-	
-	@GetMapping("list/{currentPage}")
-	public Map<String,Object> list(@PathVariable int currentPage){
-		Map<String,Object> map = new HashMap<>();
-		PageBean<Store> pb = null;
+ 
+	@GetMapping("submitted/{currentPage}")
+	public Map<String, Object> submitted(@PathVariable int currentPage) {
+		Map<String, Object> map = new HashMap<>();
 		try {
-			pb = service.getPageBean(currentPage);
+			PageBean pb = service.getPageBean(currentPage);
 			map.put("status", 1);
 			map.put("pb", pb);
 		} catch (FindException e) {
@@ -94,6 +80,127 @@ public class StoreController{
 		}
 		return map;
 	}
+
+	@PostMapping("{storeNo}")
+	public Map<String, Object> selectByNo(@PathVariable int storeNo) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			Store s = service.selectByNo(storeNo);
+			map.put("store", s);
+			map.put("status", 1);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
+
+	@PostMapping("menu/{stNum}")
+	public Map<String, Object> selectMenu(@PathVariable int stNum) {
+		Map<String, Object> map = new HashMap<>();
+		List<Menu> list = new ArrayList<>();
+
+		try {
+			list = service.findMenu(stNum);
+			map.put("list", list);
+			map.put("status", 1);
+
+			List<String> menuFile = new ArrayList<>();
+			String saveDirectory = "D:\\MyBACK\\kosafront\\src\\main\\webapp\\project_image\\menu";
+			File dir = new File(saveDirectory);
+			String[] allFileNames = dir.list();
+			for (Menu m : list) {
+				for (String fn : allFileNames) {
+					if (fn.startsWith(stNum + "_" + m.getMenuName())) {
+						menuFile.add(fn);
+						break;
+					}
+				}
+			}
+			map.put("menuFile", menuFile);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
+
+	@PostMapping("loca/{stNum}")
+	public Map<String, Object> findLoca(@PathVariable int stNum) {
+		Map<String, Object> map = new HashMap<>();
+
+		try {
+			Store s = service.selectByNo(stNum);
+			map.put("loca", s.getStLoca());
+			map.put("name", s.getStName());
+			map.put("status", 1);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
+
+	@PutMapping("{stNum}")
+	public Map<String, Object> confirmStore(@PathVariable int stNum) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			service.confirm(stNum);
+			map.put("status", 1);
+		} catch (ModifyException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
+	
+	
+	@GetMapping("mylist/{memId}")
+	public Map<String, Object> mylist(@PathVariable String memId) {
+		Map<String, Object> map = new HashMap<>();
+		List<Store> list = new ArrayList<>();
+		
+		try {
+			list = service.selectById(memId);
+			map.put("list", list); 
+			map.put("status", 1);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
+	
+	
+//	@GetMapping("list/{cateNem}/{currentPage}")
+//	public Map<String,Object> list(@PathVariable int cateNum, @PathVariable int currentPage){
+//		Map<String,Object> map = new HashMap<>();
+//		PageBean<Store> pb = null;
+//		try {
+//			pb = service.getPageBeanByCate(cateNum, currentPage);
+//			map.put("status", 1);
+//			map.put("pb", pb);
+//		} catch (FindException e) {
+//			e.printStackTrace();
+//			map.put("status", 0);
+//		}
+//		return map;
+//	}
+	
+	@GetMapping("list/{cateNum}/{currentPage}")
+	public Map<String, Object> catelist(@PathVariable int cateNum){
+		Map<String, Object> map = new HashMap<>();
+		List<Store> list = new ArrayList<>();
+		
+		try {
+			list = service.selectByCate(cateNum);
+			map.put("list", list); 
+			map.put("status", 1);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
+
 }
-	
-	

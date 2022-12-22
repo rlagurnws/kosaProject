@@ -36,13 +36,27 @@
   	UPDATE MEMBER SET mem_state = 0 WHERE mem_ID = #{id}
   </update>
   
+
   <select id="selectCount" resultType="int" >
 		select count(*) from member
 	</select>
   <select id="selectAll" resultType="Member" parameterType="int">
 		SELECT * 
-		FROM member 
+		FROM member
+		ORDER BY mem_no 
   </select>
   
+
+  <select id="findId" resultType="Member" parameterType="Member">
+  	SELECT *
+  	FROM MEMBER
+  	WHERE mem_name = #{memName} AND mem_phone = #{memPhone}
+  </select>
+
   
+  <select id="findPwd" resultType="Member" parameterType="Member">
+  	SELECT *
+  	FROM MEMBER
+  	WHERE mem_id = #{memId} AND mem_phone = #{memPhone}
+  </select>
 </mapper>

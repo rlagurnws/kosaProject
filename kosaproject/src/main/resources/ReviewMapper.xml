@@ -6,34 +6,55 @@
 <mapper namespace="com.my.mybatis.ReviewMapper">
 
 	<insert id="insert" parameterType="Review">
-		INSERT INTO Review(review_no, review_des, review_date, review_id, review_title)
-		VALUES (review_seq.nextVal,#{reviewDes},SYSDATE,#{reviewId},#{reviewTitle})
+		INSERT INTO Review(review_no, review_star, review_des, review_date, mem_Id,review_state, st_Num)
+		VALUES (review_seq.nextVal,#{reviewStar},#{reviewDes},SYSDATE,#{memId},#{reviewState},#{stNum})
 	</insert>
   
-	<select id="selectAll" resultType="Review" parameterType="map">
-		SELECT *
-		FROM (SELECT rownum rn, a.*
-		FROM (SELECT * FROM Review ORDER BY review_no DESC)a )
-		WHERE rn BETWEEN #{startRow} AND #{endRow}
-	</select>
-	
-	<select id="selectCount" resultType="int" >
-		select count(*) from Review
-	</select>
-	
-	
-	<select id="selectByNo" resultType="Review" parameterType="int">
-		SELECT *
-		FROM Review
-		WHERE review_no = #{review_no}
-	</select>
+	<update id="update" parameterType="Review">
+		UPDATE review
+		SET review_des = #{reviewDes}
+		WHERE review_no=#{reviewNo} AND mem_id=#{memId}
+	</update>
 
+
+<delete id="delete" parameterType="Review">
+		UPDATE review 
+		SET review_state = 0 
+		WHERE mem_ID = #{memId}
+</delete>
 	
-	<select id="findAll" resultType="int" parameterType="int">
-		SELECT review_NO 
-		FROM Review 
-		ORDER BY review_NO DESC
-	</select>
-	
-	
+<select id="selectBystNum" parameterType="int" resultType="Review">
+select *
+from review
+where st_Num=#{stNum}
+</select>
+
+<select id="selectBystNumNew" parameterType="int" resultType="Review">
+select *
+from review
+where st_Num=#{stNum}
+order by review_date desc
+</select>
+
+<select id="selectBystNumStar" parameterType="int" resultType="Review">
+select *
+from review
+where st_Num=#{stNum}
+order by review_star desc
+</select>
+
+<update id="modify" parameterType="Reivew">
+ 	UPDATE Review SET mem_id = #{memId},
+	review_Des = #{reviewDes},
+	review_star = #{reviewStar},
+	review_state = '0'
+	WHERE mem_ID = #{memId}
+  </update>
+
+<select id="selectById" parameterType="String">
+	SELECT *
+	FROM REVIEW
+	WHERE mem_ID = #{memId}
+</select>
+
 </mapper>

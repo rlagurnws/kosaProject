@@ -12,42 +12,69 @@ public interface ReviewRepository {
 	/**
 	 * 글을 추가한다
 	 * 추가된 글번호 조회하여 반환한다
+	 * @author 장나영
 	 * @param rv 리뷰
 	 * @throws AddException
 	 */
 	int insert(Review rv) throws AddException;
 	
+	
 	/**
-	 * 모든 글을 검색한다 
+	 * 가게번호에 맞는 리뷰를 검색한다. 
+	 * @author 장나영
+	 * @param stNum
 	 * @return
 	 * @throws FindException
 	 */
-	List<Review> selectAll() throws FindException;
+
+	List<Review> selectBystNum(int stNum) throws FindException;
+		
 	
 	/**
-	 * 페이지에 해당하는 글을 검색한다
-	 * @param currentPage
-	 * @param cntPerPage
-	 * @return
-	 * @throws FindException
-	 */
-	List<Review> selectAll(int currentPage, int cntPerPage) throws FindException;
-	
-	/**
-	 * 총 게시글수를 반환한다
-	 * @return 게시글개수
-	 * @throws FindException
-	 */
-	int selectCount() throws FindException;
-	
-	
-	/**
-	 * 글제목,글내용수정
+	 * 리뷰내용수정
+	 * @author 장나영
 	 * @param rv
 	 * @throws ModifyException
 	 */
 	void update(Review rv) throws ModifyException;
+
+
+	/**
+	 * 리뷰 삭제 
+	 * @author 장나영
+	 * @param memId
+	 * @throws RemoveException 
+	 */
+
+	void delete(String memId) throws RemoveException;
+ 
+	/**
+	 * @author 장나영
+	 * @param id
+	 * @throws FindException
+	 */
+	void selectById(String id) throws FindException;
 	
+	/**
+	 * 가게번호별 리뷰를 최신순으로 보여준다
+	 * @author 장나영
+	 * @param stNum
+	 * @throws FindException
+	 */
+	List<Review> selectBystNumNew(int stNum) throws FindException;
+	
+	/**
+	 * 가게번호별 리뷰를 별점순으로 보여준다 
+	 * @author 장나영
+	 * @param stNum
+	 * @throws FindException
+	 */
+	List<Review> selectBystNumStar(int stNum) throws FindException;
+
+
+	
+
+
 
 	
 	

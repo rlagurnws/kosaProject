@@ -8,6 +8,7 @@ public class KosaprojectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(KosaprojectApplication.class, args);
+		System.out.println("connect");
 	}
 
 }

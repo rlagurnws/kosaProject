@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
+import com.my.exception.RemoveException;
+import com.my.vo.Member;
 import com.my.vo.Review;
 
 
@@ -19,13 +21,19 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 
 	@Autowired
 	private SqlSessionFactory sqlSessionFactory;
-	
+
 	@Override
 	public int insert(Review rv) throws AddException {
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-	
+			/*
+			 * Map<String,Object> map = new HashMap<>(); map.put("parentNo",
+			 * rb.getParentNo()); map.put("boardTitle", rb.getBoardTitle());
+			 * map.put("boardC.id", rb.getBoardC().getId()); map.put("boardContent",
+			 * rb.getBoardContent());
+			 */
+			
 			session.insert("com.my.mybatis.ReviewMapper.insert",rv);
 			return rv.getreviewNo();
 		} catch (Exception e) {
@@ -39,51 +47,36 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 		}
 	}
 
-	@Override
-	public List<Review> selectAll() throws FindException {
-		List<Review> list = new ArrayList<>();
-		SqlSession session = null;
-		try {
-		session = sqlSessionFactory.openSession();
-		list = session.selectList("com.my.mybatis.ReviewMapper.selectAll");
-		return list;
-	} catch (Exception e) {
-		e.printStackTrace();
-		throw new FindException(e.getMessage());
-	} finally {
-		if(session != null) {
-		session.close();
-		}
-	}
-	}
+	
 
 	@Override
-	public List<Review> selectAll(int currentPage, int cntPerPage) throws FindException {
+	public List<Review> selectBystNum(int stNum) throws FindException {
+			List<Review> list = new ArrayList<>();
+			SqlSession session = null;
+			try {
+			session = sqlSessionFactory.openSession();
+			list = session.selectList("com.my.mybatis.ReviewMapper.selectBystNum", stNum);
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		} finally {
+			if(session != null) {
+			session.close();
+			}
+		}
+			
+		}
+	
+	@Override
+	public List<Review> selectBystNumNew(int stNum) throws FindException {
 		List<Review> list = new ArrayList<>();
 		SqlSession session = null;
-		try {
-		session = sqlSessionFactory.openSession();
-		list = session.selectList("com.my.mybatis.ReviewMapper.selectAll");
-		return list;
-	} catch (Exception e) {
-		e.printStackTrace();
-		throw new FindException(e.getMessage());
-	} finally {
-		if(session != null) {
-		session.close();
-		}
-	}	
-	}
-
-	@Override
-	public int selectCount() throws FindException {
-		String selectCountSQL = "SELECT COUNT(*) FROM Review";
-		SqlSession session = null;
-		
 		try {
 			session = sqlSessionFactory.openSession();
-			return session.selectOne("com.my.mybatis.ReviewMapper.selectCount");
-		} catch (Exception e) {
+			list = session.selectList("com.my.mybatis.ReviewMapper.selectBystNumNew", stNum);
+			return list;
+		}catch (Exception e) {
 			e.printStackTrace();
 			throw new FindException(e.getMessage());
 		}finally {
@@ -91,9 +84,33 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 				session.close();
 			}
 		}
+		
 	}
 
 
+
+	@Override
+	public List<Review> selectBystNumStar(int stNum) throws FindException {
+		List<Review> list = new ArrayList<>();
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			list = session.selectList("com.my.mybatis.ReviewMapper.selectBystNumNew", stNum);
+			return list;
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session != null) {
+				session.close();
+			}
+		}
+		
+	}
+	
+	
+	
+	
 
 	@Override
 	public void update(Review rv) throws ModifyException {
@@ -104,7 +121,6 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 			if(rowcnt == 0) {
 				throw new ModifyException("글번호가 없거나 작성자가 다른경우 수정할 수 없습니다");
 			}
-		
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new ModifyException(e.getMessage());
@@ -113,10 +129,64 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 				session.close();
 			}
 		}
+	}
+	
+
+
+	
+
+	@Override
+	public List<Review> selectById(String id) throws FindException {
+		Member m= new Member();
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			m = session.selectOne("com.my.mybatis.MemberMapper.selectById", id);
+			if(m == null) {
+				throw new Exception();
+			}
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session != null) {
+				session.close();
+			}
+		}
 		
 	}
+
+
+
+	@Override
+	public void delete(String memId) throws RemoveException {
+	SqlSession session = null;
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			session.delete("com.my.mybatis.ReviewMapper.delete",memId);
+
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new RemoveException(e.getMessage());
+		}finally {
+			if(session != null) {
+				session.close();
+			}
+		}
+		
+	}
+
+
+
+}
+	
+	
+
+
 	
 	
 
 	
-}
+

@@ -1,9 +1,0 @@
-diff a/kosaproject/src/main/java/com/example/config/MyServletContext.java b/kosaproject/src/main/java/com/example/config/MyServletContext.java	(rejected hunks)
-@@ -28,6 +28,7 @@
- 	@Override
- 	public void addCorsMappings(CorsRegistry registry) {
- //		WebMvcConfigurer.super.addCorsMappings(registry);
-+		registry.addMapping("/**").allowCredentials(true).allowedOrigins("http://192.168.2.22:9999").allowedMethods("GET","POST","PUT","DELETE"); //메서드 체이닝
- 		registry.addMapping("/**").allowCredentials(true).allowedOrigins("http://192.168.2.22:5500").allowedMethods("GET","POST","PUT","DELETE");
- 	}
- 

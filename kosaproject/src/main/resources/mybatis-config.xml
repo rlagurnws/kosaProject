@@ -6,6 +6,18 @@
   <settings>
 	<setting name="mapUnderscoreToCamelCase" value="true"/>
 
+<<<<<<< HEAD
+=======
+
+	
+
+	
+	<!-- java의 null값을 db의 어떤타입으로 매핑할 것인가를 결정
+		ex)java의 null값을 오라클의 NULL로 매핑 -->
+		<setting name="jdbcTypeForNull" value="NULL"/>
+
+
+>>>>>>> lee
 	<setting name="jdbcTypeForNull" value="NULL"/>
 
   </settings>

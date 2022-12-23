@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,6 +69,29 @@ public class StoreController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@PostMapping("storelist/{currentPage}")
+	@ResponseBody
+	public ResponseEntity<?> storereadlist(@PathVariable int currentPage, String search) throws FindException{
+		//search="서울";
+		PageBean<Store> pb = service.stListGetPageBean(currentPage , search);
+		
+		
+		String strDirPath = "C:\\files\\"; 
+        
+        File path = new File( strDirPath ); 
+        File[] fList = path.listFiles();  
+		
+        for( int i = 0; i < fList.length; i++ ) { 
+            
+            if( fList[i].isFile() ) { 
+                System.out.println( "[파일] :" + fList[i].getPath() );  // 파일의 FullPath 출력 
+            } 
+            
+        } 
+		
+		return new ResponseEntity<>(pb, HttpStatus.OK);
+	}
 
 	@GetMapping("submitted/{currentPage}")
 	public Map<String, Object> submitted(@PathVariable int currentPage) {
@@ -109,6 +133,7 @@ public class StoreController {
 
 			List<String> menuFile = new ArrayList<>();
 			String saveDirectory = "D:/finalPro/menu";
+
 			File dir = new File(saveDirectory);
 			String[] allFileNames = dir.list();
 			for (Menu m : list) {
@@ -154,6 +179,7 @@ public class StoreController {
 			map.put("status", 0);
 		}
 		return map;
+
 	}
 	
 	
@@ -191,4 +217,17 @@ public class StoreController {
 		return map;
 	}
 
+	@PostMapping("storeload/{stNum}")
+	@ResponseBody
+	public ResponseEntity<?> selectByStoreNum(@PathVariable int stNum) throws FindException{
+		Map<String, Object>map = new HashMap<>();
+		List<Menu> list = new ArrayList<>();
+		
+		List<Store> store = service.selectStoreNo(stNum);
+		
+		
+		map.put("store", store);
+		return new ResponseEntity<>(map, HttpStatus.OK);
+		
+	}
 }

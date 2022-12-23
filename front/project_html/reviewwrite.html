@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>프로젝트</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../project_css/reviewwrite.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../project_js/basic.js"></script>
+    <script src="../project_js/reviewwrite.js"></script>
+</head>
+
+<body>
+    <div class="center">
+        <header>
+            <span class='menu' onclick="openNav()">&#9776; </span>
+            <span class='title' ;>리뷰</span>
+        </header>
+        <nav>
+            <h6> 리뷰쓰기(당신의 솔직한 리뷰를 써주세요❤️)</h6>
+        </nav>
+        <aside>
+            <div class="content">
+
+
+                <div class="reviewwrite">
+                    <form class="myform" name="myform" id="myform" method="post">
+                        <fieldset>
+                            <span class="text-bold">별점을 선택해주세요</span>
+                            <input type="radio" name="reviewStar" value="5" id="rate1"><label for="rate1">★</label>
+                            <input type="radio" name="reviewStar" value="4" id="rate2"><label for="rate2">★</label>
+                            <input type="radio" name="reviewStar" value="3" id="rate3"><label for="rate3">★</label>
+                            <input type="radio" name="reviewStar" value="2" id="rate4"><label for="rate4">★</label>
+                            <input type="radio" name="reviewStar" value="1" id="rate5"><label for="rate5">★</label>
+                        </fieldset>
+
+
+                        <div class="text_box">
+                            <textarea class="content" type="text" id="reviewContents"
+                                placeholder="주문하신 메뉴는 어떠셨나요? 식당의 분위기와 서비스도 궁금해요!"></textarea>
+                            <div class="count"><span>0</span>/200</div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="container">
+                    <div class="image-upload" id="image-upload">
+                        <form method="post">
+                            <div class="button">
+                                <label for="chooseFile">
+                                    📸사진 첨부하기📸
+                                </label>
+                            </div>
+                            <input type="file" id="chooseFile" name="chooseFile" accept="image/*"
+                                onchange="loadFile(this)">
+                        </form>
+
+                        <div class="fileContainer">
+                            <div class="fileInput">
+                                <p>FILE NAME: </p>
+                                <p id="fileName"></p>
+                            </div>
+
+                            <div class="buttonContainer">
+                                <div class="submitButton" id="submitButton">SUBMIT</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="image-show" id="image-show">
+                        <img class="img">
+                    </div>
+
+                    <div class="ButtonSC">
+                        <button class="CancelButton">취소</button>
+                        <button class="SubmitButton">리뷰 올리기</button>
+                    </div>
+
+                </div>
+
+            </div>
+    </div>
+
+    </div>
+
+    </div>
+    </aside>
+    </div>
+
+    <section class="mySidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">로그인</a>
+        <a href="#">카테고리</a>
+        <a href="#">리뷰</a>
+        <a href="#">...</a>
+    </section>
+</body>
+
+</html>

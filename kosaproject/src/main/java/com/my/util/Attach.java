@@ -20,6 +20,8 @@ public class Attach {
 
 	public static ResponseEntity<?> download(String fileName, String location) throws IOException{		
 		File file = new File(SAVE_DIRECTORY+location, fileName);	
+
+
 		if(!file.exists()) {
 
 			throw new IOException("파일이 없습니다");

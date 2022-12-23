@@ -4,6 +4,10 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
   <mapper namespace="com.my.mybatis.StoreMapper">
+<<<<<<< HEAD
+=======
+
+>>>>>>> lee
 	<insert id="insert" parameterType="Store">
 		INSERT INTO ST(st_num, st_des, st_hits, st_date, st_name,st_score, st_loca,
 						 st_phone, cate_num, owner_id, st_res_no, st_review_cnt, st_status)
@@ -18,7 +22,39 @@
 		INSERT INTO menu(st_num, menu_name, menu_price)
 					VALUES(#{stNum},#{menuName},#{menuPrice})
 	</insert>
+<<<<<<< HEAD
 			
+=======
+	
+
+	
+	
+	<select id="selectStoreCount" resultType="int" >
+		select count(*) from st
+	</select>
+	
+	<!--<select id="selectAll" resultType="Store" parameterType="map">
+		SELECT *
+		FROM (SELECT rownum rn, a.*
+		FROM (SELECT * FROM st
+		
+		     where st_loca like '%부산%'
+		       ORDER BY st_num DESC)a )
+		WHERE rn BETWEEN #{startRow} AND #{endRow}
+	</select>-->
+	<select id="selectAll" resultType="Store" parameterType="map">
+		SELECT *
+		FROM (SELECT rownum rn,cate as "cateNum" ,st_review_cnt as "stHits", st_des as "stDes", oner_id as ownerId, a.*
+		FROM (SELECT * FROM st		
+		     where 
+		     	st_name like '%${search}%'
+		     	or st_loca like '%${search}%'
+		     	or st_des like '%${search}%'
+		       		ORDER BY st_num DESC)a )
+		WHERE rn BETWEEN #{startRow} AND #{endRow}
+	</select>
+
+>>>>>>> lee
 	<select id="selectCount" resultType="int">
 		SELECT COUNT(*)
 		FROM ST
@@ -55,6 +91,7 @@
 		WHERE ST_NUM = #{stNum} 
 	</update>
 	
+<<<<<<< HEAD
 	<select id="selectById" resultType="Store" parameterType="string">
   		SELECT * 
 		FROM ST 
@@ -89,4 +126,22 @@
 >>>>>>> origin/kyum2
 	 
 	
+=======
+	
+	<select id="selectStoreContent" resultType="Store" parameterType="map">
+		select st_num, st_des,  st_name, st_loca, st_phone, cate,  st_res_no
+		from st
+		where st_num = #{stNum}
+	</select>
+	
+	<select id="selectStoreLoad" resultType="Store" parameterType="map">
+		SELECT s.st_num as "stNum", s.st_des as "stDes", s.st_name as "stName", s.st_loca as "stLoca",s.st_phone as "stPhone", s.cate as "cateNum", s.st_res_no as "stResNo", m.menu_name as "stMenu.menuName" ,m.menu_price as "stMenu.menuPrice"   
+      	FROM st s
+     	FULL OUTER JOIN menu m
+        ON ( s.st_num = m.st_num)
+        where s.st_num = #{stNum}
+	</select>
+	
+
+>>>>>>> lee
 </mapper>

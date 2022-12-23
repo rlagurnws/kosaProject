@@ -38,7 +38,9 @@ public class StoreController{
 
 	@Autowired
 	private StoreService service;
-
+	
+	static String location = "menu/";
+	
 	@PostMapping(value="new", produces = "application/json;charset=UTF-8")
 	public ResponseEntity<?> write(HttpSession session, 
 			@RequestPart           List<MultipartFile> files, 
@@ -52,9 +54,9 @@ public class StoreController{
 			store.setOwnerId(id);
 			int i = 0;
 			int storeNo =  service.addStore(store);
-
+			System.out.println("여기까진 되는거야");
 			for(MultipartFile f: files) {
-				Attach.upload(storeNo,f, store.getStMenuList().get(i).getMenuName());
+				Attach.upload(storeNo,f,location, store.getStMenuList().get(i).getMenuName());
 				i++;
 			}
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -103,7 +105,7 @@ public class StoreController{
 			map.put("status", 1);
 			
 			List<String> menuFile = new ArrayList<>();
-			String saveDirectory = "D:\\MyBACK\\kosafront\\src\\main\\webapp\\project_image\\menu";
+			String saveDirectory = "D://project//menu";
 			File dir = new File(saveDirectory);
 			String[] allFileNames = dir.list();
 			for(Menu m : list) {				

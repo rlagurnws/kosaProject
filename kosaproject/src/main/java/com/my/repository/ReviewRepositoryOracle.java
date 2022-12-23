@@ -1,7 +1,9 @@
 package com.my.repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -35,7 +37,7 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 			 */
 			
 			session.insert("com.my.mybatis.ReviewMapper.insert",rv);
-			return rv.getreviewNo();
+			return rv.getReviewNo();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AddException(e.getMessage());
@@ -110,7 +112,6 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 	
 	
 	
-	
 
 	@Override
 	public void update(Review rv) throws ModifyException {
@@ -131,17 +132,13 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 		}
 	}
 	
-
-
-	
-
 	@Override
-	public List<Review> selectById(String id) throws FindException {
+	public void selectById(String memId) throws FindException {
 		Member m= new Member();
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-			m = session.selectOne("com.my.mybatis.MemberMapper.selectById", id);
+			m = session.selectOne("com.my.mybatis.ReviewMapper.selectById", memId);
 			if(m == null) {
 				throw new Exception();
 			}
@@ -158,14 +155,19 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 	}
 
 
-
 	@Override
-	public void delete(String memId) throws RemoveException {
-	SqlSession session = null;
+	public void updateReviewState(int reviewNo, int stNum) throws RemoveException {
+			SqlSession session = null;
 		
 		try {
 			session = sqlSessionFactory.openSession();
-			session.delete("com.my.mybatis.ReviewMapper.delete",memId);
+			//Map<String, Integer> map = new HashMap<>();
+			//map.put("reviewNo", reviewNo);
+			//map.put("stNum", stNum);
+			Review rv = new Review();
+			rv.setReviewNo(reviewNo);
+			rv.setStNum(stNum);
+			session.update("com.my.mybatis.ReviewMapper.updateReviewState",rv);
 
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -175,6 +177,36 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 				session.close();
 			}
 		}
+		
+	}
+
+
+
+	@Override
+	public void modify(Review rv) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void delete(int reviewNo) throws RemoveException {
+		SqlSession session = null;
+
+	try {
+		session = sqlSessionFactory.openSession();
+		
+		session.update("com.my.mybatis.ReviewMapper.delete",reviewNo);
+
+	}catch(Exception e) {
+		e.printStackTrace();
+		throw new RemoveException(e.getMessage());
+	}finally {
+		if(session != null) {
+			session.close();
+		}
+	}
 		
 	}
 

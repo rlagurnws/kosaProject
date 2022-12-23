@@ -32,8 +32,7 @@ class ReviewRepositoryTest {
 		int expectedSize = 4;
 		assertEquals(expectedSize, list.size());
 		String firstExpectedDesc = "우웩";
-		assertEquals(firstExpectedDesc, list.get(0).getreviewDes());
-		
+		assertEquals(firstExpectedDesc, list.get(0).getReviewDes());
 	}
 	
 	
@@ -41,41 +40,37 @@ class ReviewRepositoryTest {
 	@Test
 	void insertTest() throws AddException {
 		Review rv = new Review();
-		rv.setmemId("id1");
-		rv.setreviewDes("오늘부터 단골하렵니다 다들 오지마세요 저만 갈겁니다ㅋㅋ");
-		rv.setreviewNo(20);
-		rv.setreviewStar(5);
-		rv.setreviewState(0);
-		rv.setstNum(2);
+		rv.setMemId("id1");
+		rv.setReviewDes("오늘부터 단골하렵니다 다들 오지마세요 저만 갈겁니다ㅋㅋ");
+		rv.setReviewNo(20);
+		rv.setReviewStar(5);
+		rv.setReviewState(0);
+		rv.setStNum(2);
 		repository.insert(rv);
 	}
-	
-	
-	//글번호 24번, 가게번호 2번, 아이디 id1 내용 변경하기 
+		
+	//글번호 24번에
 	@Test
 	void updateTest() throws ModifyException, FindException{
 		int reviewNo=24;
 		int stNum=2;
 		String expectedDes = "ㅋㅋ";
 		Review rv = new Review();
-		rv.setreviewNo(24);
-		rv.setmemId("id1");
-		rv.setreviewDes(expectedDes);
+		rv.setReviewNo(reviewNo);
+		rv.setMemId("id1");
+		rv.setReviewDes(expectedDes);
 		repository.update(rv);
-
-		assertEquals(expectedDes, rv.getreviewDes());
+		
+		//Review rv1 = repository.selectByReviewNo(reviewNo);
+		//assertEquals(expectedDes, rv1.getReviewDes());
 		
 	}
+
 	
 	
-	//가게번호 2번 리뷰 삭제 
-	@Test
-	void deleteTest() throws RemoveException{
-		
 		
 	}
 
 	
 	
 	
-}

@@ -40,14 +40,15 @@ public interface ReviewRepository {
 
 
 	/**
-	 * 리뷰 삭제 
+	 * 리뷰 상태 0으로 바꾸어 안보이게 함
 	 * @author 장나영
 	 * @param memId
-	 * @throws RemoveException 
+	 * @throws RemoveException , FindException
 	 */
 
-	void delete(String memId) throws RemoveException;
+	void updateReviewState(int reviewNo, int stNum) throws RemoveException;
  
+	
 	/**
 	 * @author 장나영
 	 * @param id
@@ -70,6 +71,19 @@ public interface ReviewRepository {
 	 * @throws FindException
 	 */
 	List<Review> selectBystNumStar(int stNum) throws FindException;
+
+	/**
+	 * @author 장나영
+	 * @param rv
+	 */
+	void modify(Review rv) throws ;
+
+	/**
+	 * @author 장나영
+	 * @param reviewNo
+	 * @throws RemoveException
+	 */
+	void delete(int reviewNo) throws RemoveException;
 
 
 	

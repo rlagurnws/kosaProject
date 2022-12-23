@@ -15,83 +15,86 @@ public class Review {
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private java.util.Date reviewDate;
-	
-	public int getreviewNo() {
-		return reviewNo;
-	}
-	public void setreviewNo(int reviewNo) {
-		this.reviewNo = reviewNo;
-	}
-	public String getreviewDes() {
-		return reviewDes;
-	}
-	public void setreviewDes(String reviewDes) {
-		this.reviewDes = reviewDes;
-	}
-	public double getreviewStar() {
-		return reviewStar;
-	}
-	public void setreviewStar(double reviewStar) {
-		this.reviewStar = reviewStar;
-	}
-	public Date getreviewDate() {
-		return reviewDate;
-	}
-	public void setreviewDate(Date reviewDate) {
-		this.reviewDate = reviewDate;
-	}
-	public int getstNum() {
-		return stNum;
-	}
+
 	public Review() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
-	public void setstNum(int stNum) {
-		this.stNum = stNum;
-	}
-	public String getmemId() {
-		return memId;
-	}
-	public void setmemId(String memId) {
-		this.memId = memId;
-	}
-	public int getreviewState() {
-		return reviewState;
-	}
-	public void setreviewState(int reviewState) {
-		this.reviewState = reviewState;
-	}
-	public Review(int reviewNo, String reviewDes, double reviewStar, Date reviewDate, int stNum, String memId,
-			int reviewState) {
+
+	public Review(int reviewNo, String reviewDes, double reviewStar, int stNum, String memId, int reviewState,
+			Date reviewDate) {
 		super();
 		this.reviewNo = reviewNo;
 		this.reviewDes = reviewDes;
 		this.reviewStar = reviewStar;
-		this.reviewDate = reviewDate;
 		this.stNum = stNum;
 		this.memId = memId;
 		this.reviewState = reviewState;
+		this.reviewDate = reviewDate;
 	}
-	public Review findByreviewNo(int reviewNo) {
-		
-		return null;
+
+	public int getReviewNo() {
+		return reviewNo;
 	}
-	public PageBean<Review> getPageBean(int currentPage) {
-		// TODO Auto-generated method stub
-		return null;
+
+	public void setReviewNo(int reviewNo) {
+		this.reviewNo = reviewNo;
 	}
-	public void modify(Review rv) {
-		// TODO Auto-generated method stub
-		
+
+	public String getReviewDes() {
+		return reviewDes;
 	}
-	public void remove(int boardNo) {
-		// TODO Auto-generated method stub
-		
+
+	public void setReviewDes(String reviewDes) {
+		this.reviewDes = reviewDes;
 	}
-	public int writereview(Review rv) {
-		// TODO Auto-generated method stub
-		return 0;
+
+	public double getReviewStar() {
+		return reviewStar;
 	}
+
+	public void setReviewStar(double reviewStar) {
+		this.reviewStar = reviewStar;
+	}
+
+	public int getStNum() {
+		return stNum;
+	}
+
+	public void setStNum(int stNum) {
+		this.stNum = stNum;
+	}
+
+	public String getMemId() {
+		return memId;
+	}
+
+	public void setMemId(String memId) {
+		this.memId = memId;
+	}
+
+	public int getReviewState() {
+		return reviewState;
+	}
+
+	public void setReviewState(int reviewState) {
+		this.reviewState = reviewState;
+	}
+
+	public java.util.Date getReviewDate() {
+		return reviewDate;
+	}
+
+	public void setReviewDate(java.util.Date reviewDate) {
+		this.reviewDate = reviewDate;
+	}
+	
+	
+
+	
+	
+	
+
 	
 
 }

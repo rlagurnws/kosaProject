@@ -13,15 +13,15 @@
 	<update id="update" parameterType="Review">
 		UPDATE review
 		SET review_des = #{reviewDes}
-		WHERE review_no=#{reviewNo} AND mem_id=#{memId}
+		WHERE review_no=#{reviewNo}
 	</update>
 
 
-<delete id="delete" parameterType="Review">
-		UPDATE review 
-		SET review_state = 0 
-		WHERE mem_ID = #{memId}
-</delete>
+<update id="updateReviewState" parameterType="Review">
+UPDATE Review
+SET review_state =0
+WHERE  st_Num=#{stNum}
+</update>
 	
 <select id="selectBystNum" parameterType="int" resultType="Review">
 select *
@@ -43,13 +43,21 @@ where st_Num=#{stNum}
 order by review_star desc
 </select>
 
-<update id="modify" parameterType="Reivew">
+
+<delete id="delete" parameterType="int">
+delete 
+from review
+where review_No=#{reviewNo}
+</delete>
+
+<update id="modify" parameterType="Review">
  	UPDATE Review SET mem_id = #{memId},
 	review_Des = #{reviewDes},
 	review_star = #{reviewStar},
 	review_state = '0'
 	WHERE mem_ID = #{memId}
   </update>
+  
 
 <select id="selectById" parameterType="String">
 	SELECT *

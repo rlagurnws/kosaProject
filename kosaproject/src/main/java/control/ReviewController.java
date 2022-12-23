@@ -21,7 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.my.exception.AddException;
 import com.my.exception.FindException;
+import com.my.exception.ModifyException;
 import com.my.service.ReviewService;
+import com.my.service.StoreService;
 import com.my.vo.Review;
 
 @RestController
@@ -29,6 +31,9 @@ import com.my.vo.Review;
 public class ReviewController {
 	@Autowired
 	private ReviewService service;
+	
+	@Autowired
+	private StoreService sService;
 	
 	static String location = "review/";
 	
@@ -39,12 +44,14 @@ public class ReviewController {
 		String id = (String)session.getAttribute("id");
 		Map<String, Object> map = new HashMap<>();
 		try {
+			rv.setMemId(id);
 			int reviewNo = service.insert(rv);
+			sService.star(rv.getReviewStar());
 			System.out.println(reviewNo);
 //			파일업로드(f, fImg)작업
 //			com.my.util.Attach.upload(rv.getStNum(), chooseFile, location, id+reviewNo);
 			//-----------------
-			File fDir = new File("d://project//review//");
+			File fDir = new File("C:/finalPro/");
 			if(!fDir.exists()) { //업로드 경로가 없는 경우
 				fDir.mkdir();
 			}
@@ -58,7 +65,7 @@ public class ReviewController {
 
 			String saveFileName =rv.getStNum() + "_" + id+reviewNo + "_" + originName; 
 
-			File saveFile = new File("d://project//review//", saveFileName);
+			File saveFile = new File("C:/finalPro/review/", saveFileName);
 			try {
 				//원본의 내용을 복사본에 붙여넣기
 				FileCopyUtils.copy(chooseFile.getBytes(), saveFile);
@@ -73,6 +80,10 @@ public class ReviewController {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(),
 					                    HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (ModifyException e1) {
+			e1.printStackTrace();
+			return new ResponseEntity<>(e1.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
 		}	
 	}
 	
@@ -85,19 +96,19 @@ public class ReviewController {
 			map.put("list", list);
 			map.put("status", 1);
 			
-			List<String> reviewFile = new ArrayList<>();
-			String saveDirectory = "D://project/review/";
-			File dir = new File(saveDirectory);
-			String[] allFileNames = dir.list();
-			for(Review rv : list) {				
-				for(String fn: allFileNames) {
-					if(fn.startsWith(stNum+"_"+rv.getMemId()+rv.getReviewNo())){
-						reviewFile.add(fn);
-						break;
-					}
-				}
-			}
-			map.put("reviewFile",reviewFile);
+//			List<String> reviewFile = new ArrayList<>();
+//			String saveDirectory = "C:/finalPro/review/";
+//			File dir = new File(saveDirectory);
+//			String[] allFileNames = dir.list();
+//			for(Review rv : list) {				
+//				for(String fn: allFileNames) {
+//					if(fn.startsWith(stNum+"_"+rv.getMemId()+rv.getReviewNo())){
+//						reviewFile.add(fn);
+//						break;
+//					}
+//				}
+//			}
+//			map.put("reviewFile",reviewFile);
 		} catch (FindException e) {
 			e.printStackTrace();
 			map.put("status", 0);

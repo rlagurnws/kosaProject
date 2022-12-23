@@ -65,6 +65,7 @@ public interface ReviewRepository {
 	List<Review> selectBystNumStar(int stNum) throws FindException;
 
 
+	void delMem(String id) throws ModifyException;
 	
 
 

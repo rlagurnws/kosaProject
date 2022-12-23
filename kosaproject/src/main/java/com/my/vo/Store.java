@@ -39,7 +39,7 @@ public class Store {
 	}
 	public Store(int stNum, String stDes, int stHits, Date stDate, String stName, Menu stMenu, List<Menu> stMenuList,
 			double stScore, String stLoca, String stPhone, int cateNum, String onerId, int stResNo, int stPostCnt,
-			int stStatus) {
+			int stStatus) { 
 		super();
 		this.stNum = stNum;
 		this.stDes = stDes;

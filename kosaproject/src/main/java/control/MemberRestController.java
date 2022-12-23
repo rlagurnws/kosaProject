@@ -2,7 +2,9 @@ package control;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -19,12 +21,15 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.my.dto.PageBean;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
 import com.my.exception.RemoveException;
 import com.my.service.MemberService;
+import com.my.service.ReviewService;
 import com.my.vo.Member;
+import com.my.vo.Review;
 
 //@Controller
 @RestController
@@ -32,6 +37,9 @@ import com.my.vo.Member;
 public class MemberRestController {
 	@Autowired
 	MemberService service;
+	
+	@Autowired
+	ReviewService rService;
 	
 	@PostMapping(value="iddupchk")
 	public Map<String, Object> iddupchk(String id) {
@@ -55,7 +63,8 @@ public class MemberRestController {
 			service.signUp(m);
 			map.put("status", 1);
 			map.put("msg", "회원가입 성공!");
-			String saveDirectory = "D://project//profile";
+			String saveDirectory = "C:/finalPro/profile";
+
 			File fDir = new File(saveDirectory);
 			if(!fDir.exists()) {
 				fDir.mkdir();
@@ -119,7 +128,7 @@ public class MemberRestController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			Member m = service.searchById(memId);
-			String saveDirectory = "D://project//profile";
+			String saveDirectory = "C:/finalPro/profile";
 			String fileName = null;
 			File dir = new File(saveDirectory);
 			String[] allFileNames = dir.list();
@@ -158,7 +167,8 @@ public class MemberRestController {
 				flag = true;
 			}
 			if(flag) {
-				String saveDirectory = "D://project//profile";
+				String saveDirectory = "C:/finalPro/profile";
+
 				File dir = new File(saveDirectory);
 				if(!dir.exists()) {
 					dir.mkdir();
@@ -192,11 +202,16 @@ public class MemberRestController {
 	@PutMapping(value="{memId}")
 	public Map<String, Object> delmem(HttpSession session, @PathVariable String memId){
 		Map<String, Object> map = new HashMap<>();
+		List<Review> list = new ArrayList<>();
 		try {
 			service.deleteMem(memId);
 			session.invalidate();
+			rService.delMem(memId);
 			map.put("status", 1);
 		} catch (RemoveException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		} catch (ModifyException e) {
 			e.printStackTrace();
 			map.put("status", 0);
 		}
@@ -247,6 +262,21 @@ public class MemberRestController {
 			map.put("status", 0);
 			return map;
 		}
+	}
+	
+	@GetMapping("list/{currentPage}")
+	public Map<String, Object> list(@PathVariable int currentPage){
+		Map<String, Object> map = new HashMap<>();
+		PageBean<Member> pb = null;
+		try {
+			pb = service.getPageBean(currentPage);
+			map.put("status", 1);
+			map.put("pb", pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
 	}
 	
 }

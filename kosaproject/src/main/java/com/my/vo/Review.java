@@ -49,7 +49,7 @@ public class Review {
 		this.reviewDes = reviewDes;
 	}
 
-	public double getReviewStar() {
+	public int getReviewStar() {
 		return reviewStar;
 	}
 

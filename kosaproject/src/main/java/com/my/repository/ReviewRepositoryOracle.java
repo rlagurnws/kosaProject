@@ -26,14 +26,8 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 	public int insert(Review rv) throws AddException {
 		SqlSession session = null;
 		try {
+			System.out.println(rv.getReviewStar());
 			session = sqlSessionFactory.openSession();
-			/*
-			 * Map<String,Object> map = new HashMap<>(); map.put("parentNo",
-			 * rb.getParentNo()); map.put("boardTitle", rb.getBoardTitle());
-			 * map.put("boardC.id", rb.getBoardC().getId()); map.put("boardContent",
-			 * rb.getBoardContent());
-			 */
-			
 			session.insert("com.my.mybatis.ReviewMapper.insert",rv);
 			return rv.getReviewNo();
 		} catch (Exception e) {
@@ -48,6 +42,25 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 	}
 
 	
+
+	@Override
+	public void delMem(String id) throws ModifyException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			session.update("com.my.mybatis.ReviewMapper.delMem",id);
+			System.out.println("여기는 안될걸");
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new ModifyException(e.getMessage());
+		} finally {
+			if(session!=null) {
+				session.close();
+			}
+		}
+	}
+
+
 
 	@Override
 	public List<Review> selectBystNum(int stNum) throws FindException {

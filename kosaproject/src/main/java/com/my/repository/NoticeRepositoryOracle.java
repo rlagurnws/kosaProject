@@ -43,6 +43,23 @@ public class NoticeRepositoryOracle implements NoticeRepository {
 		return null;
 	}
 	
+	
+	@Override
+	public int selectCount() throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			return session.selectOne("com.my.mybatis.NoticeMapper.selectCount");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+	
 	public List<Notice> selectAll(int currentPage, int cntPerPage) throws FindException{
 		SqlSession session = null;
 		try {
@@ -62,23 +79,6 @@ public class NoticeRepositoryOracle implements NoticeRepository {
 			}
 		}
 	}
-	
-	@Override
-	public int selectCount() throws FindException {
-		SqlSession session = null;
-		try {
-			session = sqlSessionFactory.openSession();
-			return session.selectOne("com.my.mybatis.NoticeMapper.selectCount");
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new FindException(e.getMessage());
-		}finally {
-			if(session !=null) {
-				session.close();
-			}
-		}
-	}
-	
 	public Notice selectByNo(int no) throws FindException{
 		SqlSession session = null;
 		try {

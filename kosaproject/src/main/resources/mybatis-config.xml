@@ -5,7 +5,9 @@
 <configuration>
   <settings>
 	<setting name="mapUnderscoreToCamelCase" value="true"/>
+
 	<setting name="jdbcTypeForNull" value="NULL"/>
+
   </settings>
 <typeAliases>
 	<typeAlias type="com.my.vo.Member" alias="Member"/>

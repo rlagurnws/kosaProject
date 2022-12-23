@@ -6,10 +6,10 @@
 <mapper namespace="com.my.mybatis.MemberMapper">
 
   <insert id="insert" parameterType="Member">
-  	INSERT INTO MEMBER(mem_id, mem_name, mem_pwd, mem_birth,
+  	INSERT INTO MEMBER(mem_no, mem_id, mem_name, mem_pwd, mem_birth,
 						mem_phone, mem_sex, mem_nick, mem_power,
 							mem_state)
-	VALUES (#{memId}, #{memName}, #{memPwd}, #{memBirth},
+	VALUES (member_seq.nextVal, #{memId}, #{memName}, #{memPwd}, #{memBirth},
 				#{memPhone}, #{memSex}, #{memNick}, #{memPower}, 1)
   </insert>
   
@@ -36,11 +36,23 @@
   	UPDATE MEMBER SET mem_state = 0 WHERE mem_ID = #{id}
   </update>
   
+
+  <select id="selectCount" resultType="int" >
+		select count(*) from member
+	</select>
+  <select id="selectAll" resultType="Member" parameterType="int">
+		SELECT * 
+		FROM member
+		ORDER BY mem_no 
+  </select>
+  
+
   <select id="findId" resultType="Member" parameterType="Member">
   	SELECT *
   	FROM MEMBER
   	WHERE mem_name = #{memName} AND mem_phone = #{memPhone}
   </select>
+
   
   <select id="findPwd" resultType="Member" parameterType="Member">
   	SELECT *

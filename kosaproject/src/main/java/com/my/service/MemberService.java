@@ -66,4 +66,7 @@ public class MemberService {
 		return repository.findPwd(m);
 
 	}
+	public Member searchByNo(String memNo) throws FindException{
+		return repository.selectByNo(memNo);
+	}
 }

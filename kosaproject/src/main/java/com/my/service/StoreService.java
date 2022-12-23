@@ -68,19 +68,18 @@ public class StoreService {
 	}
 	
 	
-//	public PageBean<Store> getPageBeanByCate(int currentPage, int cateNum) throws FindException{
-//		List<Store> list = selectByCate(currentPage, PageBean.CNT_PER_PAGE);
-//		int totalCnt = repository.selectCount();
-//		PageBean<Store> pb = new PageBean<>(currentPage, list, totalCnt);
-//		return pb;
-//	}
+	public PageBean<Store> getPageBeanByCate(int currentPage, int cateNum) throws FindException{
+		List<Store> list = selectByCatePageBean(cateNum,currentPage, PageBean.CNT_PER_PAGE);
+		int totalCnt = repository.selectCountByCate(cateNum);
+		PageBean<Store> pb = new PageBean<>(currentPage, list, totalCnt);
+		return pb;
+	}
 	
 
-//	private List<Store> selectByCate(int cateNum, int currentPage, int cntPerPage) throws FindException {
-//		return repository.selectByCate(cateNum, currentPage, cntPerPage);
-//	}
-
-	public List<Store> selectByCate(int cateNum) throws FindException {
-		return repository.selectByCate(cateNum);
+	private List<Store> selectByCatePageBean(int cateNum, int currentPage, int cntPerPage) throws FindException {
+		return repository.selectByCatePageBean(cateNum, currentPage, cntPerPage);
 	}
+	
+
+
 }

@@ -72,9 +72,11 @@ public interface StoreRepository {
 
 
 
-//	List<Store> selectByCate(int cateNum, int currentPage, int cntPerPage) throws FindException;
+	List<Store> selectByCatePageBean(int cateNum, int currentPage, int cntPerPage) throws FindException;
 
-	List<Store> selectByCate(int cateNum) throws FindException;
+
+
+	public int selectCountByCate(int cateNum) throws FindException;
 
 
 	

@@ -56,7 +56,7 @@ public class MemberRestController {
 			service.signUp(m);
 			map.put("status", 1);
 			map.put("msg", "회원가입 성공!");
-			String saveDirectory = "C:\\\\files";
+			String saveDirectory = "C:\\\\files\\\\profile";
 			File fDir = new File(saveDirectory);
 			if(!fDir.exists()) {
 				fDir.mkdir();
@@ -120,7 +120,7 @@ public class MemberRestController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			Member m = service.searchById(memId);
-			String saveDirectory = "C:\\\\files";
+			String saveDirectory =  "C:\\\\files\\\\profile";
 			String fileName = null;
 			File dir = new File(saveDirectory);
 			String[] allFileNames = dir.list();
@@ -159,7 +159,7 @@ public class MemberRestController {
 				flag = true;
 			}
 			if(flag) {
-				String saveDirectory = "C:\\\\files";
+				String saveDirectory = "C:\\\\files\\\\profile";
 				File dir = new File(saveDirectory);
 				if(!dir.exists()) {
 					dir.mkdir();
@@ -263,6 +263,21 @@ public class MemberRestController {
 			map.put("status", 0);
 		}
 		return map;
+	}
+	
+	@GetMapping("memberpage/{memId}")
+	public Map<String, Object> memberpage(@PathVariable String memId){
+		Map<String, Object> map = new HashMap<>();
+		try {
+		Member m  =service.searchById(memId);
+		map.put("status",1);
+		map.put("member", m);
+		
+	} catch (FindException e) {
+		e.printStackTrace();
+		map.put("status", 0);
+	}
+	return map;
 	}
 	
 }

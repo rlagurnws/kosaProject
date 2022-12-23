@@ -67,6 +67,20 @@
 		FROM st   
 		WHERE CATE_NUM=#{cateNum} AND st_status=1 
 	</select>
+	
+	<select id="selectByCatePageBean" resultType="Store" parameterType="map">
+		SELECT rn, b.*
+		FROM  (SELECT rownum rn, store.*
+				FROM ST store
+				WHERE cate_NUM = #{cateNum} AND ST_STATUS = 1 ) b
+		WHERE rn BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<select id="selectCountByCate" resultType="int">
+		SELECT count(*) 
+		FROM st 
+		WHERE cate_Num=#{cateNum} AND st_status = 1
+	</select>
 	 
 	
 </mapper>

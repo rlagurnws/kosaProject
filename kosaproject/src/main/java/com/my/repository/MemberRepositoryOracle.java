@@ -174,4 +174,30 @@ public class MemberRepositoryOracle implements MemberRepository{
 			}
 		}
 	}
+
+	
+	
+	@Override
+	public Member selectByNo(String memNo) throws FindException {
+		Member M= new Member();
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			M = session.selectOne("com.my.mybatis.MemberMapper.selectByNo", memNo);
+			if(M == null) {
+				throw new Exception();
+			}
+			return M;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session != null) {
+				session.close();
+			}
+		}
+	}
+
+	
+
 }

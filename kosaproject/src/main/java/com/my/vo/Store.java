@@ -1,12 +1,15 @@
 package com.my.vo;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Store {
 	private int stNum;
 	private String stDes;
 	private int stHits;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="YYYY-MM-dd")
 	private Date stDate;
 	private String stName;
 	private Menu stMenu;

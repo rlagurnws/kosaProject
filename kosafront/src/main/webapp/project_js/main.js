@@ -1,11 +1,12 @@
 function openNav() {
-    document.querySelector(".mySidenav").style.width = '20%';
-    document.querySelector('div.center').style.marginLeft = '20%';
-
+    document.getElementById("mySidenav").style.width = "200px";
+    document.getElementById("main").style.marginLeft = "20%";
+    document.getElementById("search").style.marginLeft = "20%";
 }
 function closeNav() {
-    document.querySelector(".mySidenav").style.width = '0';
-    document.querySelector('div.center').style.marginLeft = '0';
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft = "0";
+    document.getElementById("search").style.marginLeft = "0";
 }
 
 $(function(){
@@ -40,7 +41,7 @@ $(function(){
             },
             url: backURL+'logout',
             success: function(){
-                location.href=frontURL+'project_html/main.html'
+                location.href='main.html'
             }
         })
     })

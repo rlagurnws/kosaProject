@@ -1,6 +1,7 @@
 html{
     height: 800px;
 }
+
 body{
     height: 100%;
     margin: 0;
@@ -59,6 +60,7 @@ aside{
     height: 60%;
 }
 aside>.content{
+
     display: flex;
     flex-direction: column;
     width: 100%;

@@ -21,6 +21,7 @@
         </nav>
         <aside>
             <div class="content">
+
                 
                 <input type="radio" name="memPower" value="1" checked>일반&nbsp;회원&nbsp;&nbsp;
                 <input type="radio" name="memPower" value="2">사업자<br>
@@ -59,6 +60,58 @@
 
                 <input type="submit" value="가입" name="submit">
                 <input type="reset" value="취소">
+
+                <form class="signup">
+                    <input type="radio" name="memPower" value="1" checked>일반&nbsp;회원&nbsp;&nbsp;
+                    <input type="radio" name="memPower" value="2">사업자<br>
+
+                    <label for="id">아이디</label>
+                    <input type="text" placeholder="아이디 입력하세요" name="memId" id="id">
+               
+                    <button class="iddupchk" type="button">아이디중복확인</button><br>
+               
+                    <label for="pwd">비밀번호</label>
+                    <input type="password" name="memPwd" id="pwd"> <br>
+               
+                    <label for="pwd">비밀번호확인</label>
+                    <input type="password" id="pwd2"> <br>
+               
+                    <label for="name">이름</label>
+                    <input type="text" name="memName" id="name"> <br>
+               
+                    <div class="select">
+                        <select class="locaType">
+                            <option value="loca">지역을 선택하시오</option>
+                            <option value="gg">경기도</option>
+                            <option value="jr">전라도</option>
+                            <option value="ch">충청도</option>
+                            <option value="gw">강원도</option>
+                            <option value="gs">경상도</option>
+                            <option value="jj">제주도</option>
+                        </select>
+                        <select class="region" name="memAddress">
+                            <option class="copy"></option>
+                        </select>
+                    <br>
+               
+                    <label for="phone">전화번호</label>
+                    <input name="memPhone" id="phone"> <br>
+               
+                    <!-- 성별 -->
+                    <input type="radio" name="memSex" value="m" checked>남&nbsp;&nbsp;
+                    <input type="radio" name="memSex" value="f">여<br>
+                    
+                    <label for="nickname">닉네임:</label>
+                    <input type="text" name="memNick" id="nname"> <br>
+                    
+                    <label for="Bd">생일:</label>
+                    <input type="date" name="memBirth"><br>
+                    프로필 사진 <input type="file" class="real-upload" accept="image/*" name="img">
+                    <br>
+
+                    <input type="submit" value="가입" name="submit">
+                    <input type="reset" value="취소">
+
 
                         
                         

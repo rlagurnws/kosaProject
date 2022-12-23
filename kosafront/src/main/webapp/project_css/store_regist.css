@@ -72,7 +72,11 @@ aside {
     height: 70%;
 }
 
+<<<<<<< HEAD
 aside>form>div.content {
+=======
+aside>.content {
+>>>>>>> origin/develop
     border: 1px solid;
     width: 80%;
     margin-left: 10%;

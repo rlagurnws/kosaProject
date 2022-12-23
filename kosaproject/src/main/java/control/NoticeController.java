@@ -31,9 +31,6 @@ public class NoticeController {
 	public Map<String,Object> addnoti(@RequestBody Notice noti) {
 		Map<String,Object> map = new HashMap<>();
 		try {
-			System.out.println("--------------------------------------");
-			System.out.println(noti);
-			System.out.println("--------------------------------------");
 			service.addNoti(noti);
 			map.put("msg", "성공!");
 		} catch (AddException e) {

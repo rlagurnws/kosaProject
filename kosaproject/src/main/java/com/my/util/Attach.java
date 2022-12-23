@@ -16,8 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.my.exception.AddException;
 
 public class Attach {
-	public static final String SAVE_DIRECTORY = "C:\\files";
+
 	
+
+	public static final String SAVE_DIRECTORY = "C:/files";
+
 	public static ResponseEntity<?> download(String fileName) throws IOException{		
 		File file = new File(SAVE_DIRECTORY, fileName);	
 		if(!file.exists()) {
@@ -38,11 +41,17 @@ public class Attach {
                 responseHeaders, 
                 HttpStatus.OK);
 	}
+
 	public static boolean remove(String fileName) {
 		File dir = new File(SAVE_DIRECTORY, fileName);
 		return dir.delete();
 	}
-	public static void upload(int no, MultipartFile f) throws AddException {
+
+	
+
+	
+	public static void upload(int no, MultipartFile f, String menuName) throws AddException {
+
 		File fDir = new File(SAVE_DIRECTORY);
 		if(!fDir.exists()) { //업로드 경로가 없는 경우
 			fDir.mkdir();
@@ -55,7 +64,11 @@ public class Attach {
 			throw new AddException("첨부파일이 비었거나 파일이름이 없습니다");
 		}
 		
-		String saveFileName =no + "_" + UUID.randomUUID() + "_" + originName; 
+
+		
+
+		String saveFileName =no + "_" + menuName + "_" + originName; 
+
 		File saveFile = new File(SAVE_DIRECTORY, saveFileName);
 		try {
 			//원본의 내용을 복사본에 붙여넣기
@@ -65,9 +78,13 @@ public class Attach {
 			throw new AddException(e.getMessage());
 		} 
 	}
-	public static void upload(int no, List<MultipartFile> list) throws AddException {
+
+	
+
+	public static void upload(int no, List<MultipartFile> list, String stName) throws AddException {
 		for(MultipartFile f: list) {
-			upload(no, f);
+			upload(no, f, stName);
+
 		}
 	}
 }

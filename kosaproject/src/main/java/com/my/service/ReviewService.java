@@ -50,10 +50,11 @@ public class ReviewService {
       
       public List<Review> selectBystNum(int stNum) throws FindException {
          return repository.selectBystNum(stNum);
-         
-         
       }
       
+      public void delMem(String id) throws ModifyException{
+    	  repository.delMem(id);
+      }
       
       
    

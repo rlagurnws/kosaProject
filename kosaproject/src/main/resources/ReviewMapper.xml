@@ -32,17 +32,29 @@ from review
 where st_Num=#{stNum}
 </select>
 
+<select id="selectById" resultType="Review" parameterType="string">
+	SELECT *
+	FROM REVIEW
+	WHERE MEM_ID = #{memId}
+</select>
+
+<update id="delMem" parameterType="string">
+	UPDATE REVIEW SET REVIEW_STATE = 0 WHERE MEM_ID = #{id}
+</update>
+
+
+
 <select id="selectBystNumNew" parameterType="int" resultType="Review">
 select *
 from review
-where st_Num=#{stNum}
+where st_Num=#{stNum} AND REVIEW_STATE = 1
 order by review_date desc
 </select>
 
 <select id="selectBystNumStar" parameterType="int" resultType="Review">
 select *
 from review
-where st_Num=#{stNum}
+where st_Num=#{stNum} AND REVIEW_STATE = 1
 order by review_star desc
 </select>
 

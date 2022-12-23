@@ -1,14 +1,18 @@
 package com.my.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.my.dto.PageBean;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
 import com.my.exception.RemoveException;
 import com.my.repository.MemberRepository;
 import com.my.vo.Member;
+import com.my.vo.Notice;
 
 @Service
 public class MemberService {
@@ -44,10 +48,22 @@ public class MemberService {
 	public void deleteMem(String id) throws RemoveException{
 		repository.delete(id);
 	}
+
+	public PageBean<Member> getPageBean(int currentPage) throws FindException {
+		List<Member> list = findAll(currentPage,PageBean.CNT_PER_PAGE);
+		int totalCnt = repository.selectCount();
+		PageBean<Member> pb = new PageBean<>(currentPage, list, totalCnt);
+		return pb;
+	}
+	
+	public List<Member> findAll(int currentPage, int cntPerPage) throws FindException{
+		return repository.selectAll(currentPage, cntPerPage);
+	}
 	public Member findByName(Member m) throws FindException{
 		return repository.findId(m);
 	}
 	public Member findById(Member m) throws FindException{
 		return repository.findPwd(m);
+
 	}
 }

@@ -16,7 +16,6 @@ public class Review {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private java.util.Date reviewDate;
 
-	
 	public Review(int reviewNo, String reviewDes, int reviewStar, int stNum, String memId, int reviewState,
 			Date reviewDate) {
 		super();
@@ -28,7 +27,7 @@ public class Review {
 		this.reviewState = reviewState;
 		this.reviewDate = reviewDate;
 	}
-	
+
 	public Review() {
 		super();
 	}
@@ -50,6 +49,7 @@ public class Review {
 	}
 
 	public int getReviewStar() {
+
 		return reviewStar;
 	}
 
@@ -76,7 +76,7 @@ public class Review {
 	public int getReviewState() {
 		return reviewState;
 	}
-
+	
 	public void setReviewState(int reviewState) {
 		this.reviewState = reviewState;
 	}
@@ -88,4 +88,5 @@ public class Review {
 	public void setReviewDate(java.util.Date reviewDate) {
 		this.reviewDate = reviewDate;
 	}
+
 }

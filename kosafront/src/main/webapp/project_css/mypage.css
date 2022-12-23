@@ -1,5 +1,9 @@
 html {
+<<<<<<< HEAD
+    height: 1080px;
+=======
     height: 800px;
+>>>>>>> origin/develop
 }
 a.store{
     display: none;
@@ -91,9 +95,15 @@ aside>.content {
     margin-left: 10%;
     height: 100%;
 }
+<<<<<<< HEAD
+aside>.content>img{
+    width: 200px;
+    height: 200px;
+=======
 aside>.content>.signup {
     border: 1px solid;
     width: 100%;
     margin: 0%;
     height: 100%;
+>>>>>>> origin/develop
 }

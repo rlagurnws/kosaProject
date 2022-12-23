@@ -31,15 +31,12 @@ public class StoreService {
 	 * @return 페이지빈 페이지빈에는 게시글목록, 총페이지수, 페이지그룹의 시작페이지, 끝페이지정보가 모두 담겨있다
 	 * @throws FindException
 	 */
-	
-
 	public int addStore(Store store) throws AddException{
 		int stNum = repository.insert(store);
 		System.out.println("add성공");
 		return stNum;
 	}
 
-	
 	
 	public List<Store> submittedStore(int currentPage, int cntPerPage) throws FindException{
 		return repository.submitted(currentPage, cntPerPage);
@@ -68,23 +65,33 @@ public class StoreService {
 	}
 	
 	
-//	public PageBean<Store> getPageBeanByCate(int currentPage, int cateNum) throws FindException{
-//		List<Store> list = selectByCate(currentPage, PageBean.CNT_PER_PAGE);
-//		int totalCnt = repository.selectCount();
-//		PageBean<Store> pb = new PageBean<>(currentPage, list, totalCnt);
-//		return pb;
-//	}
-	
+	public PageBean<Store> getPageBeanByCate(int currentPage, int cateNum) throws FindException{
+		List<Store> list = selectByCatePageBean(cateNum,currentPage, PageBean.CNT_PER_PAGE);
+		int totalCnt = repository.selectCountByCate(cateNum);
+		PageBean<Store> pb = new PageBean<>(currentPage, list, totalCnt);
+		return pb;
+	}
 
-//	private List<Store> selectByCate(int cateNum, int currentPage, int cntPerPage) throws FindException {
-//		return repository.selectByCate(cateNum, currentPage, cntPerPage);
-//	}
-
-	public List<Store> selectByCate(int cateNum) throws FindException {
-		return repository.selectByCate(cateNum);
+	private List<Store> selectByCatePageBean(int cateNum, int currentPage, int cntPerPage) throws FindException {
+		return repository.selectByCatePageBean(cateNum, currentPage, cntPerPage);
 	}
 	
+
 	public void star(int star) throws ModifyException{
 		repository.star(star);
+	}
+	
+	public List<Store> findAll(int currentPage, int cntPerPage, String search) throws FindException{
+		return repository.selectSearch(currentPage, cntPerPage, search);
+	}
+	public PageBean<Store> stListGetPageBean(int currentPage, String search) throws FindException{
+		List<Store> list = findAll(currentPage,PageBean.CNT_PER_PAGE, search);
+		int totalCnt = repository.selectStoreCount();
+		PageBean<Store> pb = new PageBean<>(currentPage, list, totalCnt);
+		return pb;
+	}
+	
+	public List<Store> selectStoreNo(int stNum) throws FindException{
+		return repository.selectByStoreNum(stNum);
 	}
 }

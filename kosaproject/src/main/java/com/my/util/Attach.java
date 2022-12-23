@@ -44,7 +44,7 @@ public class Attach {
 		File dir = new File(SAVE_DIRECTORY+location, fileName);
 		return dir.delete();
 	}
-	
+
 	public static void upload(int no, MultipartFile f,String location, String menuName) throws AddException {
 		File fDir = new File(SAVE_DIRECTORY+location);
 		if(!fDir.exists()) { //업로드 경로가 없는 경우
@@ -61,7 +61,6 @@ public class Attach {
 		String saveFileName =no + "_" + menuName + "_" + originName; 
 
 		File saveFile = new File(SAVE_DIRECTORY+location, saveFileName);
-
 		try {
 			// 원본의 내용을 복사본에 붙여넣기
 			FileCopyUtils.copy(f.getBytes(), saveFile);

@@ -207,7 +207,7 @@ $(function () {
             processData: false, //파일업로드용 설정
             contentType: false, //파일업로드용 설정	
             method: "post",
-            url: backURL + 'AddStore',
+            url: backURL + 'store/new',
             //     ////////Content-Type 명시함
             //    headers: { 'Content-Type': 'application/json' },
             //     ////////객체를 JSON문자열로 변환 :  JSON.stringify()로 감싸주어야 함

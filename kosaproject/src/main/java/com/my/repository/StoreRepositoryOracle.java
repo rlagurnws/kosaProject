@@ -8,16 +8,13 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.my.exception.AddException;
 import com.my.exception.FindException;
+import com.my.exception.ModifyException;
 import com.my.vo.Menu;
 import com.my.vo.Store;
-import com.my.exception.ModifyException;
 
 @Repository("storeRepository")
 
@@ -161,18 +158,24 @@ public class StoreRepositoryOracle implements StoreRepository {
 
 
 		
-	public List<Store> selectByCate(int currentPage, int cntPerPage) throws FindException{
+	public List<Store> selectByCatePageBean(int cateNum, int currentPage, int cntPerPage) throws FindException{
 		SqlSession session = null;
 		List<Store> list = new ArrayList<>();
 		try {
 			session = sqlSessionFactory.openSession();
 			int startRow = ((currentPage-1)*cntPerPage)+1;
+//			int startRow = 1;
 			int endRow = currentPage*cntPerPage;
+			System.out.println("-----------------------------------------------");
+			System.out.println("cp : " + currentPage + cntPerPage);
+			System.out.println("startrow : "+startRow);
+			System.out.println("endRow : "+endRow);
+			System.out.println("-----------------------------------------------");
 			Map<String, Object> map = new HashMap<>();
 			map.put("startRow",startRow);
 			map.put("endRow", endRow);
-			
-			list =  session.selectList("com.my.mybatis.StoreMapper.selectByCate",map);
+			map.put("cateNum", cateNum);
+			list =  session.selectList("com.my.mybatis.StoreMapper.selectByCatePageBean",map);
 			System.out.println(list);
 			return list;
 		} catch (Exception e) {
@@ -184,19 +187,15 @@ public class StoreRepositoryOracle implements StoreRepository {
 			}
 		}
 	}
-
+	
 	@Override
-	public List<Store> selectByCate(int cateNum) throws FindException {
-		SqlSession session = null;
-		
+	public int selectCountByCate(int cateNum) throws FindException {
+		SqlSession session = sqlSessionFactory.openSession();
 		try {
-		session = sqlSessionFactory.openSession();
-		return session.selectList("com.my.mybatis.StoreMapper.selectByCate",cateNum);
-		}catch (Exception e) {
-			e.printStackTrace();
-			throw new FindException(e.getMessage());
+			return session.selectOne("com.my.mybatis.StoreMapper.selectCountByCate", cateNum);
 		} finally {
 			if (session != null) {
+
 				session.close();
 			}
 		}
@@ -218,13 +217,79 @@ public class StoreRepositoryOracle implements StoreRepository {
 		}
 		
 	}
-	
-	
 
-	
+	@Override
+	public int selectStoreCount() throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			return session.selectOne("com.my.mybatis.StoreMapper.selectStoreCount");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
 
-	
 
-	
+
+	@Override
+	public List<Store> selectSearch(int currentPage, int cntPerPage, String search) throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			int startRow = ((currentPage-1)*cntPerPage)+1;
+			int endRow = currentPage*cntPerPage;
+			Map<String, Object> map = new HashMap<>();
+			map.put("startRow",startRow);
+			map.put("endRow", endRow);
+			map.put("search", search);
+			return session.selectList("com.my.mybatis.StoreMapper.selectAll",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+
+
+	@Override
+	public List<Store> selectByStoreNum(int stNum) throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			return session.selectList("com.my.mybatis.StoreMapper.selectStoreLoad", stNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session != null) {
+				session.close();
+			}
+		}
+	}
 
 }
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+

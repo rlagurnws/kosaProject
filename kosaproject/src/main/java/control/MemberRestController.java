@@ -118,6 +118,7 @@ public class MemberRestController {
 		return map;
 	}
 	
+	
 	@GetMapping(value="logout")	
 	public void logout(HttpSession session){
 		session.invalidate();

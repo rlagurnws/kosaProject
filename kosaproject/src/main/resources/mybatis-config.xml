@@ -24,20 +24,32 @@
 <typeAliases>
 	<typeAlias type="com.my.vo.Member" alias="Member"/>
 	<typeAlias type="com.my.vo.Notice" alias="Notice"/>
+<<<<<<< HEAD
+=======
+	<typeAlias type="com.my.vo.Review" alias="Review"/>
+>>>>>>> origin/de01
 
 	<typeAlias type="com.my.vo.Store" alias="Store"/>
 	<typeAlias type="com.my.vo.Menu" alias="Menu"/>
 
+<<<<<<< HEAD
 	<typeAlias type="com.my.vo.Review" alias="Review"/>
 
+=======
+>>>>>>> origin/de01
 </typeAliases>
   <mappers>
     <mapper resource="MemberMapper.xml"/>
     <mapper resource="NoticeMapper.xml"/>
+<<<<<<< HEAD
 
     <mapper resource="StoreMapper.xml"/>
 
     <mapper resource="ReviewMapper.xml"/>
 
+=======
+    <mapper resource="ReviewMapper.xml"/>
+    <mapper resource="StoreMapper.xml"/>
+>>>>>>> origin/de01
   </mappers>
 </configuration>

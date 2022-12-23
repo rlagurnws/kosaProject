@@ -62,6 +62,7 @@ public class StoreController {
 			}
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
+			
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -81,11 +82,11 @@ public class StoreController {
 		return map;
 	}
 
-	@PostMapping("{storeNo}")
-	public Map<String, Object> selectByNo(@PathVariable int storeNo) {
+	@PostMapping("{stNum}")
+	public Map<String, Object> selectByNo(@PathVariable int stNum) {
 		Map<String, Object> map = new HashMap<>();
 		try {
-			Store s = service.selectByNo(storeNo);
+			Store s = service.selectByNo(stNum);
 			map.put("store", s);
 			map.put("status", 1);
 		} catch (FindException e) {

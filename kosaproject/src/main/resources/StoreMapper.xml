@@ -6,7 +6,7 @@
   <mapper namespace="com.my.mybatis.StoreMapper">
 	<insert id="insert" parameterType="Store">
 		INSERT INTO ST(st_num, st_des, st_hits, st_date, st_name,st_score, st_loca,
-						 st_phone, cate_num, oner_id, st_res_no, st_review_cnt, st_status)
+						 st_phone, cate_num, owner_id, st_res_no, st_review_cnt, st_status)
 					VALUES(ST_SEQ.nextVal,#{stDes},0,SYSDATE,#{stName},0,#{stLoca},
 					#{stPhone},#{cateNum},#{ownerId},#{stResNo},0,0)
 		<selectKey keyProperty="stNum" resultType="int" order="AFTER">
@@ -63,7 +63,7 @@
 	
 		
 	<select id="selectByCate" resultType="Store" parameterType="int">
-		SELECT st_name, st_hits, cate_Num, st_loca   
+		SELECT st_num, st_name, st_hits, cate_Num, st_loca   
 		FROM st   
 		WHERE CATE_NUM=#{cateNum} AND st_status=1 
 	</select>

@@ -173,7 +173,7 @@ public class StoreRepositoryOracle implements StoreRepository {
 			map.put("endRow", endRow);
 			
 			list =  session.selectList("com.my.mybatis.StoreMapper.selectByCate",map);
-			//System.out.println("-------------------------"+list+"---------------------");
+			System.out.println(list);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();

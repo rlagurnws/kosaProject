@@ -1,5 +1,9 @@
 package com.my.repository;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +96,24 @@ public class MemberRepositoryOracle implements MemberRepository{
 			}
 		}
 	}
-	
+
+
+	@Override
+	public int selectCount() throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			return session.selectOne("com.my.mybatis.MemberMapper.selectCount");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session != null) {
+
+				session.close();
+			}
+		}
+	}
 	public Member findId(Member m) throws FindException{
 		SqlSession session = null;
 		try {
@@ -108,6 +129,35 @@ public class MemberRepositoryOracle implements MemberRepository{
 			}
 		}
 	}
+
+
+	@Override
+	public List<Member> selectAll() throws FindException {
+		return null;
+	}
+
+	@Override
+	public List<Member> selectAll(int currentPage, int cntPerPage) throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			int startRow = ((currentPage-1)*cntPerPage)+1;
+			int endRow = currentPage*cntPerPage;
+			Map<String, Object> map = new HashMap<>();
+			map.put("startRow",startRow);
+			map.put("endRow", endRow);
+			return session.selectList("com.my.mybatis.MemberMapper.selectAll",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session != null) {
+
+				session.close();
+			}
+		}
+	}
+
 	public Member findPwd(Member m) throws FindException{
 		SqlSession session = null;
 		try {
@@ -119,6 +169,7 @@ public class MemberRepositoryOracle implements MemberRepository{
 			throw new FindException(e.getMessage());
 		} finally {
 			if(session != null) {
+
 				session.close();
 			}
 		}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.my.exception.AddException;
 import com.my.exception.FindException;
+
 import com.my.exception.ModifyException;
 import com.my.vo.Menu;
 import com.my.vo.Store;
@@ -23,9 +24,12 @@ public interface StoreRepository {
 	 * @return 신청한 후 승인되지 않은 가게 전체 리스트
 	 * @throws FindException
 	 */
+
+	
+
 	List<Store> submitted(int currentPage, int cntPerPage) throws FindException;
 	
-	public List<Store> selectByCate(int cate) throws FindException;
+
 	
 	/**
 	 * @author 김혁준
@@ -34,13 +38,14 @@ public interface StoreRepository {
 	 */
 	public int selectCount() throws FindException;
 	
+	
 	/**
 	 * @author 김혁준 
 	 * @param storeNo
 	 * @return 번호에 해당하는 가게 객체
 	 * @throws FindException
 	 */
-	public Store selectByNo(int storeNo) throws FindException;
+	public Store selectByNo(int stNum) throws FindException;
 	
 	/**
 	 * @author 김혁준
@@ -58,4 +63,21 @@ public interface StoreRepository {
 	 * 
 	 */
 	public void confirmStore(int stNum) throws ModifyException;
+
+
+	List<Store> selectById(String id) throws FindException;
+
+	
+
+
+
+
+//	List<Store> selectByCate(int cateNum, int currentPage, int cntPerPage) throws FindException;
+
+	List<Store> selectByCate(int cateNum) throws FindException;
+
+	void star(int star) throws ModifyException;
+	
+	
+
 }

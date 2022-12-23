@@ -5,17 +5,27 @@
 <configuration>
   <settings>
 	<setting name="mapUnderscoreToCamelCase" value="true"/>
+
 	<setting name="jdbcTypeForNull" value="NULL"/>
+
   </settings>
 <typeAliases>
 	<typeAlias type="com.my.vo.Member" alias="Member"/>
 	<typeAlias type="com.my.vo.Notice" alias="Notice"/>
+
 	<typeAlias type="com.my.vo.Store" alias="Store"/>
 	<typeAlias type="com.my.vo.Menu" alias="Menu"/>
+
+	<typeAlias type="com.my.vo.Review" alias="Review"/>
+
 </typeAliases>
   <mappers>
     <mapper resource="MemberMapper.xml"/>
     <mapper resource="NoticeMapper.xml"/>
+
     <mapper resource="StoreMapper.xml"/>
+
+    <mapper resource="ReviewMapper.xml"/>
+
   </mappers>
 </configuration>

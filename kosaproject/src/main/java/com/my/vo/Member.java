@@ -12,6 +12,8 @@ public class Member {
 	private int memPower;
 	private String memAddress;
 	private int memState;
+	private int memNo;
+	
 	public String getMemId() {
 		return memId;
 	}
@@ -88,6 +90,12 @@ public class Member {
 	}
 	public void setMemState(int memState) {
 		this.memState = memState;
+	}
+	public int getMemNo() {
+		return memNo;
+	}
+	public void setMemNo(int memNo) {
+		this.memNo = memNo;
 	}
 	
 }

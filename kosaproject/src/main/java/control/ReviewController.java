@@ -75,25 +75,6 @@ public class ReviewController {
 					                    HttpStatus.INTERNAL_SERVER_ERROR);
 		}	
 	}
-	public ResponseEntity<?> write(HttpSession session, 
-			@RequestPart   MultipartFile chooseFile,
-			Review rv) {
-		String id = (String)session.getAttribute("id");
-		Map<String, Object> map = new HashMap<>();
-		rv.setMemId("id1");
-		try {
-			int reviewNo = service.insert(rv);
-			System.out.println(reviewNo);
-//			파일업로드(f, fImg)작업
-			com.my.util.Attach.upload(rv.getStNum(), chooseFile, location, id+reviewNo);
-			map.put("status", 1);
-			return new ResponseEntity<>(map,HttpStatus.OK);
-		}catch(AddException e) {
-			return new ResponseEntity<>(e.getMessage(),
-					                    HttpStatus.INTERNAL_SERVER_ERROR);
-		}		
-	}
-	
 	
 	@PostMapping("list/{stNum}")
 	public Map<String, Object> list(@PathVariable int stNum){

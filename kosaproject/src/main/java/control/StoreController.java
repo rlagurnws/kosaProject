@@ -174,30 +174,16 @@ public class StoreController {
 	}
 	
 	
-//	@GetMapping("list/{cateNem}/{currentPage}")
-//	public Map<String,Object> list(@PathVariable int cateNum, @PathVariable int currentPage){
-//		Map<String,Object> map = new HashMap<>();
-//		PageBean<Store> pb = null;
-//		try {
-//			pb = service.getPageBeanByCate(cateNum, currentPage);
-//			map.put("status", 1);
-//			map.put("pb", pb);
-//		} catch (FindException e) {
-//			e.printStackTrace();
-//			map.put("status", 0);
-//		}
-//		return map;
-//	}
-	
-	@GetMapping("list/{cateNum}/{currentPage}")
-	public Map<String, Object> catelist(@PathVariable int cateNum){
-		Map<String, Object> map = new HashMap<>();
-		List<Store> list = new ArrayList<>();
-		
+	@PostMapping("list/{cateNum}/{currentPage}") 
+	public Map<String,Object> list(@PathVariable int cateNum, @PathVariable int currentPage){
+		Map<String,Object> map = new HashMap<>();
+		List<Menu> list = new ArrayList<>();
+		PageBean<Store> pb;
 		try {
-			list = service.selectByCate(cateNum);
-			map.put("list", list); 
+			pb = service.getPageBeanByCate(currentPage,cateNum);
 			map.put("status", 1);
+			map.put("pb", pb);
+			
 		} catch (FindException e) {
 			e.printStackTrace();
 			map.put("status", 0);

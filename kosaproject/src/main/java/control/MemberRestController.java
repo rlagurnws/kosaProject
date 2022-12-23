@@ -129,6 +129,7 @@ public class MemberRestController {
 		try {
 			Member m = service.searchById(memId);
 			String saveDirectory = "C:/finalPro/profile";
+
 			String fileName = null;
 			File dir = new File(saveDirectory);
 			String[] allFileNames = dir.list();
@@ -277,6 +278,21 @@ public class MemberRestController {
 			map.put("status", 0);
 		}
 		return map;
+	}
+	
+	@GetMapping("memberpage/{memId}")
+	public Map<String, Object> memberpage(@PathVariable String memId){
+		Map<String, Object> map = new HashMap<>();
+		try {
+		Member m  =service.searchById(memId);
+		map.put("status",1);
+		map.put("member", m);
+		
+	} catch (FindException e) {
+		e.printStackTrace();
+		map.put("status", 0);
+	}
+	return map;
 	}
 	
 }

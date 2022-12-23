@@ -40,10 +40,11 @@
   <select id="selectCount" resultType="int" >
 		select count(*) from member
 	</select>
-  <select id="selectAll" resultType="Member" parameterType="int">
-		SELECT * 
-		FROM member
-		ORDER BY mem_no 
+  <select id="selectAll" resultType="Member" parameterType="int"> 
+		SELECT *
+		FROM (SELECT rownum rn, a.*
+		FROM (SELECT * FROM member ORDER BY mem_no )a )
+		WHERE rn BETWEEN #{startRow} AND #{endRow}
   </select>
   
 
@@ -59,4 +60,11 @@
   	FROM MEMBER
   	WHERE mem_id = #{memId} AND mem_phone = #{memPhone}
   </select>
+  
+   <select id="selectByNo" resultType="Member" parameterType="int">
+  	SELECT *
+	FROM MEMBER
+	WHERE mem_No = #{memNo}
+  </select>
+  
 </mapper>

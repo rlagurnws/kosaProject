@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- xml파일이라 앞에 패키지 이름 일단 신경쓰지말자 -->
+<mapper namespace="com.my.mybatis.ReviewMapper">
+
+	<insert id="insert" parameterType="Review">
+	<selectKey keyProperty="reviewNo" resultType="int" order="AFTER">
+		select review_seq.currval FROM dual
+	</selectKey>
+		INSERT INTO Review(review_no, review_star, review_des, review_date, mem_Id,review_state, st_Num)
+		VALUES (review_seq.nextVal,#{reviewStar},#{reviewDes},SYSDATE,#{memId},1,#{stNum})
+	</insert>
+
+	<update id="update" parameterType="Review">
+		UPDATE review
+		SET review_des = #{reviewDes}
+		WHERE review_no=#{reviewNo} AND mem_id=#{memId}
+	</update>
+
+
+<delete id="delete" parameterType="Review">
+		UPDATE review 
+		SET review_state = 0 
+		WHERE mem_ID = #{memId}
+</delete>
+	
+<select id="selectBystNum" parameterType="int" resultType="Review">
+select *
+from review
+where st_Num=#{stNum}
+</select>
+
+<select id="selectBystNumNew" parameterType="int" resultType="Review">
+select *
+from review
+where st_Num=#{stNum}
+order by review_date desc
+</select>
+
+<select id="selectBystNumStar" parameterType="int" resultType="Review">
+select *
+from review
+where st_Num=#{stNum}
+order by review_star desc
+</select>
+
+<update id="modify" parameterType="Review">
+ 	UPDATE Review SET mem_id = #{memId},
+	review_Des = #{reviewDes},
+	review_star = #{reviewStar},
+	review_state = '0'
+	WHERE mem_ID = #{memId}
+ </update>
+
+
+</mapper>

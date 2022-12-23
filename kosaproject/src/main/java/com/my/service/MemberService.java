@@ -44,4 +44,10 @@ public class MemberService {
 	public void deleteMem(String id) throws RemoveException{
 		repository.delete(id);
 	}
+	public Member findByName(Member m) throws FindException{
+		return repository.findId(m);
+	}
+	public Member findById(Member m) throws FindException{
+		return repository.findPwd(m);
+	}
 }

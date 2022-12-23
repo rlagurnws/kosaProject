@@ -1,21 +1,24 @@
 package com.my.vo;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Store {
 	private int stNum;
 	private String stDes;
 	private int stHits;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="YYYY-MM-dd")
 	private Date stDate;
 	private String stName;
 	private Menu stMenu;
 	private List<Menu> stMenuList;
-	private double stScore;
+	private double stScore;				//별점
 	private String stLoca;
 	private String stPhone;
 	private int cateNum;
-	private String onerId;
+	private String ownerId;
 	private int stResNo;
 	private int stPostCnt;
 	private int stStatus;
@@ -49,7 +52,7 @@ public class Store {
 		this.stLoca = stLoca;
 		this.stPhone = stPhone;
 		this.cateNum = cateNum;
-		this.onerId = onerId;
+		this.ownerId = onerId;
 		this.stResNo = stResNo;
 		this.stPostCnt = stPostCnt;
 		this.stStatus = stStatus;
@@ -108,12 +111,7 @@ public class Store {
 	public void setCateNum(int cateNum) {
 		this.cateNum = cateNum;
 	}
-	public String getOnerId() {
-		return onerId;
-	}
-	public void setOnerId(String onerId) {
-		this.onerId = onerId;
-	}
+	
 	public int getStResNo() {
 		return stResNo;
 	}
@@ -132,5 +130,19 @@ public class Store {
 	public void setStStatus(int stStatus) {
 		this.stStatus = stStatus;
 	}
+	public String getOwnerId() {
+		return ownerId;
+	}
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}
+	@Override
+	public String toString() {
+		return "Store [stNum=" + stNum + ", stDes=" + stDes + ", stHits=" + stHits + ", stDate=" + stDate + ", stName="
+				+ stName + ", stMenu=" + stMenu + ", stMenuList=" + stMenuList + ", stScore=" + stScore + ", stLoca="
+				+ stLoca + ", stPhone=" + stPhone + ", cateNum=" + cateNum + ", ownerId=" + ownerId + ", stResNo="
+				+ stResNo + ", stPostCnt=" + stPostCnt + ", stStatus=" + stStatus + "]";
+	}
+	
 
 }

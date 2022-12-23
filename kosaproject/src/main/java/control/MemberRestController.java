@@ -55,7 +55,7 @@ public class MemberRestController {
 			service.signUp(m);
 			map.put("status", 1);
 			map.put("msg", "회원가입 성공!");
-			String saveDirectory = "D:\\\\MyBACK\\\\kosafront\\\\src\\\\main\\\\webapp\\\\project_image\\\\profile";
+			String saveDirectory = "D://project//profile";
 			File fDir = new File(saveDirectory);
 			if(!fDir.exists()) {
 				fDir.mkdir();
@@ -119,7 +119,7 @@ public class MemberRestController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			Member m = service.searchById(memId);
-			String saveDirectory = "D:\\MyBACK\\kosafront\\src\\main\\webapp\\project_image\\profile";
+			String saveDirectory = "D://project//profile";
 			String fileName = null;
 			File dir = new File(saveDirectory);
 			String[] allFileNames = dir.list();
@@ -158,7 +158,7 @@ public class MemberRestController {
 				flag = true;
 			}
 			if(flag) {
-				String saveDirectory = "D:\\\\MyBACK\\\\kosafront\\\\src\\\\main\\\\webapp\\\\project_image\\\\profile";
+				String saveDirectory = "D://project//profile";
 				File dir = new File(saveDirectory);
 				if(!dir.exists()) {
 					dir.mkdir();
@@ -217,6 +217,34 @@ public class MemberRestController {
 			map.put("id", id);
 			map.put("power", power);
 			map.put("nick", nick);
+			return map;
+		}
+	}
+	@PostMapping("findid")
+	public Map<String, Object> findId(@RequestBody Member m){
+		Map<String, Object> map = new HashMap<>();
+		try {
+			Member fm = service.findByName(m);
+			map.put("status", 1);
+			map.put("memId", fm.getMemId());
+			return map;
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+			return map;
+		}
+	}
+	@PostMapping("findpwd")
+	public Map<String, Object> findPwd(@RequestBody Member m){
+		Map<String, Object> map = new HashMap<>();
+		try {
+			Member fm = service.findById(m);
+			map.put("status", 1);
+			map.put("memPwd", fm.getMemPwd());
+			return map;
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
 			return map;
 		}
 	}

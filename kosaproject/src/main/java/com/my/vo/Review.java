@@ -8,7 +8,7 @@ import com.my.dto.PageBean;
 public class Review {
 	private int reviewNo;
 	private String reviewDes;
-	private double reviewStar;
+	private int reviewStar;
 	private int stNum;
 	private String memId;
 	private int reviewState;
@@ -26,7 +26,7 @@ public class Review {
 		super();
 		this.reviewNo = reviewNo;
 		this.reviewDes = reviewDes;
-		this.reviewStar = reviewStar;
+		this.reviewStar = (int) reviewStar;
 		this.stNum = stNum;
 		this.memId = memId;
 		this.reviewState = reviewState;
@@ -53,7 +53,7 @@ public class Review {
 		return reviewStar;
 	}
 
-	public void setReviewStar(double reviewStar) {
+	public void setReviewStar(int reviewStar) {
 		this.reviewStar = reviewStar;
 	}
 

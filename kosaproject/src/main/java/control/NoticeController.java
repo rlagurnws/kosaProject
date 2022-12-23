@@ -31,9 +31,6 @@ public class NoticeController {
 	public Map<String,Object> addnoti(@RequestBody Notice noti) {
 		Map<String,Object> map = new HashMap<>();
 		try {
-			System.out.println("--------------------------------------");
-			System.out.println(noti);
-			System.out.println("--------------------------------------");
 			service.addNoti(noti);
 			map.put("msg", "성공!");
 		} catch (AddException e) {
@@ -118,18 +115,4 @@ public class NoticeController {
 		return map;
 	}
 	
-//	@PutMapping("{notiNo}")
-//	public  Map<String,Object> noticeUpdate(@PathVariable int notiNo, @RequestBody Notice noti){
-//		Map<String,Object> map = new HashMap<>();
-//		try {
-//			service.updateNotice(noti);
-//			map.put("status", 1);
-//			map.put("msg", "변경 성공!");
-//		} catch (ModifyException e) {
-//			e.printStackTrace();
-//			map.put("status", 0);
-//			map.put("msg", "변경 실패!"+e.getMessage());
-//		}
-//		return map;
-//	}
 }

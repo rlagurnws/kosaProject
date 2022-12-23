@@ -6,6 +6,7 @@ import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
 import com.my.exception.RemoveException;
+import com.my.vo.Member;
 import com.my.vo.Review;
 
 public interface ReviewRepository {
@@ -50,6 +51,7 @@ public interface ReviewRepository {
  
 	
 	/**
+	 * 고객 Id별 리뷰목록 불러오기 
 	 * @author 장나영
 	 * @param id
 	 * @throws FindException
@@ -73,17 +75,23 @@ public interface ReviewRepository {
 	List<Review> selectBystNumStar(int stNum) throws FindException;
 
 	/**
+	 * 회원 자신이 리뷰를 수정한다. 
 	 * @author 장나영
 	 * @param rv
 	 */
-	void modify(Review rv) throws ;
+	void modify(Review rv) throws ModifyException;
 
 	/**
+	 * 회원 자신이 리뷰를 삭제한다. 
 	 * @author 장나영
 	 * @param reviewNo
 	 * @throws RemoveException
 	 */
 	void delete(int reviewNo) throws RemoveException;
+
+
+	
+
 
 
 	

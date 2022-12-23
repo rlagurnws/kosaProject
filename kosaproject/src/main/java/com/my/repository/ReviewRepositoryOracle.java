@@ -49,6 +49,28 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 		}
 	}
 
+
+	@Override
+	public void selectById(String memId) throws FindException {
+		Member m= new Member();
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			m = session.selectOne("com.my.mybatis.ReviewMapper.selectById", memId);
+			if(m == null) {
+				throw new Exception();
+			}
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session != null) {
+				session.close();
+			}
+		}
+		
+	}
 	
 
 	@Override
@@ -132,27 +154,6 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 		}
 	}
 	
-	@Override
-	public void selectById(String memId) throws FindException {
-		Member m= new Member();
-		SqlSession session = null;
-		try {
-			session = sqlSessionFactory.openSession();
-			m = session.selectOne("com.my.mybatis.ReviewMapper.selectById", memId);
-			if(m == null) {
-				throw new Exception();
-			}
-			return;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new FindException(e.getMessage());
-		}finally {
-			if(session != null) {
-				session.close();
-			}
-		}
-		
-	}
 
 
 	@Override
@@ -183,8 +184,19 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 
 
 	@Override
-	public void modify(Review rv) {
-		// TODO Auto-generated method stub
+	public void modify(Review rv) throws ModifyException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			session.update("com.my.mybatis.ReviewMapper.modify",rv);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ModifyException(e.getMessage());
+		}finally {
+			if(session != null) {
+				session.close();
+			}
+		}
 		
 	}
 
@@ -209,6 +221,9 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 	}
 		
 	}
+
+
+	
 
 
 

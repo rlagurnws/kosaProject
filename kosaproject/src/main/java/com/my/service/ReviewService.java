@@ -46,9 +46,6 @@ public class ReviewService {
 			repository.update(rv);
 		}
 		
-		public List<Review> selectBystNumStar(int stNum) throws FindException{
-			return repository.selectBystNumStar(stNum);
-		}
 		
 		public ReviewRepository getRepository() {
 			return repository;
@@ -56,6 +53,10 @@ public class ReviewService {
 
 		public void setRepository(ReviewRepository repository) {
 			this.repository = repository;
+		}
+		
+		public List<Review> selectBystNumStar(int stNum) throws FindException{
+			return repository.selectBystNumStar(stNum);
 		}
 
 		public List<Review> selectBystNumNew(int stNum) throws FindException{
@@ -72,17 +73,14 @@ public class ReviewService {
 			return null;
 		}
 
+		public void delete(int reviewNo) throws RemoveException{
+			repository.delete(reviewNo);
+		}
+
 		public void reviewMemory(Review rv) throws ModifyException{
 			repository.modify(rv);
 		}
 		
-		public void deleteMem(int reviewNo) throws RemoveException{
-			repository.delete(reviewNo);
-		}
-		
-		public void delete(int reviewNo) throws RemoveException{
-			repository.delete(reviewNo);
-		}
 		
 		
 		

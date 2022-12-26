@@ -90,21 +90,7 @@ public class StoreController {
 	public ResponseEntity<?> storereadlist(@PathVariable int currentPage, String search) throws FindException{
 		//search="서울";
 		PageBean<Store> pb = service.stListGetPageBean(currentPage , search);
-		
-		
-//		String strDirPath = "C:\\files\\"; 
-//        
-//        File path = new File( strDirPath ); 
-//        File[] fList = path.listFiles();  
-//		
-//        for( int i = 0; i < fList.length; i++ ) { 
-//            
-//            if( fList[i].isFile() ) { 
-//                System.out.println( "[파일] :" + fList[i].getPath() );  // 파일의 FullPath 출력 
-//            } 
-//            
-//        } 
-		
+
 		return new ResponseEntity<>(pb, HttpStatus.OK);
 	}
 
@@ -149,21 +135,6 @@ public class StoreController {
 			list = service.findMenu(stNum);
 			map.put("list", list);
 			map.put("status", 1);
-
-			List<String> menuFile = new ArrayList<>();
-			String saveDirectory = "D:/finalPro/menu";
-
-			File dir = new File(saveDirectory);
-			String[] allFileNames = dir.list();
-			for (Menu m : list) {
-				for (String fn : allFileNames) {
-					if (fn.startsWith(stNum + "_" + m.getMenuName())) {
-						menuFile.add(fn);
-						break;
-					}
-				}
-			}
-			map.put("menuFile", menuFile);
 		} catch (FindException e) {
 			e.printStackTrace();
 			map.put("status", 0);

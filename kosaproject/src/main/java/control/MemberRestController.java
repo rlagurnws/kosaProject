@@ -236,7 +236,7 @@ public class MemberRestController {
 			map.put("status", 1);
 			map.put("memId", fm.getMemId());
 			return map;
-		} catch (FindException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			map.put("status", 0);
 			return map;
@@ -250,7 +250,7 @@ public class MemberRestController {
 			map.put("status", 1);
 			map.put("memPwd", fm.getMemPwd());
 			return map;
-		} catch (FindException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			map.put("status", 0);
 			return map;
@@ -272,6 +272,24 @@ public class MemberRestController {
 		return map;
 	}
 	
+	@PutMapping(value="drop/{memId}")
+	   public Map<String, Object> dropMem(HttpSession session, @PathVariable String memId){
+	      Map<String, Object> map = new HashMap<>();
+	      List<Review> list = new ArrayList<>();
+	      try {
+	         service.deleteMem(memId);
+	         rService.delMem(memId);
+	         map.put("status", 1);
+	      } catch (RemoveException e) {
+	         e.printStackTrace();
+	         map.put("status", 0);
+	      } catch (ModifyException e) {
+	         e.printStackTrace();
+	         map.put("status", 0);
+	      }
+	      return map;
+	   }
+	
 	@GetMapping("memberpage/{memId}")
 	public Map<String, Object> memberpage(@PathVariable String memId){
 		Map<String, Object> map = new HashMap<>();
@@ -285,6 +303,21 @@ public class MemberRestController {
 		map.put("status", 0);
 	}
 	return map;
+	}
+	
+	@GetMapping("selectlist/{currentPage}/{memPower}/{memState}")
+	public Map<String, Object> selectlist(@PathVariable int currentPage, @PathVariable int memPower, @PathVariable int memState){
+		Map<String, Object> map = new HashMap<>();
+		PageBean<Member> pb = null;
+		try {
+			pb = service.getPageBeanBySelect(currentPage,memPower,memState);
+			map.put("status", 1);
+			map.put("pb", pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
 	}
 	
 }

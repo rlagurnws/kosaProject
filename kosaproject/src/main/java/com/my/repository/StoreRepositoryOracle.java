@@ -222,6 +222,39 @@ public class StoreRepositoryOracle implements StoreRepository{
 			}
 		}
 	}
+
+
+
+
+
+
+	@Override
+	public int update(Store store) throws AddException {
+		SqlSession session = null;
+		int stNum;
+		try {
+			session = sqlSessionFactory.openSession();
+			session.insert("com.my.mybatis.StoreMapper.update",store);
+			System.out.println(store.getStNum());
+			session.close();
+			
+			List<Menu> foodList = store.getStMenuList();			
+			for(Menu menu: foodList) {
+				session = sqlSessionFactory.openSession();
+				menu.setStNum(store.getStNum());
+				session.insert("com.my.mybatis.StoreMapper.updatefood",menu);
+			}
+			return store.getStNum();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new AddException(e.getMessage());
+		}finally {
+			if(session != null) {
+				session.close();
+			}
+		}
+	}
 	
 	
 	

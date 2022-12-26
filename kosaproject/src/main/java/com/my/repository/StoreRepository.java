@@ -91,5 +91,7 @@ public interface StoreRepository {
 	
 	
 	List<Store> selectByStoreNum(int stNum) throws FindException;
+	
+	int update(Store store) throws AddException;
 
 }

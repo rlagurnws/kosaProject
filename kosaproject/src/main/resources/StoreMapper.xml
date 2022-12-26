@@ -94,5 +94,20 @@
         where s.st_num = #{stNum}
 	</select>
 	
+	
+	<update id="update" parameterType="Store">
+		update st set st_des=#{stDes} ,st_name= #{stName}, st_loca= #{stLoca}, st_phone=#{stPhone}, cate=#{cateNum},st_res_no= #{stResNo},st_status=3
+		where st_num = #{stNum};
+		<selectKey keyProperty="stNum" resultType="int" order="AFTER">
+		SELECT ST_SEQ.currval FROM dual
+		</selectKey>
+	</update>
+	
+	<update id="updatefood" parameterType="Menu">
+		
+		update menu set menu_name=#{menuName}, menu_price=#{menuPrice}
+		where stnum=#{stNum}
+	</update>
+	
 
 </mapper>

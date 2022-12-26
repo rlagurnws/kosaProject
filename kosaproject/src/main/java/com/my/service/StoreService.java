@@ -79,4 +79,10 @@ public class StoreService {
 	public List<Store> selectStoreNo(int stNum) throws FindException{
 		return repository.selectByStoreNum(stNum);
 	}
+	
+	public int updateStore(Store store) throws AddException{
+		int stNum = repository.update(store);
+		System.out.println("update성공");
+		return stNum;
+	}
 }

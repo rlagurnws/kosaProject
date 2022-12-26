@@ -222,9 +222,53 @@ public class StoreController{
 		
 		List<Store> store = service.selectStoreNo(stNum);
 		
-		
 		map.put("store", store);
+		
+		File dir = new File("C:\\files");
+		File files[] = dir.listFiles();
+		
+		for (int i = 0; i < files.length; i++) {
+			//File[] result =  ((String) files[i]).split("\");
+		    System.out.println("file: " + files[i]);
+		}
+		
+		
 		return new ResponseEntity<>(map, HttpStatus.OK);
 		
+	}
+	
+	@PostMapping(value="update", produces = "application/json;charset=UTF-8")
+	public ResponseEntity<?> update(HttpSession session, 
+			@RequestPart           List<MultipartFile> files, 
+			@RequestParam("Store") String strStore) throws AddException{
+
+
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			Store store = mapper.readValue(strStore, new TypeReference<Store>() {});
+			System.out.println(store);
+
+			//		System.out.println(store.getStDes());
+			String loginedId = (String)session.getAttribute("loginedId");
+			//store.setOwnerId(loginedId);
+			store.setOwnerId("id1");
+			String stName = store.getStName();
+			
+			int storeNo =  service.addStore(store);
+			//int storeNo=1;
+			int i=0;
+
+
+			for(MultipartFile f: files) {
+				Attach.upload(storeNo,f,store.getStMenuList().get(i).getMenuName());
+				i++;
+			}
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);		
+		}
+
 	}
 }

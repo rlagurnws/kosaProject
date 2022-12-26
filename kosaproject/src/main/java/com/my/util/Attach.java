@@ -21,14 +21,13 @@ public class Attach {
 	public static ResponseEntity<?> download(String fileName, String location) throws IOException{		
 		File file = new File(SAVE_DIRECTORY+location, fileName);	
 		if(!file.exists()) {
-
 			throw new IOException("파일이 없습니다");
 		}
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.set(HttpHeaders.CONTENT_LENGTH, file.length() + ""); // 응답길이
 
 		String contentType = Files.probeContentType(file.toPath());
-		System.out.println("Files.probeContentType(file.toPath())=" + contentType);
+//		System.out.println("Files.probeContentType(file.toPath())=" + contentType);
 		responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(file.toPath()));
 		if (contentType.startsWith("image/")) { // 이미지파일인경우 바로 응답
 			responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION,

@@ -50,11 +50,7 @@ public class ReviewController {
 		try {
 			rv.setMemId(id);
 			int reviewNo = service.insert(rv);
-			sService.star(rv.getReviewStar());
-			System.out.println(reviewNo);
-//			파일업로드(f, fImg)작업
-//			com.my.util.Attach.upload(rv.getStNum(), chooseFile, location, id+reviewNo);
-			//-----------------
+			sService.star(rv.getReviewStar(),rv.getStNum());
 			File fDir = new File("C:/finalPro/");
 			if(!fDir.exists()) { //업로드 경로가 없는 경우
 				fDir.mkdir();

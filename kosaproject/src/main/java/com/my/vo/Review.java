@@ -49,7 +49,6 @@ public class Review {
 	}
 
 	public int getReviewStar() {
-
 		return reviewStar;
 	}
 
@@ -76,7 +75,7 @@ public class Review {
 	public int getReviewState() {
 		return reviewState;
 	}
-	
+
 	public void setReviewState(int reviewState) {
 		this.reviewState = reviewState;
 	}

@@ -130,4 +130,29 @@ public class NoticeController {
 		}
 		return map;
 	}
+	
+	@GetMapping("search/{search}/{currentPage}")
+	public Map<String,Object> searchNoti(@PathVariable String search, @PathVariable int currentPage){
+		Map<String,Object> map = new HashMap<>();
+		PageBean<Notice> pb = null;
+		try {
+			pb = service.getPageBeanSearch(currentPage, search);
+			map.put("status", 1);
+			map.put("pb", pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

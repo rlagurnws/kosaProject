@@ -73,6 +73,8 @@ public interface MemberRepository {
 
 	Member selectByNo(String memNo) throws FindException;
 	
-	
+	List<Member> selectByPowerState(int currentPage, int cntPerPage, int memPower, int memState) throws FindException;
+
+	int selectCountByPowerState(int memPower, int memState);
 
 }

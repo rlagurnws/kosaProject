@@ -32,9 +32,10 @@
 	FROM (SELECT rownum rn,cate_NUM as "cateNum" ,st_review_cnt as "stHits", st_des as "stDes", owner_id as ownerId, a.*
 	FROM (SELECT * FROM st		
 	     where 
-	     	st_name like '%${search}%'
-	     	or st_loca like '%${search}%'
-	       		ORDER BY st_num DESC)a )
+	     	(st_name like '%${search}%'
+	     	or st_loca like '%${search}%')
+	     	AND ST_STATUS = 1
+	       	ORDER BY st_num DESC)a )
 	WHERE rn BETWEEN #{startRow} AND #{endRow}
 </select>
 

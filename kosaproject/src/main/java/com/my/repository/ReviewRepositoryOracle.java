@@ -87,12 +87,18 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 
 
 	@Override
-	public List<Review> selectBystNum(int stNum) throws FindException {
+	public List<Review> selectBystNum(int currentPage, int cntPerPage, int stNum) throws FindException {
 		List<Review> list = new ArrayList<>();
 		SqlSession session = null;
+		Map<String, Object>map = new HashMap<>();
 		try {
 			session = sqlSessionFactory.openSession();
-			list = session.selectList("com.my.mybatis.ReviewMapper.selectBystNum", stNum);
+			int startRow = ((currentPage-1)*cntPerPage)+1;
+			int endRow = currentPage*cntPerPage;
+			map.put("startRow", startRow);
+			map.put("endRow", endRow);
+			map.put("stNum", stNum);
+			list = session.selectList("com.my.mybatis.ReviewMapper.selectBystNum", map);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -105,7 +111,26 @@ public class ReviewRepositoryOracle implements ReviewRepository{
 
 	}
 
+	
 	@Override
+	public int selectCount(int stNum) throws FindException {
+		SqlSession session = null;
+		int cnt = 0;
+		try {
+			session = sqlSessionFactory.openSession();
+			cnt = session.selectOne("com.my.mybatis.ReviewMapper.selectCount", stNum);
+			return cnt;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		} finally {
+			if(session != null) {
+				session.close();
+			}
+		}
+	}
+
+	
 	public List<Review> selectBystNumNew(int stNum) throws FindException {
 		List<Review> list = new ArrayList<>();
 		SqlSession session = null;

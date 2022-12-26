@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,7 +46,8 @@ public class StoreController {
 	
 	@PostMapping(value="new", produces = "application/json;charset=UTF-8")
 	public ResponseEntity<?> write(HttpSession session, 
-			@RequestPart           List<MultipartFile> files, 
+			@RequestPart           List<MultipartFile> files,
+			@RequestPart	MultipartFile img,
 			@RequestParam("Store") String strStore) throws AddException{
 
 		try {
@@ -57,11 +59,24 @@ public class StoreController {
 			store.setOwnerId(id);
 			int i = 0;
 			int storeNo =  service.addStore(store);
-			System.out.println("여기까진 되는거야");
 			for(MultipartFile f: files) {
 				Attach.upload(storeNo,f,location, store.getStMenuList().get(i).getMenuName());
 				i++;
 			}
+			
+			File fDir = new File("C:/finalPro/thumb");
+	         if(!fDir.exists()) {
+	            fDir.mkdir();
+	         }
+	         long imgSize = img.getSize();
+	         String imgOriginName = img.getOriginalFilename();
+	         String saveFileName = store.getStNum()+"_"+imgOriginName;
+	         if(imgSize ==0 || "".equals(imgOriginName)) {
+	         }else {
+	            File saveImg = new File("C:/finalPro/thumb", saveFileName);
+	            FileCopyUtils.copy(img.getBytes(), saveImg);
+	         }
+	         
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			
@@ -77,18 +92,18 @@ public class StoreController {
 		PageBean<Store> pb = service.stListGetPageBean(currentPage , search);
 		
 		
-		String strDirPath = "C:\\files\\"; 
-        
-        File path = new File( strDirPath ); 
-        File[] fList = path.listFiles();  
-		
-        for( int i = 0; i < fList.length; i++ ) { 
-            
-            if( fList[i].isFile() ) { 
-                System.out.println( "[파일] :" + fList[i].getPath() );  // 파일의 FullPath 출력 
-            } 
-            
-        } 
+//		String strDirPath = "C:\\files\\"; 
+//        
+//        File path = new File( strDirPath ); 
+//        File[] fList = path.listFiles();  
+//		
+//        for( int i = 0; i < fList.length; i++ ) { 
+//            
+//            if( fList[i].isFile() ) { 
+//                System.out.println( "[파일] :" + fList[i].getPath() );  // 파일의 FullPath 출력 
+//            } 
+//            
+//        } 
 		
 		return new ResponseEntity<>(pb, HttpStatus.OK);
 	}
@@ -112,9 +127,13 @@ public class StoreController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			Store s = service.selectByNo(stNum);
+			service.viewCntUp(stNum);
 			map.put("store", s);
 			map.put("status", 1);
 		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		} catch (ModifyException e) {
 			e.printStackTrace();
 			map.put("status", 0);
 		}
@@ -229,5 +248,36 @@ public class StoreController {
 		map.put("store", store);
 		return new ResponseEntity<>(map, HttpStatus.OK);
 		
+	}
+	
+	@PostMapping(value="update", produces = "application/json;charset=UTF-8")
+	public ResponseEntity<?> update(HttpSession session, 
+			@RequestPart           List<MultipartFile> files, 
+			@RequestParam("Store") String strStore) throws AddException{
+
+
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			Store store = mapper.readValue(strStore, new TypeReference<Store>() {});
+			System.out.println(store);
+
+			int storeNo = store.getStNum();
+			System.out.println(storeNo);
+			service.modifyStore(store);
+			int i=0;
+
+			boolean flag = false;
+			if(files.size() != 0) {
+				for(MultipartFile f: files) {
+					Attach.upload(storeNo,f,location, store.getStMenuList().get(i).getMenuName());
+					i++;
+				}				
+			}
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);		
+		}
+
 	}
 }

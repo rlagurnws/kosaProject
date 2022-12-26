@@ -1,9 +1,16 @@
 package com.my.vo;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Notice {
 	private int notiNo;
 	private String notiDes;
-	private String notiDate;
+	
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	private Date notiDate;
+	
 	private String notiId;
 	private String notiTitle;
 	public int getNotiNo() {
@@ -18,10 +25,10 @@ public class Notice {
 	public void setNotiDes(String notiDes) {
 		this.notiDes = notiDes;
 	}
-	public String getNotiDate() {
+	public Date getNotiDate() {
 		return notiDate;
 	}
-	public void setNotiDate(String notiDate) {
+	public void setNotiDate(Date notiDate) {
 		this.notiDate = notiDate;
 	}
 	public String getNotiId() {
@@ -36,7 +43,7 @@ public class Notice {
 	public void setNotiTitle(String notiTitle) {
 		this.notiTitle = notiTitle;
 	}
-	public Notice(int notiNo, String notiDes, String notiDate, String notiId, String notiTitle) {
+	public Notice(int notiNo, String notiDes, Date notiDate, String notiId, String notiTitle) {
 		super();
 		this.notiNo = notiNo;
 		this.notiDes = notiDes;

@@ -77,8 +77,8 @@ public class StoreService {
 	}
 	
 
-	public void star(int star) throws ModifyException{
-		repository.star(star);
+	public void star(int star, int stNum) throws ModifyException{
+		repository.star(star, stNum);
 	}
 	
 	public List<Store> findAll(int currentPage, int cntPerPage, String search) throws FindException{
@@ -93,5 +93,13 @@ public class StoreService {
 	
 	public List<Store> selectStoreNo(int stNum) throws FindException{
 		return repository.selectByStoreNum(stNum);
+	}
+	
+	public void viewCntUp(int stNum) throws ModifyException{
+		repository.viewCnt(stNum);
+	}
+	
+	public void modifyStore(Store store) throws ModifyException{
+		repository.modify(store);
 	}
 }

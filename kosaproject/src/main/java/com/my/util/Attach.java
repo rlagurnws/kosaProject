@@ -21,14 +21,13 @@ public class Attach {
 	public static ResponseEntity<?> download(String fileName, String location) throws IOException{		
 		File file = new File(SAVE_DIRECTORY+location, fileName);	
 		if(!file.exists()) {
-
 			throw new IOException("파일이 없습니다");
 		}
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.set(HttpHeaders.CONTENT_LENGTH, file.length() + ""); // 응답길이
 
 		String contentType = Files.probeContentType(file.toPath());
-		System.out.println("Files.probeContentType(file.toPath())=" + contentType);
+//		System.out.println("Files.probeContentType(file.toPath())=" + contentType);
 		responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(file.toPath()));
 		if (contentType.startsWith("image/")) { // 이미지파일인경우 바로 응답
 			responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION,
@@ -45,7 +44,7 @@ public class Attach {
 		return dir.delete();
 	}
 
-	public static void upload(int no, MultipartFile f,String location, String menuName) throws AddException {
+	public static void upload(int no, MultipartFile f,String location, String Name) throws AddException {
 		File fDir = new File(SAVE_DIRECTORY+location);
 		if(!fDir.exists()) { //업로드 경로가 없는 경우
 			fDir.mkdir();
@@ -58,7 +57,7 @@ public class Attach {
 			throw new AddException("첨부파일이 비었거나 파일이름이 없습니다");
 		}
 
-		String saveFileName =no + "_" + menuName + "_" + originName; 
+		String saveFileName =no + "_" + Name + "_" + originName; 
 
 		File saveFile = new File(SAVE_DIRECTORY+location, saveFileName);
 		try {

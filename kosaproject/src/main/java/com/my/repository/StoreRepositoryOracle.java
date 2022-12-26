@@ -17,7 +17,6 @@ import com.my.vo.Menu;
 import com.my.vo.Store;
 
 @Repository("storeRepository")
-
 public class StoreRepositoryOracle implements StoreRepository {
 
 	@Autowired
@@ -202,11 +201,14 @@ public class StoreRepositoryOracle implements StoreRepository {
 	}
 
 	@Override
-	public void star(int star) throws ModifyException {
+	public void star(int star, int stNum) throws ModifyException {
 		SqlSession session = null;
+		Map<String, Object> map = new HashMap<>();
 		try {
 			session=sqlSessionFactory.openSession();
-			session.update("com.my.mybatis.StoreMapper.star",star);
+			map.put("star", star);
+			map.put("stNum", stNum);
+			session.update("com.my.mybatis.StoreMapper.star",map);
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new ModifyException();
@@ -275,6 +277,33 @@ public class StoreRepositoryOracle implements StoreRepository {
 		}
 	}
 
+	@Override
+	public void viewCnt(int stNum) throws ModifyException {
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		session.update("com.my.mybatis.StoreMapper.viewCnt",stNum);
+		if(session!=null) {
+			session.close();
+		}
+	}
+
+	@Override
+	public void modify(Store store) throws ModifyException {
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		session.update("com.my.mybatis.StoreMapper.update",store);
+		if(session!=null) {
+			session.close();
+		}
+		List<Menu> foodList = store.getStMenuList();
+		for (Menu menu : foodList) {
+			session = sqlSessionFactory.openSession();
+			menu.setStNum(store.getStNum());
+			session.insert("com.my.mybatis.StoreMapper.updatefood", menu);
+		}
+	}
+	
+	
 }
 
 

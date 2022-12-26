@@ -22,12 +22,14 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.my.dto.PageBean;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
 import com.my.exception.RemoveException;
 import com.my.service.ReviewService;
 import com.my.service.StoreService;
+import com.my.vo.Notice;
 import com.my.vo.Review;
 
 @RestController
@@ -50,11 +52,7 @@ public class ReviewController {
 		try {
 			rv.setMemId(id);
 			int reviewNo = service.insert(rv);
-			sService.star(rv.getReviewStar());
-			System.out.println(reviewNo);
-//			파일업로드(f, fImg)작업
-//			com.my.util.Attach.upload(rv.getStNum(), chooseFile, location, id+reviewNo);
-			//-----------------
+			sService.star(rv.getReviewStar(),rv.getStNum());
 			File fDir = new File("C:/finalPro/");
 			if(!fDir.exists()) { //업로드 경로가 없는 경우
 				fDir.mkdir();
@@ -91,28 +89,15 @@ public class ReviewController {
 		}	
 	}
 	
-	@PostMapping("list/{stNum}")
-	public Map<String, Object> list(@PathVariable int stNum){
+	@PostMapping("list/{stNum}/{currentPage}")
+	public Map<String, Object> list(@PathVariable int currentPage,  @PathVariable int stNum){
 		Map<String, Object>map = new HashMap<>();
-		List<Review> list = new ArrayList<>(); 
+		PageBean<Review> pb = null; 
 		try {
-			list = service.selectBystNumNew(stNum);
-			map.put("list", list);
+			pb = service.getPageBean(currentPage, stNum);
+			map.put("pb", pb);
 			map.put("status", 1);
 			
-//			List<String> reviewFile = new ArrayList<>();
-//			String saveDirectory = "C:/finalPro/review/";
-//			File dir = new File(saveDirectory);
-//			String[] allFileNames = dir.list();
-//			for(Review rv : list) {				
-//				for(String fn: allFileNames) {
-//					if(fn.startsWith(stNum+"_"+rv.getMemId()+rv.getReviewNo())){
-//						reviewFile.add(fn);
-//						break;
-//					}
-//				}
-//			}
-//			map.put("reviewFile",reviewFile);
 		} catch (FindException e) {
 			e.printStackTrace();
 			map.put("status", 0);

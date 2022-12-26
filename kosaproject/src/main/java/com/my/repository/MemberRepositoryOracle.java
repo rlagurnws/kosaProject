@@ -53,7 +53,7 @@ public class MemberRepositoryOracle implements MemberRepository{
 			session = sqlSessionFactory.openSession();
 			M = session.selectOne("com.my.mybatis.MemberMapper.selectById", id);
 			if(M == null) {
-				throw new Exception();
+				throw new FindException();
 			}
 			return M;
 		} catch (Exception e) {

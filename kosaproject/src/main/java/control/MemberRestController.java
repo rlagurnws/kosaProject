@@ -2,6 +2,8 @@ package control;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +12,9 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -124,28 +129,14 @@ public class MemberRestController {
 		session.invalidate();
 	}
 	
-	@PostMapping("mypage/{memId}")
+	@GetMapping("mypage/{memId}")
 	public Map<String, Object> mypage(HttpSession session, @PathVariable String memId){
 		Map<String, Object> map = new HashMap<>();
+		HttpHeaders responseHeaders = new HttpHeaders();
 		try {
 			Member m = service.searchById(memId);
-			String saveDirectory = "C:/finalPro/profile";
-
-			String fileName = null;
-			File dir = new File(saveDirectory);
-			String[] allFileNames = dir.list();
-			for(String fn: allFileNames) {
-				if(fn.startsWith(memId+"_")){
-					fileName = fn;
-					break;
-				}
-			}
-			System.out.println(fileName);
 			map.put("status",1);
 			map.put("member", m);
-			if(fileName != null) {
-				map.put("profile", fileName);				
-			}
 		} catch (FindException e) {
 			e.printStackTrace();
 			map.put("status", 0);

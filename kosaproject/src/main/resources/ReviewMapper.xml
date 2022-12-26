@@ -12,34 +12,30 @@
 		INSERT INTO Review(review_no, review_star, review_des, review_date, mem_Id,review_state, st_Num)
 		VALUES (review_seq.nextVal,#{reviewStar},#{reviewDes},SYSDATE,#{memId},1,#{stNum})
 	</insert>
-<<<<<<< HEAD
-
 	<update id="update" parameterType="Review">
 		UPDATE review
 		SET review_des = #{reviewDes}
 		WHERE review_no=#{reviewNo} AND mem_id=#{memId}
 	</update>
-=======
-  
-<update id="update" parameterType="Review">
-	UPDATE review
-	SET review_des = #{reviewDes}
-	WHERE review_no=#{reviewNo}
-</update>
->>>>>>> origin/de01
-
-
 <update id="updateReviewState" parameterType="Review">
 UPDATE Review
 SET review_state =0
 WHERE  st_Num=#{stNum}
 </update>
 	
-<select id="selectBystNum" parameterType="int" resultType="Review">
-select *
-from review
-where st_Num=#{stNum}
+<select id="selectBystNum" parameterType="map" resultType="Review">
+	select *
+	FROM (SELECT rownum rn, a.*
+		FROM (SELECT * FROM REVIEW WHERE ST_NUM = #{stNum} ORDER BY review_no DESC)a )
+	WHERE rn BETWEEN #{startRow} AND #{endRow}
 </select>
+
+<select id="selectCount" parameterType="int" resultType="int">
+	select count(*)
+	from review
+	where st_Num=#{stNum}
+</select>
+
 
 <select id="selectById" resultType="Review" parameterType="string">
 	SELECT *
@@ -67,15 +63,13 @@ where st_Num=#{stNum} AND REVIEW_STATE = 1
 order by review_star desc
 </select>
 
-<<<<<<< HEAD
-<update id="modify" parameterType="Review">
+<!-- <update id="modify" parameterType="Review">
  	UPDATE Review SET mem_id = #{memId},
 	review_Des = #{reviewDes},
 	review_star = #{reviewStar},
 	review_state = '0'
 	WHERE mem_ID = #{memId}
- </update>
-=======
+ </update> -->
 
 <delete id="delete" parameterType="int">
 delete 
@@ -89,8 +83,5 @@ where review_No=#{reviewNo}
 	review_star = #{reviewStar}
 	where review_No = #{reviewNo}
 </update>
-  
->>>>>>> origin/de01
-
 
 </mapper>

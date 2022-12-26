@@ -93,8 +93,11 @@ public interface StoreRepository {
 
 	public int selectCountByCate(int cateNum) throws FindException;
 
-	void star(int star) throws ModifyException;
+	void star(int star, int stNum) throws ModifyException;
 
 	List<Store> selectByStoreNum(int stNum) throws FindException;
-
+	
+	public void viewCnt(int stNum) throws ModifyException;
+	
+	public void modify(Store store) throws ModifyException;
 }

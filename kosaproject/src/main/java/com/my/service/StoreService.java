@@ -98,4 +98,8 @@ public class StoreService {
 	public void viewCntUp(int stNum) throws ModifyException{
 		repository.viewCnt(stNum);
 	}
+	
+	public void modifyStore(Store store) throws ModifyException{
+		repository.modify(store);
+	}
 }

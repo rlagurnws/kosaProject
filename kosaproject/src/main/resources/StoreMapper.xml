@@ -34,7 +34,6 @@
 	     where 
 	     	st_name like '%${search}%'
 	     	or st_loca like '%${search}%'
-	     	or st_des like '%${search}%'
 	       		ORDER BY st_num DESC)a )
 	WHERE rn BETWEEN #{startRow} AND #{endRow}
 </select>
@@ -114,7 +113,7 @@
 </select>
 
 <select id="selectStoreLoad" resultType="Store" parameterType="map">
-	SELECT s.st_num as "stNum", s.st_des as "stDes", s.st_name as "stName", s.st_loca as "stLoca",s.st_phone as "stPhone", s.cate as "cateNum", s.st_res_no as "stResNo", m.menu_name as "stMenu.menuName" ,m.menu_price as "stMenu.menuPrice"   
+	SELECT s.st_num as "stNum", s.st_des as "stDes", s.st_name as "stName", s.st_loca as "stLoca",s.st_phone as "stPhone", s.cate_Num as "cateNum", s.st_res_no as "stResNo", m.menu_name as "stMenu.menuName" ,m.menu_price as "stMenu.menuPrice"   
      	FROM st s
     	FULL OUTER JOIN menu m
        ON ( s.st_num = m.st_num)
@@ -125,5 +124,14 @@
 	UPDATE ST SET ST_HITS = ST_HITS +1 WHERE ST_NUM = #{stNum}
 </update>
 
+<update id="update" parameterType="Store">
+		update st set st_des=#{stDes} ,st_name= #{stName}, st_loca= #{stLoca}, st_phone=#{stPhone}, cate_Num=#{cateNum},st_res_no= #{stResNo},st_status=0
+		where st_num = #{stNum}
+</update>
+
+<update id="updatefood" parameterType="Menu">
+		update menu set menu_name=#{menuName}, menu_price=#{menuPrice}
+		where st_num=#{stNum} AND MENU_NAME = #{menuName}
+</update>
 
 </mapper>

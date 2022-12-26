@@ -99,4 +99,5 @@ public interface StoreRepository {
 	
 	public void viewCnt(int stNum) throws ModifyException;
 	
+	public void modify(Store store) throws ModifyException;
 }

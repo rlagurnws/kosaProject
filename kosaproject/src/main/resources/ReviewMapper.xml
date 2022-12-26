@@ -23,11 +23,19 @@ SET review_state =0
 WHERE  st_Num=#{stNum}
 </update>
 	
-<select id="selectBystNum" parameterType="int" resultType="Review">
-select *
-from review
-where st_Num=#{stNum}
+<select id="selectBystNum" parameterType="map" resultType="Review">
+	select *
+	FROM (SELECT rownum rn, a.*
+		FROM (SELECT * FROM REVIEW WHERE ST_NUM = #{stNum} ORDER BY review_no DESC)a )
+	WHERE rn BETWEEN #{startRow} AND #{endRow}
 </select>
+
+<select id="selectCount" parameterType="int" resultType="int">
+	select count(*)
+	from review
+	where st_Num=#{stNum}
+</select>
+
 
 <select id="selectById" resultType="Review" parameterType="string">
 	SELECT *

@@ -19,16 +19,6 @@ public interface ReviewRepository {
 	 */
 	int insert(Review rv) throws AddException;
 	
-	
-	/**
-	 * 가게번호에 맞는 리뷰를 검색한다. 
-	 * @author 장나영
-	 * @param stNum
-	 * @return
-	 * @throws FindException
-	 */
-
-	List<Review> selectBystNum(int stNum) throws FindException;
 		
 	
 	/**
@@ -65,7 +55,7 @@ public interface ReviewRepository {
 	 * @param stNum
 	 * @throws FindException
 	 */
-	List<Review> selectBystNumNew(int stNum) throws FindException;
+	List<Review> selectBystNum(int currentPage, int cntPerPage, int stNum) throws FindException;
 	
 	/**
 	 * 가게번호별 리뷰를 별점순으로 보여준다 
@@ -90,14 +80,9 @@ public interface ReviewRepository {
 	 */
 	void delete(int reviewNo) throws RemoveException;
 
-
-	
-
-
-
 	void delMem(String id) throws ModifyException;
 	
-
+	int selectCount(int stNum) throws FindException;
 
 
 	

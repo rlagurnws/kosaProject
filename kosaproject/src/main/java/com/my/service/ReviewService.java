@@ -11,6 +11,7 @@ import com.my.exception.FindException;
 import com.my.exception.ModifyException;
 import com.my.exception.RemoveException;
 import com.my.repository.ReviewRepository;
+import com.my.vo.Notice;
 import com.my.vo.Review;
 
 
@@ -66,18 +67,20 @@ public class ReviewService {
     	  return repository.selectBystNumStar(stNum);
       }
 
-      public List<Review> selectBystNumNew(int stNum) throws FindException{
-    	  return repository.selectBystNumNew(stNum);
+//      public List<Review> selectBystNumNew(int stNum) throws FindException{
+//    	  return repository.selectBystNumNew(stNum);
+//      }
+
+      public List<Review> selectBystNum(int currentPage, int cntPerPage, int stNum) throws FindException {
+    	  return repository.selectBystNum(currentPage, cntPerPage, stNum);
       }
 
-      public List<Review> selectBystNum(int stNum) throws FindException {
-    	  return repository.selectBystNum(stNum);
-
-      }
-
-      public PageBean<Review> getPageBean(int currentPage) {
-    	  // TODO Auto-generated method stub
-    	  return null;
+      public PageBean<Review> getPageBean(int currentPage, int stNum) throws FindException{
+    	List<Review> list = selectBystNum(currentPage,PageBean.CNT_PER_PAGE, stNum);
+    	System.out.println(list);
+  		int totalCnt = repository.selectCount(stNum);
+  		PageBean<Review> pb = new PageBean<>(currentPage, list, totalCnt);
+  		return pb;
       }
 
       public void delete(int reviewNo) throws RemoveException{

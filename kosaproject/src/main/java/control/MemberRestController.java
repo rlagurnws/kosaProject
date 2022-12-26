@@ -130,51 +130,18 @@ public class MemberRestController {
 	}
 	
 	@GetMapping("mypage/{memId}")
-	public ResponseEntity<?> mypage(HttpSession session, @PathVariable String memId){
+	public Map<String, Object> mypage(HttpSession session, @PathVariable String memId){
 		Map<String, Object> map = new HashMap<>();
 		HttpHeaders responseHeaders = new HttpHeaders();
 		try {
 			Member m = service.searchById(memId);
-			String saveDirectory = "C:/finalPro/profile";
-//			String saveFileName = m.getMemId()+"_"+imgOriginName;
 			map.put("status",1);
 			map.put("member", m);
-//			String fileName = null;
-//			File dir = new File(saveDirectory);
-//			String[] allFileNames = dir.list();
-//			for(String fn: allFileNames) {
-//				if(fn.startsWith(memId+"_")){
-//					fileName = fn;
-//				}
-//			}
-//			
-//			File file = new File(saveDirectory, fileName);
-//			System.out.println(fileName);
-//			System.out.println(file);
-//			if(!file.exists()) {
-//				throw new IOException("파일이 없습니다");
-//			}
-//			responseHeaders.set(HttpHeaders.CONTENT_LENGTH, file.length() + ""); // 응답길이
-//			String contentType = Files.probeContentType(file.toPath());
-////			System.out.println("Files.probeContentType(file.toPath())=" + contentType);
-//			responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(file.toPath()));
-//			if (contentType.startsWith("image/")) { // 이미지파일인경우 바로 응답
-//				responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION,
-//						"inline; filename=" + URLEncoder.encode(fileName, "UTF-8"));
-//			}
-////			byte[] test = FileCopyUtils.copyToByteArray(file);
-////			System.out.println(FileCopyUtils.copyToByteArray(file));
-//			map.put("file", FileCopyUtils.copyToByteArray(file));
-////			file.get
-			return new ResponseEntity<>(map, responseHeaders, HttpStatus.OK);
 		} catch (FindException e) {
 			e.printStackTrace();
 			map.put("status", 0);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
 		}
-		return null;
+		return map;
 	}
 	
 	@PostMapping(value="modify")

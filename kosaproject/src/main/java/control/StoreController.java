@@ -59,7 +59,6 @@ public class StoreController {
 			store.setOwnerId(id);
 			int i = 0;
 			int storeNo =  service.addStore(store);
-			System.out.println("여기까진 되는거야");
 			for(MultipartFile f: files) {
 				Attach.upload(storeNo,f,location, store.getStMenuList().get(i).getMenuName());
 				i++;
@@ -249,5 +248,36 @@ public class StoreController {
 		map.put("store", store);
 		return new ResponseEntity<>(map, HttpStatus.OK);
 		
+	}
+	
+	@PostMapping(value="update", produces = "application/json;charset=UTF-8")
+	public ResponseEntity<?> update(HttpSession session, 
+			@RequestPart           List<MultipartFile> files, 
+			@RequestParam("Store") String strStore) throws AddException{
+
+
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			Store store = mapper.readValue(strStore, new TypeReference<Store>() {});
+			System.out.println(store);
+
+			int storeNo = store.getStNum();
+			System.out.println(storeNo);
+			service.modifyStore(store);
+			int i=0;
+
+			boolean flag = false;
+			if(files.size() != 0) {
+				for(MultipartFile f: files) {
+					Attach.upload(storeNo,f,location, store.getStMenuList().get(i).getMenuName());
+					i++;
+				}				
+			}
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);		
+		}
+
 	}
 }

@@ -287,6 +287,23 @@ public class StoreRepositoryOracle implements StoreRepository {
 		}
 	}
 
+	@Override
+	public void modify(Store store) throws ModifyException {
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		session.update("com.my.mybatis.StoreMapper.update",store);
+		if(session!=null) {
+			session.close();
+		}
+		List<Menu> foodList = store.getStMenuList();
+		for (Menu menu : foodList) {
+			session = sqlSessionFactory.openSession();
+			menu.setStNum(store.getStNum());
+			session.insert("com.my.mybatis.StoreMapper.updatefood", menu);
+		}
+	}
+	
+	
 }
 
 

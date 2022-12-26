@@ -44,7 +44,7 @@ public class Attach {
 		return dir.delete();
 	}
 
-	public static void upload(int no, MultipartFile f,String location, String menuName) throws AddException {
+	public static void upload(int no, MultipartFile f,String location, String Name) throws AddException {
 		File fDir = new File(SAVE_DIRECTORY+location);
 		if(!fDir.exists()) { //업로드 경로가 없는 경우
 			fDir.mkdir();
@@ -57,7 +57,7 @@ public class Attach {
 			throw new AddException("첨부파일이 비었거나 파일이름이 없습니다");
 		}
 
-		String saveFileName =no + "_" + menuName + "_" + originName; 
+		String saveFileName =no + "_" + Name + "_" + originName; 
 
 		File saveFile = new File(SAVE_DIRECTORY+location, saveFileName);
 		try {

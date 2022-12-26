@@ -208,6 +208,10 @@ public class MemberRepositoryOracle implements MemberRepository{
 			Map<String, Object> map = new HashMap<>();
 			map.put("startRow",startRow);
 			map.put("endRow", endRow);
+			System.out.println("-------------------------------------------------");
+			System.out.println(startRow);
+			System.out.println(endRow);
+			System.out.println("-------------------------------------------------");
 			map.put("memPower", memPower);
 			map.put("memState", memState);
 			return session.selectList("com.my.mybatis.MemberMapper.selectByPowerState",map);
@@ -225,6 +229,7 @@ public class MemberRepositoryOracle implements MemberRepository{
 	@Override
 	public int selectCountByPowerState(int memPower, int memState) {
 		Map<String, Object> map = new HashMap<>();
+		
 		map.put("memPower", memPower);
 		map.put("memState",memState);
 		SqlSession session = sqlSessionFactory.openSession();

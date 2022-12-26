@@ -314,4 +314,19 @@ public class MemberRestController {
 	return map;
 	}
 	
+	@GetMapping("selectlist/{currentPage}/{memPower}/{memState}")
+	public Map<String, Object> selectlist(@PathVariable int currentPage, @PathVariable int memPower, @PathVariable int memState){
+		Map<String, Object> map = new HashMap<>();
+		PageBean<Member> pb = null;
+		try {
+			pb = service.getPageBeanBySelect(currentPage,memPower,memState);
+			map.put("status", 1);
+			map.put("pb", pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
+	
 }

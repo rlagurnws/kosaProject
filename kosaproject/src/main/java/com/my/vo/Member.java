@@ -97,5 +97,9 @@ public class Member {
 	public void setMemNo(int memNo) {
 		this.memNo = memNo;
 	}
-	
+		
+	public void setMemPowerState(int memPower, int memState) {
+		this.memPower = memPower;
+		this.memState = memState;
+	}
 }

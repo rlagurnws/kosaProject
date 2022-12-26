@@ -198,6 +198,46 @@ public class MemberRepositoryOracle implements MemberRepository{
 		}
 	}
 
+	@Override
+	public List<Member> selectByPowerState(int currentPage, int cntPerPage, int memPower, int memState) throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			int startRow = ((currentPage-1)*cntPerPage)+1;
+			int endRow = currentPage*cntPerPage;
+			Map<String, Object> map = new HashMap<>();
+			map.put("startRow",startRow);
+			map.put("endRow", endRow);
+			map.put("memPower", memPower);
+			map.put("memState", memState);
+			return session.selectList("com.my.mybatis.MemberMapper.selectByPowerState",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session != null) {
+
+				session.close();
+			}
+		}
+	}
+
+	@Override
+	public int selectCountByPowerState(int memPower, int memState) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("memPower", memPower);
+		map.put("memState",memState);
+		SqlSession session = sqlSessionFactory.openSession();
+		try {
+			return session.selectOne("com.my.mybatis.MemberMapper.selectCountByPowerState",map);
+		} finally {
+			if (session != null) {
+
+				session.close();
+			}
+		}
+	}
+
 	
 
 }

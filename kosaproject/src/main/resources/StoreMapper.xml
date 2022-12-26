@@ -4,10 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
   <mapper namespace="com.my.mybatis.StoreMapper">
-<<<<<<< HEAD
-=======
 
->>>>>>> lee
 	<insert id="insert" parameterType="Store">
 		INSERT INTO ST(st_num, st_des, st_hits, st_date, st_name,st_score, st_loca,
 						 st_phone, cate_num, owner_id, st_res_no, st_review_cnt, st_status)
@@ -22,13 +19,7 @@
 		INSERT INTO menu(st_num, menu_name, menu_price)
 					VALUES(#{stNum},#{menuName},#{menuPrice})
 	</insert>
-<<<<<<< HEAD
-			
-=======
-	
 
-	
-	
 	<select id="selectStoreCount" resultType="int" >
 		select count(*) from st
 	</select>
@@ -54,17 +45,16 @@
 		WHERE rn BETWEEN #{startRow} AND #{endRow}
 	</select>
 
->>>>>>> lee
 	<select id="selectCount" resultType="int">
 		SELECT COUNT(*)
 		FROM ST
 		WHERE ST_STATUS = 1
 	</select>
 	
-	<select id="selectAll" resultType="Store" parameterType="map">
+	<!-- <select id="selectAll" resultType="Store" parameterType="map">
 		SELECT st_name, st_hits, cate_Num, st_loca
 		FROM st		
-	</select>
+	</select> -->
 	
 	<select id="submitted" resultType="Store" parameterType="map">
 		SELECT *
@@ -91,7 +81,7 @@
 		WHERE ST_NUM = #{stNum} 
 	</update>
 	
-<<<<<<< HEAD
+
 	<select id="selectById" resultType="Store" parameterType="string">
   		SELECT * 
 		FROM ST 
@@ -105,11 +95,11 @@
 		WHERE CATE_NUM=#{cateNum} AND st_status=1 
 	</select>
 	
-<<<<<<< HEAD
+
 	<update id="star" parameterType="int">
 		UPDATE ST SET ST_SCORE = ST_SCORE+#{star}
 	</update>
-=======
+
 	<select id="selectByCatePageBean" resultType="Store" parameterType="map">
 		SELECT rn, b.*
 		FROM  (SELECT rownum rn, store.*
@@ -123,11 +113,7 @@
 		FROM st 
 		WHERE cate_Num=#{cateNum} AND st_status = 1
 	</select>
->>>>>>> origin/kyum2
-	 
-	
-=======
-	
+
 	<select id="selectStoreContent" resultType="Store" parameterType="map">
 		select st_num, st_des,  st_name, st_loca, st_phone, cate,  st_res_no
 		from st
@@ -141,7 +127,5 @@
         ON ( s.st_num = m.st_num)
         where s.st_num = #{stNum}
 	</select>
-	
 
->>>>>>> lee
 </mapper>

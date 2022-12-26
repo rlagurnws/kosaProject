@@ -5,51 +5,23 @@
 <configuration>
   <settings>
 	<setting name="mapUnderscoreToCamelCase" value="true"/>
-
-<<<<<<< HEAD
-=======
-
-	
-
-	
-	<!-- java의 null값을 db의 어떤타입으로 매핑할 것인가를 결정
-		ex)java의 null값을 오라클의 NULL로 매핑 -->
-		<setting name="jdbcTypeForNull" value="NULL"/>
-
-
->>>>>>> lee
 	<setting name="jdbcTypeForNull" value="NULL"/>
 
   </settings>
 <typeAliases>
 	<typeAlias type="com.my.vo.Member" alias="Member"/>
 	<typeAlias type="com.my.vo.Notice" alias="Notice"/>
-<<<<<<< HEAD
-=======
-	<typeAlias type="com.my.vo.Review" alias="Review"/>
->>>>>>> origin/de01
-
 	<typeAlias type="com.my.vo.Store" alias="Store"/>
 	<typeAlias type="com.my.vo.Menu" alias="Menu"/>
-
-<<<<<<< HEAD
 	<typeAlias type="com.my.vo.Review" alias="Review"/>
 
-=======
->>>>>>> origin/de01
+
 </typeAliases>
   <mappers>
     <mapper resource="MemberMapper.xml"/>
     <mapper resource="NoticeMapper.xml"/>
-<<<<<<< HEAD
-
     <mapper resource="StoreMapper.xml"/>
-
-    <mapper resource="ReviewMapper.xml"/>
-
-=======
     <mapper resource="ReviewMapper.xml"/>
     <mapper resource="StoreMapper.xml"/>
->>>>>>> origin/de01
   </mappers>
 </configuration>

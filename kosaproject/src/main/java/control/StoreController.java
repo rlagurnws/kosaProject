@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +45,8 @@ public class StoreController {
 	static String location = "menu/";
 	
 	@PostMapping(value="new", produces = "application/json;charset=UTF-8")
-	public ResponseEntity<?> write(HttpSession session, 
+	public ResponseEntity<?> write(HttpSession session,
+			@RequestPart MultipartFile img,
 			@RequestPart           List<MultipartFile> files, 
 			@RequestParam("Store") String strStore) throws AddException{
 
@@ -57,7 +59,26 @@ public class StoreController {
 			store.setOwnerId(id);
 			int i = 0;
 			int storeNo =  service.addStore(store);
-			System.out.println("여기까진 되는거야");
+			
+			
+
+			File fDir = new File("C:/finalPro/thumb");
+			if(!fDir.exists()) {
+				fDir.mkdir();
+			}
+			long imgSize = img.getSize();
+			String imgOriginName = img.getOriginalFilename();
+			String saveFileName = store.getStNum()+"_"+imgOriginName;
+			if(imgSize ==0 || "".equals(imgOriginName)) {
+				System.out.println("이미지파일이 첨부되지 않았습니다.");
+			}else {
+				File saveImg = new File("C:/finalPro/thumb", saveFileName);
+				FileCopyUtils.copy(img.getBytes(), saveImg);
+				System.out.println("여기까진 되는거야");
+			}
+			
+			
+			
 			for(MultipartFile f: files) {
 				Attach.upload(storeNo,f,location, store.getStMenuList().get(i).getMenuName());
 				i++;

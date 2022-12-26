@@ -219,6 +219,24 @@ public class MemberRestController {
 		}
 		return map;
 	}
+	
+	@PutMapping(value="drop/{memId}")
+	public Map<String, Object> dropMem(HttpSession session, @PathVariable String memId){
+		Map<String, Object> map = new HashMap<>();
+		List<Review> list = new ArrayList<>();
+		try {
+			service.deleteMem(memId);
+			rService.delMem(memId);
+			map.put("status", 1);
+		} catch (RemoveException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		} catch (ModifyException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
 		
 	@GetMapping(value="session")
 	public Map<String, Object> session(HttpSession session){

@@ -50,7 +50,7 @@ public class MemberService {
 	}
 
 	public PageBean<Member> getPageBean(int currentPage) throws FindException {
-		List<Member> list = findAll(currentPage,PageBean.CNT_PER_PAGE);
+		List<Member> list = findAll(currentPage,15);
 		int totalCnt = repository.selectCount();
 		PageBean<Member> pb = new PageBean<>(currentPage, list, totalCnt);
 		return pb;

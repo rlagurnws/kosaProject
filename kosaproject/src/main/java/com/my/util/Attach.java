@@ -21,14 +21,13 @@ public class Attach {
 	public static ResponseEntity<?> download(String fileName, String location) throws IOException{		
 		File file = new File(SAVE_DIRECTORY+location, fileName);	
 		if(!file.exists()) {
-
 			throw new IOException("파일이 없습니다");
 		}
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.set(HttpHeaders.CONTENT_LENGTH, file.length() + ""); // 응답길이
 
 		String contentType = Files.probeContentType(file.toPath());
-		System.out.println("Files.probeContentType(file.toPath())=" + contentType);
+//		System.out.println("Files.probeContentType(file.toPath())=" + contentType);
 		responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(file.toPath()));
 		if (contentType.startsWith("image/")) { // 이미지파일인경우 바로 응답
 			responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION,
@@ -44,7 +43,7 @@ public class Attach {
 		File dir = new File(SAVE_DIRECTORY+location, fileName);
 		return dir.delete();
 	}
-	
+
 	public static void upload(int no, MultipartFile f,String location, String menuName) throws AddException {
 		File fDir = new File(SAVE_DIRECTORY+location);
 		if(!fDir.exists()) { //업로드 경로가 없는 경우
@@ -61,7 +60,6 @@ public class Attach {
 		String saveFileName =no + "_" + menuName + "_" + originName; 
 
 		File saveFile = new File(SAVE_DIRECTORY+location, saveFileName);
-
 		try {
 			// 원본의 내용을 복사본에 붙여넣기
 			FileCopyUtils.copy(f.getBytes(), saveFile);

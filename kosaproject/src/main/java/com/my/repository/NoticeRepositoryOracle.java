@@ -79,6 +79,47 @@ public class NoticeRepositoryOracle implements NoticeRepository {
 			}
 		}
 	}
+	
+	@Override
+	public List<Notice> searchNoti(int currentPage, int cntPerPage,String search) throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			int startRow = ((currentPage-1)*cntPerPage)+1;
+			int endRow = currentPage*cntPerPage;
+			Map<String, Object> map = new HashMap<>();
+			search = '%'+search+'%';
+			map.put("search", search);
+			map.put("startRow",startRow);
+			map.put("endRow", endRow);
+			return session.selectList("com.my.mybatis.NoticeMapper.searchNoti",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+	
+	@Override
+	public int selectSearchCount(String search) throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			search = '%'+search+'%';
+			return session.selectOne("com.my.mybatis.NoticeMapper.selectSearchCount",search);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+
 	public Notice selectByNo(int no) throws FindException{
 		SqlSession session = null;
 		try {

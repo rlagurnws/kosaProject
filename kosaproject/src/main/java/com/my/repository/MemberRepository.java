@@ -71,4 +71,8 @@ public interface MemberRepository {
 	 */
 	Member findPwd(Member m) throws FindException;
 
+	Member selectByNo(String memNo) throws FindException;
+	
+	
+
 }

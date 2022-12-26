@@ -6,13 +6,16 @@ import com.my.exception.AddException;
 import com.my.exception.FindException;
 
 import com.my.exception.ModifyException;
+import com.my.vo.Member;
 import com.my.vo.Menu;
+
 import com.my.vo.Store;
 
 public interface StoreRepository {
 	
 	/**
-	 * 가게등록
+	 * 가게등록 
+	 * @author 이남규
 	 * @param store  
 	 * @return 
 	 * @throws AddException
@@ -25,6 +28,23 @@ public interface StoreRepository {
 	 * @throws FindException
 	 */
 
+
+	/**
+	 * @author 이남규
+	 * @return
+	 * @throws FindException
+	 */
+	int selectStoreCount() throws FindException;
+	
+	/**
+	 * @author 이남규
+	 * @param currentPage
+	 * @param cntPerPage
+	 * @param search
+	 * @return
+	 * @throws FindException
+	 */
+	List<Store> selectSearch(int currentPage, int cntPerPage, String search) throws FindException;
 	
 
 	List<Store> submitted(int currentPage, int cntPerPage) throws FindException;
@@ -64,20 +84,19 @@ public interface StoreRepository {
 	 */
 	public void confirmStore(int stNum) throws ModifyException;
 
-
 	List<Store> selectById(String id) throws FindException;
 
+
+	List<Store> selectByCatePageBean(int cateNum, int currentPage, int cntPerPage) throws FindException;
+
+
+
+	public int selectCountByCate(int cateNum) throws FindException;
+
+	void star(int star, int stNum) throws ModifyException;
+
+	List<Store> selectByStoreNum(int stNum) throws FindException;
 	
-
-
-
-
-//	List<Store> selectByCate(int cateNum, int currentPage, int cntPerPage) throws FindException;
-
-	List<Store> selectByCate(int cateNum) throws FindException;
-
-	void star(int star) throws ModifyException;
+	public void viewCnt(int stNum) throws ModifyException;
 	
-	
-
 }

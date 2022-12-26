@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,7 +46,8 @@ public class StoreController {
 	
 	@PostMapping(value="new", produces = "application/json;charset=UTF-8")
 	public ResponseEntity<?> write(HttpSession session, 
-			@RequestPart           List<MultipartFile> files, 
+			@RequestPart           List<MultipartFile> files,
+			@RequestPart	MultipartFile img,
 			@RequestParam("Store") String strStore) throws AddException{
 
 		try {
@@ -61,12 +64,49 @@ public class StoreController {
 				Attach.upload(storeNo,f,location, store.getStMenuList().get(i).getMenuName());
 				i++;
 			}
+			
+			File fDir = new File("C:/finalPro/thumb");
+	         if(!fDir.exists()) {
+	            fDir.mkdir();
+	         }
+	         long imgSize = img.getSize();
+	         String imgOriginName = img.getOriginalFilename();
+	         String saveFileName = store.getStNum()+"_"+imgOriginName;
+	         if(imgSize ==0 || "".equals(imgOriginName)) {
+	         }else {
+	            File saveImg = new File("C:/finalPro/thumb", saveFileName);
+	            FileCopyUtils.copy(img.getBytes(), saveImg);
+	         }
+	         
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@PostMapping("storelist/{currentPage}")
+	@ResponseBody
+	public ResponseEntity<?> storereadlist(@PathVariable int currentPage, String search) throws FindException{
+		//search="서울";
+		PageBean<Store> pb = service.stListGetPageBean(currentPage , search);
+		
+		
+//		String strDirPath = "C:\\files\\"; 
+//        
+//        File path = new File( strDirPath ); 
+//        File[] fList = path.listFiles();  
+//		
+//        for( int i = 0; i < fList.length; i++ ) { 
+//            
+//            if( fList[i].isFile() ) { 
+//                System.out.println( "[파일] :" + fList[i].getPath() );  // 파일의 FullPath 출력 
+//            } 
+//            
+//        } 
+		
+		return new ResponseEntity<>(pb, HttpStatus.OK);
 	}
 
 	@GetMapping("submitted/{currentPage}")
@@ -88,9 +128,13 @@ public class StoreController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			Store s = service.selectByNo(stNum);
+			service.viewCntUp(stNum);
 			map.put("store", s);
 			map.put("status", 1);
 		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		} catch (ModifyException e) {
 			e.printStackTrace();
 			map.put("status", 0);
 		}
@@ -109,6 +153,7 @@ public class StoreController {
 
 			List<String> menuFile = new ArrayList<>();
 			String saveDirectory = "D:/finalPro/menu";
+
 			File dir = new File(saveDirectory);
 			String[] allFileNames = dir.list();
 			for (Menu m : list) {
@@ -154,6 +199,7 @@ public class StoreController {
 			map.put("status", 0);
 		}
 		return map;
+
 	}
 	
 	
@@ -174,30 +220,16 @@ public class StoreController {
 	}
 	
 	
-//	@GetMapping("list/{cateNem}/{currentPage}")
-//	public Map<String,Object> list(@PathVariable int cateNum, @PathVariable int currentPage){
-//		Map<String,Object> map = new HashMap<>();
-//		PageBean<Store> pb = null;
-//		try {
-//			pb = service.getPageBeanByCate(cateNum, currentPage);
-//			map.put("status", 1);
-//			map.put("pb", pb);
-//		} catch (FindException e) {
-//			e.printStackTrace();
-//			map.put("status", 0);
-//		}
-//		return map;
-//	}
-	
-	@GetMapping("list/{cateNum}/{currentPage}")
-	public Map<String, Object> catelist(@PathVariable int cateNum){
-		Map<String, Object> map = new HashMap<>();
-		List<Store> list = new ArrayList<>();
-		
+	@PostMapping("list/{cateNum}/{currentPage}") 
+	public Map<String,Object> list(@PathVariable int cateNum, @PathVariable int currentPage){
+		Map<String,Object> map = new HashMap<>();
+		List<Menu> list = new ArrayList<>();
+		PageBean<Store> pb;
 		try {
-			list = service.selectByCate(cateNum);
-			map.put("list", list); 
+			pb = service.getPageBeanByCate(currentPage,cateNum);
 			map.put("status", 1);
+			map.put("pb", pb);
+			
 		} catch (FindException e) {
 			e.printStackTrace();
 			map.put("status", 0);
@@ -205,4 +237,17 @@ public class StoreController {
 		return map;
 	}
 
+	@PostMapping("storeload/{stNum}")
+	@ResponseBody
+	public ResponseEntity<?> selectByStoreNum(@PathVariable int stNum) throws FindException{
+		Map<String, Object>map = new HashMap<>();
+		List<Menu> list = new ArrayList<>();
+		
+		List<Store> store = service.selectStoreNo(stNum);
+		
+		
+		map.put("store", store);
+		return new ResponseEntity<>(map, HttpStatus.OK);
+		
+	}
 }

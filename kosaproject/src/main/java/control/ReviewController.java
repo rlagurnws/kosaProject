@@ -1,6 +1,7 @@
 package control;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
+import com.my.exception.RemoveException;
 import com.my.service.ReviewService;
 import com.my.service.StoreService;
 import com.my.vo.Review;
@@ -46,11 +50,7 @@ public class ReviewController {
 		try {
 			rv.setMemId(id);
 			int reviewNo = service.insert(rv);
-			sService.star(rv.getReviewStar());
-			System.out.println(reviewNo);
-//			파일업로드(f, fImg)작업
-//			com.my.util.Attach.upload(rv.getStNum(), chooseFile, location, id+reviewNo);
-			//-----------------
+			sService.star(rv.getReviewStar(),rv.getStNum());
 			File fDir = new File("C:/finalPro/");
 			if(!fDir.exists()) { //업로드 경로가 없는 경우
 				fDir.mkdir();
@@ -136,41 +136,62 @@ public class ReviewController {
 //		map.put("fileNames", fileNames);			
 //		return new ResponseEntity<>(map, HttpStatus.OK);		
 //	}
-	
-	
-//	@PostMapping("reviewmodify")
-//	public ResponseEntity<?> modify(
-////			@RequestPart   List<MultipartFile> f, //multiple속성인 경우 List타입으로 매핑 
-////			@RequestPart   MultipartFile fImg,
-//			int reviewNo, 
-//            String reviewDes, 
-//            String memId,
-//            HttpSession session) throws ModifyException{
-//		Review rv = new Review();
-//		rv.setreviewNo(reviewNo);
-//		rv.setreviewDes(reviewDes);
-//		rv.setmemId(memId);		
-//		service.modify(rv);
-//
-//		return new ResponseEntity<>(HttpStatus.OK);
-//	}
-//	
-//	@GetMapping("reviewremove")
-//	@ResponseBody
-//	public ResponseEntity<?> remove(int boardNo) throws RemoveException{
-//		service.remove(boardNo);
-//		//기존 첨부파일들을 모두 삭제 (c:\\files경로에서 boardNo값으로 시작하는 파일들을 찾아 삭제 )
-//		String saveDirectory = "c:\\files";
-//		File dir = new File(saveDirectory);
-//		File[] files = dir.listFiles();
-//		for(File f1: files) {
-//			if(f1.getName().startsWith(boardNo+"_")) {
-//				f1.delete();
-//			}
-//		}
-//					
-//		return new ResponseEntity<>(HttpStatus.OK);
-//	}
-//	
+
+	@PostMapping(value="modify/{reviewNo}")
+	public Map<String, Object> modify(HttpSession session,@PathVariable int reviewNo, Review rv, @RequestPart MultipartFile img){
+		Map<String, Object> map = new HashMap<>();
+		try {
+			rv.setReviewNo(reviewNo);
+			service.reviewMemory(rv);
+			map.put("status", 1);
+			map.put("msg", "수정 성공!");
+
+			boolean flag = false;
+			String imgOriginName = img.getOriginalFilename();
+			long imgSize = img.getSize();
+
+			if(imgSize > 0 && !"".equals(imgOriginName)) {
+				flag = true;
+			}
+			if(flag) {
+				String saveDirectory = "C:\\Users\\skdud\\OneDrive\\바탕 화면\\review";
+				File dir = new File(saveDirectory);
+				if(!dir.exists()) {
+					dir.mkdir();
+				}
+
+				String saveFileName = rv.getMemId()+"_"+ rv.getStNum()+"_" + imgOriginName;
+
+				File[] files = dir.listFiles();
+				for(File f1: files) {
+					String[] fName = f1.getName().split("_");
+					if(fName[0].equals(rv.getMemId()) && fName[1].equals(""+rv.getStNum())) {
+						f1.delete();
+					}
+				}
+
+				File saveImg = new File(saveDirectory, saveFileName);
+				FileCopyUtils.copy(img.getBytes(), saveImg);
+			}
+		} catch (ModifyException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+			map.put("msg", e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+			map.put("msg", e.getMessage());
+		}
+		return map;
+	}
+
+
+
+	@DeleteMapping("delete/{reviewNo}")
+	public ResponseEntity<?> delete(@PathVariable int reviewNo) throws  RemoveException  {
+		//		reviewNo = 6;
+		service.delete(reviewNo);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
 }

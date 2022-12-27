@@ -29,6 +29,7 @@ import com.my.dto.PageBean;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
+import com.my.exception.RemoveException;
 import com.my.service.StoreService;
 import com.my.util.Attach;
 import com.my.vo.Menu;
@@ -91,21 +92,7 @@ public class StoreController {
 	public ResponseEntity<?> storereadlist(@PathVariable int currentPage, String search) throws FindException{
 		//search="서울";
 		PageBean<Store> pb = service.stListGetPageBean(currentPage , search);
-		
-		
-//		String strDirPath = "C:\\files\\"; 
-//        
-//        File path = new File( strDirPath ); 
-//        File[] fList = path.listFiles();  
-//		
-//        for( int i = 0; i < fList.length; i++ ) { 
-//            
-//            if( fList[i].isFile() ) { 
-//                System.out.println( "[파일] :" + fList[i].getPath() );  // 파일의 FullPath 출력 
-//            } 
-//            
-//        } 
-		
+
 		return new ResponseEntity<>(pb, HttpStatus.OK);
 	}
 
@@ -150,7 +137,6 @@ public class StoreController {
 			list = service.findMenu(stNum);
 			map.put("list", list);
 			map.put("status", 1);
-
 
 		} catch (FindException e) {
 			e.printStackTrace();
@@ -237,4 +223,71 @@ public class StoreController {
 		return new ResponseEntity<>(map, HttpStatus.OK);
 		
 	}
+
+	
+	@PostMapping(value="update", produces = "application/json;charset=UTF-8")
+	public ResponseEntity<?> update(HttpSession session, 
+			@RequestPart(required = false)           List<MultipartFile> files, 
+			@RequestParam("Store") String strStore) throws AddException{
+
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			Store store = mapper.readValue(strStore, new TypeReference<Store>() {});
+			System.out.println(store);
+
+			int storeNo = store.getStNum();
+			System.out.println(storeNo);
+			service.modifyStore(store);
+			int i=0;
+
+			if(files !=null && files.size() != 0) {
+				for(MultipartFile f: files) {
+					Attach.upload(storeNo,f,location, store.getStMenuList().get(i).getMenuName());
+					i++;
+				}				
+			}
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);		
+		}
+	}
+	
+	@GetMapping("most")
+	public Map<String, Object> mostViewStore(){
+		Map<String, Object> map = new HashMap<>();
+		List<Store> list = null;
+		try {
+			list = service.mostViewStore();
+			map.put("status", 1);
+			map.put("list", list);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
+	
+	@GetMapping("current")
+	public Map<String, Object> currentStore(){
+		Map<String, Object> map = new HashMap<>();
+		List<Store> list = null;
+		try {
+			list = service.currentStore();
+			map.put("status", 1);
+			map.put("list", list);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
+	
+	@PutMapping("delete/{stNum}")
+	public ResponseEntity<?> delete(@PathVariable int stNum) throws ModifyException, RemoveException{
+		service.deleteStore(stNum);
+
+		return new ResponseEntity<>( HttpStatus.OK);
+	}
 }
+

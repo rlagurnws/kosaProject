@@ -10,6 +10,7 @@ import com.my.dto.PageBean;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
+import com.my.exception.RemoveException;
 import com.my.repository.StoreRepository;
 import com.my.vo.Menu;
 import com.my.vo.Store;
@@ -109,4 +110,17 @@ public class StoreService {
 		repository.modify(store);
 
 	}
+	
+	public List<Store> mostViewStore() throws FindException{
+		return repository.mostView();
+	}
+	
+	public List<Store> currentStore() throws FindException{
+		return repository.currStore();
+	}
+	
+	public void deleteStore(int stNum) throws ModifyException, RemoveException{
+		repository.delete(stNum);
+	}
+	
 }

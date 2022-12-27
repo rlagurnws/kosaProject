@@ -6,6 +6,7 @@ import com.my.exception.AddException;
 import com.my.exception.FindException;
 
 import com.my.exception.ModifyException;
+import com.my.exception.RemoveException;
 import com.my.vo.Member;
 import com.my.vo.Menu;
 
@@ -108,4 +109,12 @@ public interface StoreRepository {
 	public void viewCnt(int stNum) throws ModifyException;
 	
 	public void modify(Store store) throws ModifyException;
+	
+	public List<Store> mostView() throws FindException;
+	
+	public List<Store> currStore() throws FindException;
+	
+	
+	
+	void delete(int stNum) throws ModifyException;
 }

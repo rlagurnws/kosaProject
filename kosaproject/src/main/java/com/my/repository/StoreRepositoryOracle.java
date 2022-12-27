@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
+import com.my.exception.RemoveException;
 import com.my.vo.Menu;
 import com.my.vo.Store;
 
@@ -337,6 +338,56 @@ public class StoreRepositoryOracle implements StoreRepository {
 			session.insert("com.my.mybatis.StoreMapper.updatefood", menu);
 		}
 	}
+
+
+	@Override
+	public List<Store> mostView() throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			return session.selectList("com.my.mybatis.StoreMapper.mostView");
+		} finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+
+	@Override
+	public List<Store> currStore() throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			return session.selectList("com.my.mybatis.StoreMapper.currStore");
+		} finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+
+	@Override
+	public void delete(int stNum)  {
+		SqlSession session = null;
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			session.update("com.my.mybatis.StoreMapper.delete", stNum);			
+			session.close();
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		
+	}
+	
+	
 
 	
 	

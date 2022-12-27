@@ -302,6 +302,35 @@ public class StoreRepositoryOracle implements StoreRepository {
 			session.insert("com.my.mybatis.StoreMapper.updatefood", menu);
 		}
 	}
+
+	@Override
+	public List<Store> mostView() throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			return session.selectList("com.my.mybatis.StoreMapper.mostView");
+		} finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+
+	@Override
+	public List<Store> currStore() throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			return session.selectList("com.my.mybatis.StoreMapper.currStore");
+		} finally {
+			if(session !=null) {
+				session.close();
+			}
+		}
+	}
+	
+	
+	
 	
 	
 }

@@ -249,6 +249,35 @@ public class StoreController {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);		
 		}
-
+	}
+	
+	@GetMapping("most")
+	public Map<String, Object> mostViewStore(){
+		Map<String, Object> map = new HashMap<>();
+		List<Store> list = null;
+		try {
+			list = service.mostViewStore();
+			map.put("status", 1);
+			map.put("list", list);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
+	
+	@GetMapping("current")
+	public Map<String, Object> currentStore(){
+		Map<String, Object> map = new HashMap<>();
+		List<Store> list = null;
+		try {
+			list = service.currentStore();
+			map.put("status", 1);
+			map.put("list", list);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
 	}
 }

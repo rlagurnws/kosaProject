@@ -36,6 +36,15 @@ public interface NoticeRepository {
 	int selectCount() throws FindException;
 	
 	/**
+	 * 검색한 공지사항 총 개수
+	 * @param search
+	 * @return
+	 * @throws FindException
+	 */
+	int selectSearchCount(String search) throws FindException;
+	
+	
+	/**
 	 * 공지사항 페이징
 	 * @author 김혁준
 	 * @param currentPage
@@ -44,6 +53,14 @@ public interface NoticeRepository {
 	 * @throws FindException
 	 */
 	List<Notice> selectAll(int currentPage, int cntPerPage) throws FindException;
+	
+	/**
+	 * 공지사항 검색
+	 * @param search
+	 * @return
+	 * @throws FindException
+	 */
+	List<Notice> searchNoti(int currentPage, int cntPerPage,String search) throws FindException;
 	
 	/**
 	 * 번호에 해당하는 공지사항 반환

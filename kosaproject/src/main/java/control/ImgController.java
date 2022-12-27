@@ -32,13 +32,15 @@ public class ImgController {
 					fileName = fn;
 				}
 			}
+			System.out.println(fileName);
+			System.out.println(dir);
 			File file = new File(SAVE_DIRECTORY+dir, fileName);
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set(HttpHeaders.CONTENT_LENGTH, file.length() + ""); // 응답길이	
 			String contentType = Files.probeContentType(file.toPath());
 			responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(file.toPath()));
 			responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION,
-					"inline; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+					"inline");
 			return new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), responseHeaders, HttpStatus.OK);
 		} catch(IOException e) {
 			e.printStackTrace();

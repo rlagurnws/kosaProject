@@ -115,18 +115,44 @@ public class NoticeController {
 		return map;
 	}
 	
-//	@PutMapping("{notiNo}")
-//	public  Map<String,Object> noticeUpdate(@PathVariable int notiNo, @RequestBody Notice noti){
-//		Map<String,Object> map = new HashMap<>();
-//		try {
-//			service.updateNotice(noti);
-//			map.put("status", 1);
-//			map.put("msg", "변경 성공!");
-//		} catch (ModifyException e) {
-//			e.printStackTrace();
-//			map.put("status", 0);
-//			map.put("msg", "변경 실패!"+e.getMessage());
-//		}
-//		return map;
-//	}
+	@PutMapping("{notiNo}")
+	public  Map<String,Object> noticeUpdate(@PathVariable int notiNo, @RequestBody Notice noti){
+		Map<String,Object> map = new HashMap<>();
+		try {
+			noti.setNotiNo(notiNo);
+			service.updateNotice(noti);
+			map.put("status", 1);
+			map.put("msg", "변경 성공!");
+		} catch (ModifyException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+			map.put("msg", "변경 실패!"+e.getMessage());
+		}
+		return map;
+	}
+	
+	@GetMapping("search/{search}/{currentPage}")
+	public Map<String,Object> searchNoti(@PathVariable String search, @PathVariable int currentPage){
+		Map<String,Object> map = new HashMap<>();
+		PageBean<Notice> pb = null;
+		try {
+			pb = service.getPageBeanSearch(currentPage, search);
+			map.put("status", 1);
+			map.put("pb", pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		return map;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

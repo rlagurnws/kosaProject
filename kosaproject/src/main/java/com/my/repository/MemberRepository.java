@@ -1,5 +1,7 @@
 package com.my.repository;
 
+import java.util.List;
+
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
@@ -41,6 +43,15 @@ public interface MemberRepository {
 	 * @throws RemoveException
 	 */
 	void delete(String id) throws RemoveException;
+
+
+	int selectCount() throws FindException;
+	
+	List<Member> selectAll() throws FindException;
+	
+	List<Member> selectAll(int currentPage, int cntPerPage) throws FindException;
+	
+
 	
 	/**
 	 * 아이디 찾기 (이름이랑 전화번호만 사용)
@@ -59,4 +70,9 @@ public interface MemberRepository {
 	 * @throws FindException
 	 */
 	Member findPwd(Member m) throws FindException;
+
+	Member selectByNo(String memNo) throws FindException;
+	
+	
+
 }

@@ -28,11 +28,7 @@ public interface StoreRepository {
 	 * @throws FindException
 	 */
 
-	
-	
-	
-	
-	
+
 	/**
 	 * @author 이남규
 	 * @return
@@ -51,10 +47,9 @@ public interface StoreRepository {
 	List<Store> selectSearch(int currentPage, int cntPerPage, String search) throws FindException;
 	
 
-
 	List<Store> submitted(int currentPage, int cntPerPage) throws FindException;
 	
-	public List<Store> selectByCate(int cate) throws FindException;
+
 	
 	/**
 	 * @author 김혁준
@@ -63,13 +58,14 @@ public interface StoreRepository {
 	 */
 	public int selectCount() throws FindException;
 	
+	
 	/**
 	 * @author 김혁준 
 	 * @param storeNo
 	 * @return 번호에 해당하는 가게 객체
 	 * @throws FindException
 	 */
-	public Store selectByNo(int storeNo) throws FindException;
+	public Store selectByNo(int stNum) throws FindException;
 	
 	/**
 	 * @author 김혁준
@@ -87,11 +83,29 @@ public interface StoreRepository {
 	 * 
 	 */
 	public void confirmStore(int stNum) throws ModifyException;
+
 	
 	
 	
-	List<Store> selectByStoreNum(int stNum) throws FindException;
+	
 	
 	int update(Store store) throws AddException;
 
+
+	List<Store> selectById(String id) throws FindException;
+
+
+	List<Store> selectByCatePageBean(int cateNum, int currentPage, int cntPerPage) throws FindException;
+
+
+
+	public int selectCountByCate(int cateNum) throws FindException;
+
+	void star(int star, int stNum) throws ModifyException;
+
+	List<Store> selectByStoreNum(int stNum) throws FindException;
+	
+	public void viewCnt(int stNum) throws ModifyException;
+	
+	public void modify(Store store) throws ModifyException;
 }

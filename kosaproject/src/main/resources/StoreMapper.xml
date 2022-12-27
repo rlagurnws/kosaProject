@@ -135,4 +135,26 @@
 		where st_num=#{stNum} AND MENU_NAME = #{menuName}
 </update>
 
+<select id="mostView" resultType="Store">
+	SELECT *
+	FROM (SELECT rownum rn, st.*
+          FROM ST st
+          ORDER BY ST_HITS DESC)
+	WHERE rn BETWEEN 1 AND 3
+</select>
+
+<select id="currStore" resultType="Store">
+	SELECT *
+	FROM (SELECT rownum rn, st.*
+		  FROM ST st
+		  ORDER BY ST_DATE DESC)
+	WHERE rn BETWEEN 1 AND 3
+</select>
+
+
+
+
+
+
+
 </mapper>

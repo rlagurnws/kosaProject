@@ -102,4 +102,14 @@ public class StoreService {
 	public void modifyStore(Store store) throws ModifyException{
 		repository.modify(store);
 	}
+	
+	public List<Store> mostViewStore() throws FindException{
+		return repository.mostView();
+	}
+	
+	public List<Store> currentStore() throws FindException{
+		return repository.currStore();
+	}
+	
+	
 }

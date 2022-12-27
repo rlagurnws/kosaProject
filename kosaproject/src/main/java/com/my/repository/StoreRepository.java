@@ -100,4 +100,8 @@ public interface StoreRepository {
 	public void viewCnt(int stNum) throws ModifyException;
 	
 	public void modify(Store store) throws ModifyException;
+	
+	public List<Store> mostView() throws FindException;
+	
+	public List<Store> currStore() throws FindException;
 }

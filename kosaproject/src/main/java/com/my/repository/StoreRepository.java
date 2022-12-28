@@ -47,7 +47,7 @@ public interface StoreRepository {
 	List<Store> selectSearch(int currentPage, int cntPerPage, String search) throws FindException;
 	
 
-	List<Store> submitted(int currentPage, int cntPerPage) throws FindException;
+	List<Store> submitted(int status,int currentPage, int cntPerPage) throws FindException;
 	
 
 	
@@ -56,7 +56,7 @@ public interface StoreRepository {
 	 * @return 신청된 가게 개수
 	 * @throws FindException
 	 */
-	public int selectCount() throws FindException;
+	public int selectCount(int status) throws FindException;
 	
 	
 	/**
@@ -104,4 +104,6 @@ public interface StoreRepository {
 	public List<Store> mostView() throws FindException;
 	
 	public List<Store> currStore() throws FindException;
+	
+	void delete(int stNum) throws ModifyException;
 }

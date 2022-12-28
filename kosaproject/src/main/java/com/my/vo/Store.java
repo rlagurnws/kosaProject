@@ -20,7 +20,7 @@ public class Store {
 	private int cateNum;
 	private String ownerId;
 	private int stResNo;
-	private int stPostCnt;
+	private int stReviewCnt;
 	private int stStatus;
 	public int getStNum() {
 		return stNum;
@@ -38,7 +38,7 @@ public class Store {
 		super();
 	}
 	public Store(int stNum, String stDes, int stHits, Date stDate, String stName, Menu stMenu, List<Menu> stMenuList,
-			double stScore, String stLoca, String stPhone, int cateNum, String onerId, int stResNo, int stPostCnt,
+			double stScore, String stLoca, String stPhone, int cateNum, String onerId, int stResNo, int stReviewCnt,
 			int stStatus) { 
 		super();
 		this.stNum = stNum;
@@ -54,7 +54,7 @@ public class Store {
 		this.cateNum = cateNum;
 		this.ownerId = onerId;
 		this.stResNo = stResNo;
-		this.stPostCnt = stPostCnt;
+		this.stReviewCnt = stReviewCnt;
 		this.stStatus = stStatus;
 	}
 	public int getStHits() {
@@ -118,11 +118,11 @@ public class Store {
 	public void setStResNo(int stResNo) {
 		this.stResNo = stResNo;
 	}
-	public int getStPostCnt() {
-		return stPostCnt;
+	public int getStReviewCnt() {
+		return stReviewCnt;
 	}
-	public void setStPostCnt(int stPostCnt) {
-		this.stPostCnt = stPostCnt;
+	public void setStReviewCnt(int stReviewCnt) {
+		this.stReviewCnt = stReviewCnt;
 	}
 	public int getStStatus() {
 		return stStatus;
@@ -141,7 +141,7 @@ public class Store {
 		return "Store [stNum=" + stNum + ", stDes=" + stDes + ", stHits=" + stHits + ", stDate=" + stDate + ", stName="
 				+ stName + ", stMenu=" + stMenu + ", stMenuList=" + stMenuList + ", stScore=" + stScore + ", stLoca="
 				+ stLoca + ", stPhone=" + stPhone + ", cateNum=" + cateNum + ", ownerId=" + ownerId + ", stResNo="
-				+ stResNo + ", stPostCnt=" + stPostCnt + ", stStatus=" + stStatus + "]";
+				+ stResNo + ", stReviewCnt=" + stReviewCnt + ", stStatus=" + stStatus + "]";
 	}
 	
 

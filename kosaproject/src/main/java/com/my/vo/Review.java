@@ -12,12 +12,17 @@ public class Review {
 	private int stNum;
 	private String memId;
 	private int reviewState;
+	private String memNick;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private java.util.Date reviewDate;
 
+	public Review() {
+		super();
+	}
+
 	public Review(int reviewNo, String reviewDes, int reviewStar, int stNum, String memId, int reviewState,
-			Date reviewDate) {
+			String memNick, Date reviewDate) {
 		super();
 		this.reviewNo = reviewNo;
 		this.reviewDes = reviewDes;
@@ -25,11 +30,17 @@ public class Review {
 		this.stNum = stNum;
 		this.memId = memId;
 		this.reviewState = reviewState;
+		this.memNick = memNick;
 		this.reviewDate = reviewDate;
 	}
 
-	public Review() {
-		super();
+	
+	public String getMemNick() {
+		return memNick;
+	}
+
+	public void setMemNick(String memNick) {
+		this.memNick = memNick;
 	}
 
 	public int getReviewNo() {

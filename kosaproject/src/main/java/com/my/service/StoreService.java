@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.my.dto.PageBean;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
+import com.my.exception.RemoveException;
 import com.my.repository.StoreRepository;
 import com.my.vo.Menu;
 import com.my.vo.Store;
@@ -38,12 +38,12 @@ public class StoreService {
 	}
 
 	
-	public List<Store> submittedStore(int currentPage, int cntPerPage) throws FindException{
-		return repository.submitted(currentPage, cntPerPage);
+	public List<Store> submittedStore(int status,int currentPage, int cntPerPage) throws FindException{
+		return repository.submitted(status,currentPage, cntPerPage);
 	}
-	public PageBean<Store> getPageBean(int currentPage) throws FindException{
-		List<Store> list = submittedStore(currentPage,PageBean.CNT_PER_PAGE);
-		int totalCnt = repository.selectCount();
+	public PageBean<Store> getPageBean(int status, int currentPage) throws FindException{
+		List<Store> list = submittedStore(status,currentPage,PageBean.CNT_PER_PAGE);
+		int totalCnt = repository.selectCount(status);
 		PageBean<Store> pb = new PageBean<>(currentPage, list, totalCnt);
 		return pb;
 	}
@@ -110,6 +110,8 @@ public class StoreService {
 	public List<Store> currentStore() throws FindException{
 		return repository.currStore();
 	}
-	
+	public void deleteStore(int stNum) throws ModifyException, RemoveException{
+		repository.delete(stNum);
+	}
 	
 }

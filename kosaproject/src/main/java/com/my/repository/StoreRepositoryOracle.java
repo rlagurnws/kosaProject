@@ -52,10 +52,10 @@ public class StoreRepositoryOracle implements StoreRepository {
 	}
 
 	@Override
-	public int selectCount() throws FindException {
+	public int selectCount(int status) throws FindException {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
-			return session.selectOne("com.my.mybatis.StoreMapper.selectCount");
+			return session.selectOne("com.my.mybatis.StoreMapper.selectCount", status);
 		} finally {
 			if (session != null) {
 
@@ -67,15 +67,17 @@ public class StoreRepositoryOracle implements StoreRepository {
 	
 
 	@Override
-	public List<Store> submitted(int currentPage, int cntPerPage) throws FindException {
+	public List<Store> submitted(int status, int currentPage, int cntPerPage) throws FindException {
 		List<Store> list = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
 		SqlSession session = null;
 		try {
+			System.out.println(status);
 			int startRow = ((currentPage - 1) * cntPerPage) + 1;
 			int endRow = currentPage * cntPerPage;
 			map.put("startRow", startRow);
 			map.put("endRow", endRow);
+			map.put("status", status);
 			session = sqlSessionFactory.openSession();
 			return session.selectList("com.my.mybatis.StoreMapper.submitted", map);
 		} catch (Exception e) {
@@ -329,6 +331,26 @@ public class StoreRepositoryOracle implements StoreRepository {
 		}
 	}
 	
+	@Override
+	public void delete(int stNum)  {
+		SqlSession session = null;
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			session.update("com.my.mybatis.StoreMapper.delete", stNum);			
+			session.close();
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		
+	}
 	
 	
 	

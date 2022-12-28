@@ -9,8 +9,8 @@
 	<selectKey keyProperty="reviewNo" resultType="int" order="AFTER">
 		select review_seq.currval FROM dual
 	</selectKey>
-		INSERT INTO Review(review_no, review_star, review_des, review_date, mem_Id,review_state, st_Num)
-		VALUES (review_seq.nextVal,#{reviewStar},#{reviewDes},SYSDATE,#{memId},1,#{stNum})
+		INSERT INTO Review(review_no, review_star, review_des, review_date, mem_Id,review_state, st_Num, mem_nick)
+		VALUES (review_seq.nextVal,#{reviewStar},#{reviewDes},SYSDATE,#{memId},1,#{stNum}, #{memNick})
 	</insert>
 	<update id="update" parameterType="Review">
 		UPDATE review

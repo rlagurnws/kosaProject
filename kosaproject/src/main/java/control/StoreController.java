@@ -29,6 +29,7 @@ import com.my.dto.PageBean;
 import com.my.exception.AddException;
 import com.my.exception.FindException;
 import com.my.exception.ModifyException;
+import com.my.exception.RemoveException;
 import com.my.service.StoreService;
 import com.my.util.Attach;
 import com.my.vo.Menu;
@@ -94,11 +95,11 @@ public class StoreController {
 		return new ResponseEntity<>(pb, HttpStatus.OK);
 	}
 
-	@GetMapping("submitted/{currentPage}")
-	public Map<String, Object> submitted(@PathVariable int currentPage) {
+	@GetMapping("{status}/{currentPage}")
+	public Map<String, Object> submitted(@PathVariable int status, @PathVariable int currentPage) {
 		Map<String, Object> map = new HashMap<>();
 		try {
-			PageBean pb = service.getPageBean(currentPage);
+			PageBean pb = service.getPageBean(status,currentPage);
 			map.put("status", 1);
 			map.put("pb", pb);
 		} catch (FindException e) {
@@ -223,7 +224,7 @@ public class StoreController {
 	
 	@PostMapping(value="update", produces = "application/json;charset=UTF-8")
 	public ResponseEntity<?> update(HttpSession session, 
-			@RequestPart           List<MultipartFile> files, 
+			@RequestPart(required = false)          List<MultipartFile> files, 
 			@RequestParam("Store") String strStore) throws AddException{
 
 
@@ -238,7 +239,7 @@ public class StoreController {
 			int i=0;
 
 			boolean flag = false;
-			if(files.size() != 0) {
+			if((files != null) && (files.size() != 0)) {
 				for(MultipartFile f: files) {
 					Attach.upload(storeNo,f,location, store.getStMenuList().get(i).getMenuName());
 					i++;
@@ -279,5 +280,11 @@ public class StoreController {
 			map.put("status", 0);
 		}
 		return map;
+	}
+	
+	@PutMapping("delete/{stNum}")
+	public ResponseEntity<?> delete(@PathVariable int stNum) throws ModifyException, RemoveException{
+		service.deleteStore(stNum);
+		return new ResponseEntity<>( HttpStatus.OK);
 	}
 }

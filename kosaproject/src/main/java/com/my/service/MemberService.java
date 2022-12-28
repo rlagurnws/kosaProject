@@ -70,7 +70,7 @@ public class MemberService {
 		return repository.selectByNo(memNo);
 	}
 	public PageBean<Member> getPageBeanBySelect(int currentPage, int memPower, int memState) throws FindException {
-		List<Member> list = selectByPowerState(currentPage,15,memPower,memState);
+		List<Member> list = selectByPowerState(currentPage,PageBean.CNT_PER_PAGE,memPower,memState);
 		int totalCnt = repository.selectCountByPowerState(memPower,memState);
 		PageBean<Member> pb = new PageBean<>(currentPage, list, totalCnt);
 		return pb;

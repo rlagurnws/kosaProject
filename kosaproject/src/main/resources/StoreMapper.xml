@@ -39,10 +39,14 @@
 	WHERE rn BETWEEN #{startRow} AND #{endRow}
 </select>
 
-<select id="selectCount" resultType="int">
+<select id="selectCount" resultType="int" parameterType="int">
 	SELECT COUNT(*)
 	FROM ST
-	WHERE ST_STATUS = 1
+	<where>
+		<if test="status != -1">
+			ST_STATUS = #{status}
+		</if>
+	</where>
 </select>
 
 <!-- <select id="selectAll" resultType="Store" parameterType="map">
@@ -54,7 +58,13 @@
 	SELECT *
 	FROM (SELECT rownum rn, a.*
 		  FROM ST a
-		  WHERE ST_STATUS = 0)
+	<where>
+		<if test="status != -1">
+		  ST_STATUS = #{status}
+		</if>
+	</where>
+	order by st_num desc
+	)
 	WHERE rn BETWEEN #{startRow} AND #{endRow}
 </select>
 
@@ -139,6 +149,7 @@
 	SELECT *
 	FROM (SELECT rownum rn, st.*
           FROM ST st
+          WHERE ST_STATUS = 1
           ORDER BY ST_HITS DESC)
 	WHERE rn BETWEEN 1 AND 3
 </select>
@@ -147,14 +158,14 @@
 	SELECT *
 	FROM (SELECT rownum rn, st.*
 		  FROM ST st
+		  WHERE ST_STATUS = 1
 		  ORDER BY ST_DATE DESC)
 	WHERE rn BETWEEN 1 AND 3
 </select>
 
-
-
-
-
-
+<update id="delete" parameterType="int">
+		update st set st_status=2
+		where st_num = #{stNum}
+</update>
 
 </mapper>
